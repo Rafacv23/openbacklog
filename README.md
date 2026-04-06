@@ -168,6 +168,36 @@ Expected scripts once scaffolded:
 - `bun run test`
 - `bun run build`
 
+## Database (Turso + Drizzle)
+
+Initial scope for launch landing: one preregistration table only.
+
+Table: `pre_registrations`
+
+- `id`: auto-increment primary key
+- `email`: unique and required
+- `registered_at`: registration timestamp (unix epoch seconds)
+- `notification_sent`: boolean flag (`false` by default)
+
+Setup flow:
+
+```bash
+# 1) Create database in Turso (if not created yet)
+turso db create openbacklog
+
+# 2) Get connection values
+turso db show openbacklog --url
+turso db tokens create openbacklog
+
+# 3) Put them into .env
+# TURSO_DATABASE_URL=libsql://...
+# TURSO_AUTH_TOKEN=...
+
+# 4) Generate and run migrations
+bun run db:generate
+bun run db:migrate
+```
+
 ## Current Status
 
 This repository is currently in project bootstrap stage.

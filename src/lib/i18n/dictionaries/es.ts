@@ -12,6 +12,7 @@ export const es = {
         { label: "PRODUCTO", href: "#hero" },
         { label: "CAPACIDADES", href: "#capabilities" },
         { label: "TESTIMONIOS", href: "#testimonials" },
+        { label: "PREGUNTAS", href: "#faq" },
         { label: "UNIRSE", href: "#join" },
       ],
       register: "REGISTRARSE",
@@ -30,6 +31,8 @@ export const es = {
     hero: {
       titleLead: "termina mas juegos,",
       titleHighlight: "NO SOLO LOS REGISTRES.",
+      releaseBadgeLabel: "VERSION_PROYECTO",
+      releaseBadgeValue: "v0.0.1",
       primaryCta: "INICIAR OPERADOR",
       secondaryCta: "VER DOCUMENTACION",
     },
@@ -44,8 +47,7 @@ export const es = {
         progressNumber: 88,
         imageAlt:
           "Ilustracion de fantasia oscura con runas doradas brillantes y un caballero solitario con armadura pesada",
-        imageSrc:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuB30jTXT9C3PwpUw3K9wGuKpiK5mMIbkQCulfhl69v-CB0e7FtJGTcixJLYRdB6q5qmCWqUWy1cVQ_fGte0sB0MRrb7DbsE_lC0ej8V-MCxP0ROk31tqFpi1boPLVEa70oWRVP6UuWBHUUZdiT62VmXQa7zn2sNd5tZUnWklN-Hg5jJvfm60ZYNxKiY5HmCHlRfVYT_5Z8fCS4PrHqmsHjgjHQSU5K_-ivB2Fjy1T-KgZeXVT6WKiMUpMHTLF3OqpXo7m2GbYTdinU",
+        imageSrc: "/images/elden-ring-cover-2079746590.webp",
       },
       {
         badge: "ENLACE_ACTIVO",
@@ -58,7 +60,7 @@ export const es = {
         imageAlt:
           "Calle futurista iluminada por neon durante la noche con anuncios brillantes y reflejos sobre asfalto mojado",
         imageSrc:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuD_R9yxCrG9bPrEGQqxXhv9dgpfSwBfz9IkgA0sEkp77WXLzRB-4VLr6xKEt5_mOc2330kaLk9u80frg4-wICaSYMGSuoke9rLi3BN778lYKazzJhp45hNun0l-4W84RGfZr6rWtSZ_rkTEpGl-qx0b57HriJ1Hn29wFhkOsALjQsRIfdOn2AQDWumB5XzEqzzktL16h_wlYHKGYIMPNLQJmXylTouX64Hq0dJVzEHBM3W9fqCFmtssX6a1uSqYZG-woxTbwWSkEVQ",
+          "/images/795696-cyberpunk-2077-playstation-4-front-cover-4048827496.webp",
       },
       {
         badge: "ENTRADA_EN_COLA",
@@ -70,8 +72,7 @@ export const es = {
         progressNumber: 15,
         imageAlt:
           "Ilustracion mistica abstracta con espirales de energia verde y violeta sobre un fondo negro profundo",
-        imageSrc:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuDSr_X1Ad2GZPi61SJ6nFMYFI_hmaYZERY-wX_JaXubSGNsnnvbbck8T2AgbVVFzVyO6THDNjX4gKrTHUWYt6tXvfVaIzyc5VaI9Qrzp8Kw3kP1cPrlEri7bv6JTQOm_nUwvDY8ZdS9-oJrfjF0hzk43ECUjhMA9ZbGSBizK07nwt1ICLVXqvdBAouQLz4SbJ-112HsFtlK0-EOquzbi6ZaI9DCVRg86djV2GcNPLP8cZuaADSxzyMwy80rB583H0LsxWygzw5rI00",
+        imageSrc: "/images/hades2coverart-3153497908.webp",
       },
     ],
     capabilities: {
@@ -129,6 +130,34 @@ export const es = {
         },
       ],
     },
+    faq: {
+      eyebrow: "PREGUNTAS FRECUENTES",
+      title: "Necesitas una respuesta rapida?",
+      description:
+        "Preguntas clave sobre OpenBacklog, como ayuda a terminar mas juegos y que viene en el roadmap del producto.",
+      items: [
+        {
+          question: "QUE HACE DIFERENTE A OPENBACKLOG?",
+          answer:
+            "OpenBacklog prioriza la finalizacion y la toma de decisiones. No solo registra tu biblioteca: te ayuda a elegir que jugar y terminar despues.",
+        },
+        {
+          question: "PUEDO IMPORTAR MI BIBLIOTECA ACTUAL?",
+          answer:
+            "Si. Los flujos de importacion son parte del enfoque principal, empezando por integraciones como Steam para reducir friccion manual.",
+        },
+        {
+          question: "HABRA UN CHANGELOG PUBLICO?",
+          answer:
+            "Si. Cada version se publicara en la pagina de changelog, incluyendo correcciones, cambios de interfaz y avances del roadmap.",
+        },
+        {
+          question: "COMO PUEDO PROPONER NUEVAS FEATURES?",
+          answer:
+            "Podras proponer y votar funcionalidades en el panel de features para priorizar en base a la demanda real de la comunidad.",
+        },
+      ],
+    },
     cta: {
       title: "UNETE A LA RED",
       body:
@@ -138,13 +167,19 @@ export const es = {
       security: "HANDSHAKE SEGURO: RSA_4096 // CIFRADO: AES_256",
     },
     footer: {
-      copyright: "(C)2026 OPENBACKLOG // CURACION_DE_ALTO_RENDIMIENTO",
-      system: "SISTEMA: OPTIMO",
-      latency: "LATENCIA: 12MS",
-      uptime: "UPTIME: 99.9%",
-      links: ["GITHUB", "DISCORD", "API_DOCS"],
+      copyright: "© 2026 OpenBacklog. Todos los derechos reservados.",
+      description:
+        "Plataforma backlog-first enfocada en ayudarte a terminar mas juegos con claridad y constancia.",
+      usefulLinksTitle: "ENLACES UTILES",
+      usefulLinks: {
+        changelog: "CHANGELOG",
+        features: "PANEL DE FEATURES",
+        faq: "PREGUNTAS",
+        github: "GITHUB",
+      },
       mobileLinks: ["PANEL", "BACKLOG", "PERFIL"],
-      onlineDotLabel: "EN_LINEA",
+      madeBy: "Made by Rafa Canosa",
+      websiteLabel: "rafacanosa.dev",
     },
     labels: {
       terminal: "terminal",
@@ -171,6 +206,7 @@ export const es = {
     aria: {
       primaryCta: "Iniciar operador",
       secondaryCta: "Ver documentacion",
+      releaseBadge: "Abrir changelog del proyecto",
       githubRepository: "Abrir repositorio de GitHub",
       repository: "Acceder a repositorio",
       footerLink: "Abrir enlace",
@@ -182,6 +218,7 @@ export const es = {
       sideNavigation: "Navegacion lateral",
       testimonialSection: "Seccion de testimonios",
       capabilitiesSection: "Seccion de capacidades",
+      faqSection: "Seccion de preguntas frecuentes",
       ctaSection: "Seccion unir red",
       heroSection: "Seccion principal",
       footer: "Pie de pagina",
@@ -213,6 +250,36 @@ export const es = {
       screenshot:
         "https://lh3.googleusercontent.com/aida-public/AB6AXuD_R9yxCrG9bPrEGQqxXhv9dgpfSwBfz9IkgA0sEkp77WXLzRB-4VLr6xKEt5_mOc2330kaLk9u80frg4-wICaSYMGSuoke9rLi3BN778lYKazzJhp45hNun0l-4W84RGfZr6rWtSZ_rkTEpGl-qx0b57HriJ1Hn29wFhkOsALjQsRIfdOn2AQDWumB5XzEqzzktL16h_wlYHKGYIMPNLQJmXylTouX64Hq0dJVzEHBM3W9fqCFmtssX6a1uSqYZG-woxTbwWSkEVQ",
     },
+  },
+  changelog: {
+    metaTitle: "Changelog | OpenBacklog",
+    metaDescription:
+      "Consulta notas de version, actualizaciones del producto y cambios por cada release de OpenBacklog.",
+    title: "CHANGELOG",
+    description:
+      "Consulta cada release, desde correcciones hasta nuevas funcionalidades enfocadas en ayudarte a terminar mas juegos.",
+    currentVersionLabel: "VERSION_ACTUAL",
+    currentVersionValue: "v0.0.1",
+    statusTitle: "Las notas de version se estan preparando",
+    statusBody:
+      "Esta pagina mostrara todos los cambios por version. Por ahora la estructura ya esta lista y el seguimiento de version ya aparece desde el badge del inicio.",
+    featuresLink: "IR_AL_PANEL_DE_FEATURES",
+    backHome: "VOLVER_AL_INICIO",
+  },
+  features: {
+    metaTitle: "Panel de Features | OpenBacklog",
+    metaDescription:
+      "Vota por proximas funcionalidades de OpenBacklog y propone nuevas ideas para el roadmap.",
+    title: "PANEL_DE_FEATURES",
+    description:
+      "Tablero comunitario para votar funcionalidades futuras y proponer nuevas ideas para OpenBacklog.",
+    voteTitle: "Vota items del roadmap",
+    voteBody:
+      "Los usuarios podran votar funcionalidades planeadas para priorizar lo que mas impacto tenga en productividad de backlog.",
+    proposeTitle: "Propone nuevas features",
+    proposeBody:
+      "Los jugadores podran enviar propuestas con contexto, valor esperado y casos de uso para que la comunidad las revise.",
+    changelogLink: "VOLVER_AL_CHANGELOG",
   },
   common: {
     languageSwitcherLabel: "Idioma",

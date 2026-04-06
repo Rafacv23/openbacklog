@@ -6,7 +6,14 @@ import { notFound } from "next/navigation"
 
 import { getDictionary } from "@/lib/i18n"
 
+import { LandingFooter } from "@/components/landing/footer"
 import { LandingHeader } from "@/components/landing/header"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -97,6 +104,12 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
   }
 
   const dictionary = getDictionary(locale)
+  const faq = dictionary.home.faq ?? {
+    eyebrow: "FAQ",
+    title: "Frequently Asked Questions",
+    description: "",
+    items: [] as Array<{ question: string; answer: string }>,
+  }
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -207,6 +220,23 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
         </div>
 
         <div className="relative z-10 max-w-5xl text-center">
+          <Link
+            aria-label={dictionary.home.aria.releaseBadge}
+            className="mb-6 inline-flex"
+            href={`/${locale}/changelog`}
+          >
+            <Badge
+              variant="outline"
+              className="rounded-none border-primary/40 bg-card/70 px-3 py-1 font-body text-[10px] tracking-[0.12em] text-primary uppercase hover:bg-primary/10"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              {dictionary.home.hero.releaseBadgeLabel}
+              <span className="text-foreground">
+                {dictionary.home.hero.releaseBadgeValue}
+              </span>
+            </Badge>
+          </Link>
+
           <h1 className="font-headline text-6xl leading-tight tracking-tight md:text-7xl">
             {dictionary.home.hero.titleLead}
             <br />
@@ -243,25 +273,6 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
                 className={cn(layout.wrapper, "rounded-none p-0 ring-0")}
               >
                 <CardContent className="p-4">
-                  <div className="mb-4 flex items-start justify-between">
-                    <Badge
-                      className={cn(
-                        "rounded-none text-[10px] tracking-tight uppercase",
-                        layout.badgeClass,
-                      )}
-                    >
-                      {card.badge}
-                    </Badge>
-                    <span
-                      aria-label={
-                        index === 0
-                          ? dictionary.home.labels.gameCardMenu
-                          : dictionary.home.labels.gameCardSensor
-                      }
-                      className="inline-block h-2 w-2 rounded-full bg-muted-foreground"
-                      role="img"
-                    />
-                  </div>
                   <Image
                     alt={card.imageAlt}
                     className="mb-4 h-48 w-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
@@ -486,6 +497,48 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
       </section>
 
       <section
+        id="faq"
+        aria-label={dictionary.home.aria.faqSection ?? "Frequently asked questions section"}
+        className="scroll-mt-24 border-y border-border/20 bg-card/40 py-24"
+      >
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+          <div>
+            <span className="font-body text-sm tracking-[0.24em] text-primary uppercase">
+              {faq.eyebrow}
+            </span>
+            <h2 className="mt-3 font-headline text-4xl">
+              <span className="font-display italic">
+                {faq.title}
+              </span>
+            </h2>
+            <p className="mt-4 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
+              {faq.description}
+            </p>
+          </div>
+
+          <Card className="rounded-none border border-border bg-popover/80 p-0">
+            <CardContent className="p-6 md:p-8">
+              <Accordion
+                defaultValue={["item-1"]}
+                className="w-full"
+              >
+                {faq.items.map((item, index) => (
+                  <AccordionItem key={item.question} value={`item-${index + 1}`}>
+                    <AccordionTrigger className="font-headline text-xs tracking-[0.1em] uppercase hover:no-underline">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="font-body text-sm leading-relaxed text-muted-foreground">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section
         id="join"
         aria-label={dictionary.home.aria.ctaSection}
         className="relative scroll-mt-24 py-0"
@@ -525,52 +578,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
         </div>
       </section>
 
-      <footer
-        aria-label={dictionary.home.aria.footer}
-        className="z-50 border-t border-border/15 bg-popover font-body text-[10px] tracking-tight text-primary uppercase"
-      >
-        <div className="flex w-full flex-col items-center justify-between gap-4 px-6 py-4 md:flex-row">
-          <div>{dictionary.home.footer.copyright}</div>
-          <div className="flex gap-8">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              {dictionary.home.footer.system}
-            </div>
-            <div>{dictionary.home.footer.latency}</div>
-            <div>{dictionary.home.footer.uptime}</div>
-          </div>
-          <div className="flex gap-6">
-            {dictionary.home.footer.links.map((linkLabel) => (
-              <Link
-                key={linkLabel}
-                aria-label={`${dictionary.home.aria.footerLink}: ${linkLabel}`}
-                className="transition-colors hover:text-primary"
-                href="#"
-              >
-                {linkLabel}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </footer>
-
-      <nav
-        aria-label={dictionary.home.aria.mobileNavigation}
-        className="fixed bottom-0 z-[60] flex w-full items-center justify-around border-t border-border/30 bg-popover py-4 md:hidden"
-      >
-        {dictionary.home.footer.mobileLinks.map((item, index) => (
-          <div
-            key={item}
-            className={cn(
-              "flex flex-col items-center",
-              index === 0 ? "text-primary" : "text-muted-foreground",
-            )}
-          >
-            <span className="inline-block h-3 w-3 border border-current" />
-            <span className="mt-1 font-body text-[8px]">{item}</span>
-          </div>
-        ))}
-      </nav>
+      <LandingFooter dictionary={dictionary} locale={locale} />
     </main>
   )
 }

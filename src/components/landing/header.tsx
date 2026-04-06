@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { getOpenBacklogRepoStars } from "@/server/github/get-repo-stars"
 
 import { GitHubStarsLink } from "@/components/landing/github-stars-link"
+import { SmoothScrollLink } from "@/components/landing/smooth-scroll-link"
 import { buttonVariants } from "@/components/ui/button"
 import { LanguageDropdown } from "@/components/landing/language-dropdown"
 
@@ -40,13 +41,13 @@ export async function LandingHeader({
 
       <div className="hidden items-center justify-center gap-6 md:flex lg:gap-8">
         {dictionary.home.nav.sections.map((section) => (
-          <Link
+          <SmoothScrollLink
             key={section.href}
             className="px-1 py-1 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors duration-150 hover:text-primary"
             href={section.href}
           >
             {section.label}
-          </Link>
+          </SmoothScrollLink>
         ))}
       </div>
 
@@ -64,7 +65,7 @@ export async function LandingHeader({
           locale={locale}
           starsLabel={dictionary.home.nav.stars}
         />
-        <Link
+        <SmoothScrollLink
           className={cn(
             buttonVariants({ size: "sm" }),
             "h-auto rounded-none px-3 py-2 font-headline text-[10px] font-bold tracking-[0.12em] uppercase lg:px-4 lg:text-[11px]",
@@ -72,7 +73,7 @@ export async function LandingHeader({
           href="#join"
         >
           {dictionary.home.nav.register}
-        </Link>
+        </SmoothScrollLink>
       </div>
     </nav>
   )

@@ -82,7 +82,7 @@ export function GitHubStarsLink({
     >
       <span className="hidden lg:inline">{githubLabel}</span>
       <span className="inline-flex items-center gap-1 rounded-none bg-popover px-1.5 py-0.5 text-[10px] text-primary">
-        <StarIcon />
+        <StarIcon size={16} />
         <span>{formatStars(stars, locale)}</span>
         <span className="hidden xl:inline">{starsLabel}</span>
       </span>
