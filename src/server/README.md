@@ -1,0 +1,8 @@
+# Server Domain Layer
+
+Keep domain and backend logic here (`src/server`) and out of UI components.
+
+Current scaffold:
+
+- `auth/`: authentication provider baseline (`better-auth` standard)
+- `system/`: internal service modules (health, diagnostics)

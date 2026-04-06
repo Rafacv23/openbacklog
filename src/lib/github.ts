@@ -1,0 +1,6 @@
+export const OPENBACKLOG_REPO_OWNER = "Rafacv23"
+export const OPENBACKLOG_REPO_NAME = "openbacklog"
+export const OPENBACKLOG_REPO_URL = `https://github.com/${OPENBACKLOG_REPO_OWNER}/${OPENBACKLOG_REPO_NAME}`
+
+export const GITHUB_STARS_REVALIDATE_SECONDS = 60 * 5
+export const GITHUB_STARS_REFRESH_INTERVAL_MS = 60 * 1000

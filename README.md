@@ -46,10 +46,10 @@ Positioning: **help players decide what to play and finish more games** (not jus
 
 Start with **Next.js backend** in the same app to move faster in the MVP:
 
-- Route Handlers + server-side services in `apps/web`
+- Route Handlers + server-side services in `src`
 - Type-safe domain modules under `src/server/*`
 - Better Auth for authentication
-- Keep clear service boundaries to allow future extraction into `apps/api`
+- Keep clear service boundaries to allow future extraction into a dedicated API app later
 
 ### Data and infra
 
@@ -64,20 +64,28 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 - IGDB API (game metadata)
 - Steam import (phase 1 external sync)
 
-### Monorepo
+### Current Repository Setup
 
-- pnpm + Turborepo
-- Suggested apps:
-  - `apps/web` (Next.js)
-  - `apps/worker` (optional in early phase, required when async load grows)
-- Suggested packages:
-  - `packages/ui`, `packages/config`, `packages/types`, `packages/i18n`
+- Single Next.js app repository (no workspaces)
+- One codebase for UI + backend endpoints during MVP
+- Keep modules organized by domain under `src/*`
+
+### Landing Header (Current)
+
+- Header extracted to `src/components/landing/header.tsx`.
+- Layout contract:
+  - Left: site title.
+  - Center: links to landing sections (`#hero`, `#capabilities`, `#testimonials`, `#join`).
+  - Right: register CTA, GitHub repository link with stars counter, and language dropdown.
+- Language selector uses `shadcn` `dropdown-menu` for locale switching (`en`, `es`).
+- GitHub stars are served from `GET /api/github/stars` and auto-refresh on client every minute.
+- Optional `GITHUB_TOKEN` can be configured in `.env` to avoid low unauthenticated GitHub API limits.
 
 ## High-Level Architecture
 
-- `apps/web` serves UI and backend endpoints.
+- This app serves UI and backend endpoints.
 - Domain logic lives in reusable server modules (not in UI components).
-- `worker` handles async tasks when needed (imports, reminders, analytics).
+- Background jobs can move to a worker service when needed (imports, reminders, analytics).
 - `redis` decouples write-heavy and time-based operations.
 - `turso` stores canonical relational data.
 
@@ -85,7 +93,7 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 
 ### Phase 0: Foundation
 
-- Monorepo setup, CI, lint/test/typecheck
+- CI and quality gates (`lint`, `typecheck`, `test`)
 - Auth, user profile, i18n foundation (`en`/`es`)
 - IGDB ingestion pipeline (core entities)
 
@@ -128,7 +136,7 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 
 - UI copy and metadata in English and Spanish from day one
 - Locale-aware slugs where possible
-- Translation key ownership in `packages/i18n`
+- Translation keys live in `src/lib/i18n`
 - All new UI changes require both locales before merge
 
 ## Monetization Model
@@ -149,16 +157,16 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 ## Local Development (target workflow)
 
 ```bash
-pnpm install
-pnpm dev
+bun install
+bun run dev
 ```
 
 Expected scripts once scaffolded:
 
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm build`
+- `bun run lint`
+- `bun run typecheck`
+- `bun run test`
+- `bun run build`
 
 ## Current Status
 

@@ -17,26 +17,21 @@ Build an open-source platform that helps players **finish more games**, not only
 
 ## Architectural Rules
 
-- Keep domain logic in `apps/web/src/server`, not in UI components.
+- Keep domain logic in `src/server`, not in UI components.
 - Use Next.js backend for MVP (Route Handlers + server services).
-- Keep async, scheduled, and heavy workloads in `apps/worker` once needed.
+- Keep async, scheduled, and heavy workloads in a dedicated worker service once needed.
 - Treat Turso as source of truth; Redis is acceleration, not canonical state.
 - Design API contracts mobile-ready from day one.
 - Prefer additive schema evolution via migrations only.
 - Authentication standard: Better Auth.
-
-## Suggested Repository Shape
-
-- `apps/web`: Next.js application (SSR/ISR/SEO + backend endpoints)
-- `apps/worker`: optional early, then required for queues/cron/import jobs
-- `packages/ui`: shared UI primitives
-- `packages/types`: shared contracts and DTOs
-- `packages/config`: lint/tsconfig/prettier/shared setup
-- `packages/i18n`: translation dictionaries and helpers
+- Email delivery standard: Resend.
 
 ## Engineering Standards
 
 - Language: TypeScript end-to-end.
+- Runtime and package manager: Bun.
+- Transactional email provider: Resend.
+- Email templates: React Email.
 - Testing baseline:
   - Unit tests for domain services.
   - Integration tests for API endpoints.
@@ -128,4 +123,4 @@ A task is done when:
 
 ## Initial Open Decisions (Owner Input Needed)
 
-1. Trigger criteria to split backend from Next.js into a dedicated `apps/api`.
+1. Trigger criteria to split backend from Next.js into a dedicated API service.
