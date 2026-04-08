@@ -17,7 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
@@ -141,7 +141,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
   }
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-background text-foreground xl:pl-64">
+    <main className="relative min-h-screen overflow-x-clip bg-background text-foreground">
       <LandingHeader dictionary={dictionary} locale={locale} />
 
       <script
@@ -150,65 +150,6 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
           __html: JSON.stringify(jsonLd),
         }}
       />
-
-      <aside
-        aria-label={dictionary.home.aria.sideNavigation}
-        className="fixed top-0 left-0 z-40 hidden h-screen w-64 flex-col border-r border-border/20 bg-card pt-16 xl:flex"
-      >
-        <div className="px-6 py-8">
-          <h4 className="font-body text-xs tracking-[0.3em] text-primary uppercase">
-            {dictionary.home.nav.side.operator}
-          </h4>
-          <p className="mt-1 font-body text-[10px] tracking-[0.1em] text-muted-foreground uppercase">
-            {dictionary.home.nav.side.status}
-          </p>
-        </div>
-
-        <nav className="flex-1">
-          {dictionary.home.nav.side.links.map((item, index) => (
-            <Link
-              key={item}
-              href="#"
-              className={cn(
-                "flex items-center px-4 py-3 font-body text-sm tracking-[0.1em] uppercase transition-transform hover:scale-[0.98]",
-                index === 0
-                  ? "border-l-4 border-primary bg-muted text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              <span className="mr-3 inline-block h-2 w-2 border border-current" />
-              {item}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="border-y border-border/20 px-6 py-6">
-          <Button
-            aria-label={dictionary.home.nav.side.newEntry}
-            className="h-auto w-full rounded-none py-3 font-headline text-xs font-bold tracking-[0.1em] uppercase"
-            type="button"
-          >
-            {dictionary.home.nav.side.newEntry}
-          </Button>
-        </div>
-
-        <div className="mt-auto">
-          <Link
-            href="#"
-            className="flex items-center px-4 py-3 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:bg-muted"
-          >
-            <span className="mr-3 inline-block h-2 w-2 rounded-full border border-current" />
-            {dictionary.home.nav.side.help}
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center px-4 py-3 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:bg-muted"
-          >
-            <span className="mr-3 inline-block h-2 w-2 rounded-full border border-current" />
-            {dictionary.home.nav.side.logout}
-          </Link>
-        </div>
-      </aside>
 
       <section
         id="hero"

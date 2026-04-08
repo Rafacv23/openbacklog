@@ -18,14 +18,6 @@ export const es = {
       register: "UNETE A LA BETA",
       github: "GITHUB",
       stars: "estrellas",
-      side: {
-        operator: "PLAN_JUGADOR",
-        status: "ESTADO: EN SEGUIMIENTO",
-        links: ["HOY", "SIGUIENTE", "EN CURSO", "COMPLETADOS"],
-        newEntry: "ANADIR JUEGO",
-        help: "SOPORTE",
-        logout: "SALIR",
-      },
       mobile: ["HOY", "BACKLOG", "PERFIL"],
     },
     hero: {
@@ -227,7 +219,6 @@ export const es = {
       submitEmail: "Unirme a la waitlist",
       mobileNavigation: "Navegacion movil inferior",
       topNavigation: "Navegacion superior",
-      sideNavigation: "Navegacion lateral",
       testimonialSection: "Seccion de testimonios",
       capabilitiesSection: "Seccion de capacidades",
       faqSection: "Seccion de preguntas frecuentes",

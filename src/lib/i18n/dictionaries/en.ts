@@ -18,14 +18,6 @@ export const en = {
       register: "JOIN BETA",
       github: "GITHUB",
       stars: "stars",
-      side: {
-        operator: "PLAYER_PLAN",
-        status: "STATUS: TRACKING",
-        links: ["TODAY", "NEXT UP", "IN PROGRESS", "COMPLETED"],
-        newEntry: "ADD GAME",
-        help: "SUPPORT",
-        logout: "SIGN OUT",
-      },
       mobile: ["TODAY", "BACKLOG", "PROFILE"],
     },
     hero: {
@@ -223,7 +215,6 @@ export const en = {
       submitEmail: "Join waitlist",
       mobileNavigation: "Bottom mobile navigation",
       topNavigation: "Top navigation",
-      sideNavigation: "Side navigation",
       testimonialSection: "Testimonials section",
       capabilitiesSection: "Capabilities section",
       faqSection: "Frequently asked questions section",
