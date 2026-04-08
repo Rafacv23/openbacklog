@@ -129,32 +129,49 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
     items: [] as Array<{ question: string; answer: string }>,
   }
 
+  const jsonLdGraph: Array<Record<string, unknown>> = [
+    {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: `${BASE_URL}/${locale}`,
+      inLanguage: locale,
+      description: dictionary.seo.description,
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: dictionary.home.jsonLd.name,
+      alternateName: dictionary.home.jsonLd.alternateName,
+      applicationCategory: dictionary.home.jsonLd.applicationCategory,
+      operatingSystem: dictionary.home.jsonLd.operatingSystem,
+      slogan: dictionary.home.jsonLd.slogan,
+      offers: {
+        "@type": "Offer",
+        name: dictionary.home.jsonLd.offers,
+      },
+      description: dictionary.home.jsonLd.description,
+      featureList: dictionary.home.jsonLd.featureList,
+      screenshot: dictionary.home.jsonLd.screenshot,
+    },
+  ]
+
+  if (faq.items.length > 0) {
+    jsonLdGraph.push({
+      "@type": "FAQPage",
+      inLanguage: locale,
+      mainEntity: faq.items.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    })
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        name: SITE_NAME,
-        url: `${BASE_URL}/${locale}`,
-        inLanguage: locale,
-        description: dictionary.seo.description,
-      },
-      {
-        "@type": "SoftwareApplication",
-        name: dictionary.home.jsonLd.name,
-        alternateName: dictionary.home.jsonLd.alternateName,
-        applicationCategory: dictionary.home.jsonLd.applicationCategory,
-        operatingSystem: dictionary.home.jsonLd.operatingSystem,
-        slogan: dictionary.home.jsonLd.slogan,
-        offers: {
-          "@type": "Offer",
-          name: dictionary.home.jsonLd.offers,
-        },
-        description: dictionary.home.jsonLd.description,
-        featureList: dictionary.home.jsonLd.featureList,
-        screenshot: dictionary.home.jsonLd.screenshot,
-      },
-    ],
+    "@graph": jsonLdGraph,
   }
 
   return (

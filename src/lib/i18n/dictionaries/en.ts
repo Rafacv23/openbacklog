@@ -20,8 +20,8 @@ export const en = {
       mobile: ["TODAY", "BACKLOG", "PROFILE"],
     },
     hero: {
-      titleLead: "finish your game backlog,",
-      titleHighlight: "ONE COMPLETED GAME AT A TIME.",
+      titleLead: "Finish your game backlog",
+      titleHighlight: "one completed game at a time.",
       releaseBadgeLabel: "LATEST BUILD",
       releaseBadgeValue: "v0.0.1",
       primaryCta: "JOIN BETA",

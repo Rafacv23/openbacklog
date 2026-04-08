@@ -20,8 +20,8 @@ export const es = {
       mobile: ["HOY", "BACKLOG", "PERFIL"],
     },
     hero: {
-      titleLead: "termina tu backlog de juegos,",
-      titleHighlight: "UN JUEGO COMPLETADO CADA VEZ.",
+      titleLead: "Termina tu backlog de juegos",
+      titleHighlight: "un juego completado cada vez.",
       releaseBadgeLabel: "ÚLTIMA VERSIÓN",
       releaseBadgeValue: "v0.0.1",
       primaryCta: "ÚNETE A LA BETA",
@@ -37,7 +37,7 @@ export const es = {
         progressValue: "88%",
         progressNumber: 88,
         imageAlt:
-          "Ilustracion de fantasia oscura con runas doradas brillantes y un caballero solitario con armadura pesada",
+          "Ilustración de fantasía oscura con runas doradas brillantes y un caballero solitario con armadura pesada",
         imageSrc: "/images/elden-ring-cover-2079746590.webp",
       },
       {
@@ -49,12 +49,12 @@ export const es = {
         progressValue: "32%",
         progressNumber: 32,
         imageAlt:
-          "Calle futurista iluminada por neon durante la noche con anuncios brillantes y reflejos sobre asfalto mojado",
+          "Calle futurista iluminada por neón durante la noche con anuncios brillantes y reflejos sobre asfalto mojado",
         imageSrc:
           "/images/795696-cyberpunk-2077-playstation-4-front-cover-4048827496.webp",
       },
       {
-        badge: "SIGUIENTE ELECCION",
+        badge: "SIGUIENTE ELECCIÓN",
         title: "Hades II",
         playtimeLabel: "TIEMPO",
         playtimeValue: "12H",
@@ -62,19 +62,19 @@ export const es = {
         progressValue: "15%",
         progressNumber: 15,
         imageAlt:
-          "Ilustracion mistica abstracta con espirales de energia verde y violeta sobre un fondo negro profundo",
+          "Ilustración mística abstracta con espirales de energía verde y violeta sobre un fondo negro profundo",
         imageSrc: "/images/hades2coverart-3153497908.webp",
       },
     ],
     capabilities: {
-      title: "Por Que Los Jugadores Terminan Mas Con OpenBacklog",
+      title: "Por Qué Los Jugadores Terminan Más Con OpenBacklog",
       protocol: "SISTEMA BACKLOG",
-      archivistTitle: "UN SIGUIENTE JUEGO CLARO",
+      archivistTitle: "ENCUENTRA RÁPIDAMENTE TU PRÓXIMO JUEGO",
       archivistBody:
         "Deja de perder tiempo revisando tu biblioteca. OpenBacklog puntúa tu backlog por esfuerzo, prioridad y ritmo para decirte qué jugar después.",
       latencyLabel: "FOCO SEMANAL:",
       latencyValue: "5 SESIONES",
-      neuralTitle: "PLANIFICACION INTELIGENTE",
+      neuralTitle: "PLANIFICACIÓN INTELIGENTE",
       neuralBody:
         "Planifica sesiones realistas con el tiempo que de verdad tienes. Mantiene tu progreso visible, reduce abandono y te ayuda a cerrar más juegos.",
       efficiencyLabel: "Mejora en completado",
@@ -82,13 +82,13 @@ export const es = {
       globalTitle: "BIBLIOTECA SINCRONIZADA",
       globalBody:
         "Importa tus juegos, centraliza tu backlog y actualiza estados desde cualquier dispositivo. Tus datos quedan limpios, buscables y accionables.",
-      repository: "VER ROADMAP PUBLICO",
+      repository: "VER ROADMAP PÚBLICO",
       metadataTitle: "DATOS PARA DECIDIR MEJOR",
       metadataBody:
         "Fechas de lanzamiento, estimaciones de horas y metadatos de plataforma en una sola vista para priorizar mejor y terminar más títulos.",
       metadataTags: [
-        "IMPORTACION STEAM",
-        "ESTIMACION DE HORAS",
+        "IMPORTACIÓN STEAM",
+        "ESTIMACIÓN DE HORAS",
         "CALENDARIO DE LANZAMIENTOS",
       ],
       decrypting: "SINCRONIZANDO BIBLIOTECA...",
@@ -200,20 +200,20 @@ export const es = {
     },
     labels: {
       terminal: "terminal",
-      settings: "configuracion",
+      settings: "configuración",
       gameCardMenu: "menu",
       gameCardSensor: "sensor",
       gameCardHistory: "historial",
       database: "base de datos",
       dashboard: "panel",
       inventory: "inventario",
-      curation: "priorizacion",
+      curation: "priorización",
       profile: "perfil",
       help: "ayuda",
       logout: "salir",
       latencyIndicator: "estado",
       operatorsIndicator: "jugadores",
-      mobileNav: "navegacion movil",
+      mobileNav: "navegación móvil",
       language: "idioma",
       testimonials: "testimonios",
       capabilities: "capacidades",
@@ -223,9 +223,9 @@ export const es = {
     aria: {
       primaryCta: "Únete a la beta",
       secondaryCta: "Ver roadmap",
-      releaseBadge: "Abrir pagina de changelog",
+      releaseBadge: "Abrir página de changelog",
       githubRepository: "Abrir repositorio de GitHub",
-      repository: "Abrir roadmap publico",
+      repository: "Abrir roadmap público",
       footerLink: "Abrir enlace",
       languageSwitcher: "Cambiar idioma",
       email: "Correo electrónico",
@@ -254,13 +254,13 @@ export const es = {
       applicationCategory: "ProductivityApplication",
       operatingSystem: "Web",
       offers: "Waitlist beta gratuita",
-      slogan: "Termina mas juegos con un backlog inteligente",
+      slogan: "Termina más juegos con un backlog inteligente",
       description:
         "OpenBacklog te ayuda a decidir qué jugar después, organizar tu backlog de juegos y terminar más títulos con planificación y responsabilidad social.",
       featureList: [
-        "Priorizacion de backlog",
-        "Recomendaciones de que jugar despues",
-        "Planificacion segun horas disponibles",
+        "Priorización de backlog",
+        "Recomendaciones de qué jugar después",
+        "Planificación según horas disponibles",
         "Funciones sociales de responsabilidad",
       ],
       screenshot:
@@ -285,57 +285,57 @@ export const es = {
     backHome: "VOLVER AL INICIO",
   },
   features: {
-    metaTitle: "Roadmap de OpenBacklog | Vota y Propone Features",
+    metaTitle: "Hoja de Ruta de OpenBacklog | Vota y Propón Funcionalidades",
     metaDescription:
-      "Vota próximas funcionalidades de OpenBacklog y propone ideas para el roadmap del gestor de backlog de juegos.",
-    title: "Roadmap de Features",
+      "Vota próximas funcionalidades de OpenBacklog y propone ideas para la hoja de ruta de nuestro gestor de backlog de videojuegos.",
+    title: "Hoja de Ruta de Funcionalidades",
     description:
-      "Vota funcionalidades futuras y propone ideas para mejorar un gestor de backlog centrado en decidir mejor y terminar más juegos.",
+      "Vota funcionalidades futuras y propone ideas para mejorar un gestor de backlog de videojuegos centrado en decidir mejor y terminar más juegos.",
     backHome: "VOLVER AL INICIO",
     statusLive: "ROADMAP ACTIVO",
     statusCommunity: "SUGERENCIAS DE LA COMUNIDAD ABIERTAS",
     developmentOrderTitle: "Orden de Desarrollo",
     developmentOrderDescription:
-      "Esta es la secuencia actual de implementacion para las proximas features. Cerramos cada fase antes de pasar a la siguiente.",
+      "Esta es la secuencia actual de implementación para las próximas funcionalidades. Cerramos cada fase antes de pasar a la siguiente.",
     phases: [
       {
         id: "FASE 0",
         status: "AHORA",
         title: "Base del Producto",
         description:
-          "Fundacion tecnica para que la plataforma sea estable, indexable y escalable.",
+          "Fundación técnica para que la plataforma sea estable, indexable y escalable.",
         items: [
           "Quality gates en CI: lint, typecheck y test antes de merge",
-          "Autenticacion con Better Auth y perfil base de usuario",
-          "Base i18n bilingue en espanol e ingles",
-          "Pipeline de ingesta IGDB y modelo canonico de datos de juego",
-          "Base SEO para paginas publicas: metadata, canonicals y JSON-LD",
+          "Autenticación con Better Auth y perfil base de usuario",
+          "Base i18n bilingüe en español e inglés",
+          "Pipeline de ingesta IGDB y modelo canónico de datos de juego",
+          "Base SEO para páginas públicas: metadata, canonicals y JSON-LD",
         ],
       },
       {
         id: "FASE 1",
         status: "SIGUIENTE",
-        title: "Backlog Core",
+        title: "Núcleo del Backlog",
         description:
           "Flujos principales de backlog para uso diario y seguimiento de progreso.",
         items: [
-          "Estados de libreria: planned, playing, completed, dropped, on_hold",
+          "Estados de librería: planned, playing, completed, dropped, on_hold",
           "Valoraciones y reviews cortas",
-          "Busqueda, filtros y ordenacion de la libreria personal",
-          "Paginas publicas de perfil y reviews renderizadas en servidor",
+          "Búsqueda, filtros y ordenación de la librería personal",
+          "Páginas públicas de perfil y reviews renderizadas en servidor",
         ],
       },
       {
         id: "FASE 2",
         status: "PLANIFICADO",
-        title: "Social First",
+        title: "Social Primero",
         description:
-          "Loop social MVP centrado en responsabilidad y retencion antes de modulos AI.",
+          "Loop social MVP centrado en responsabilidad y retención antes de módulos AI.",
         items: [
           "Sistema de amistades y feed de actividad",
           "Reacciones e interacciones ligeras sobre actividad",
           "Rachas de completado y objetivos mensuales v1",
-          "Moderacion y controles de abuso para contenido generado por usuario",
+          "Moderación y controles de abuso para contenido generado por usuario",
         ],
       },
       {
@@ -343,36 +343,36 @@ export const es = {
         status: "PLANIFICADO",
         title: "Motor de Productividad",
         description:
-          "Soporte de decision para elegir mejor y terminar mas juegos.",
+          "Soporte de decisión para elegir mejor y terminar más juegos.",
         items: [
-          'Recomendacion "que juego hoy" (reglas v1)',
+          'Recomendación "qué juego hoy" (reglas v1)',
           "Score de completado del backlog y señales de riesgo de abandono",
-          "Estimacion de horas totales para limpiar el backlog",
-          "Planificacion de sesiones y recordatorios de lanzamientos",
+          "Estimación de horas totales para limpiar el backlog",
+          "Planificación de sesiones y recordatorios de lanzamientos",
         ],
       },
       {
         id: "FASE 4",
         status: "PLANIFICADO",
-        title: "Growth y Premium",
+        title: "Crecimiento y Premium",
         description:
-          "Capa de monetizacion y expansion una vez validado el loop principal.",
+          "Capa de monetización y expansión una vez validado el loop principal.",
         items: [
-          "Hardening de importacion Steam y mejoras de onboarding",
+          "Hardening de importación Steam y mejoras de onboarding",
           "Recomendaciones smart premium (AI en fase posterior)",
           "Soporte de anuncios en free y modo premium sin anuncios",
-          "Separacion a worker para jobs pesados y contratos API mobile-ready",
+          "Separación a worker para jobs pesados y contratos API mobile-ready",
         ],
       },
     ],
     voteTitle: "Vota lo que construimos después",
     voteBody:
       "Vota las funcionalidades planificadas para priorizar lo que más impacto tenga en completado de backlog.",
-    proposeTitle: "Propón una feature",
+    proposeTitle: "Propón una funcionalidad",
     proposeBody:
       "Comparte tu propuesta con contexto, valor esperado y casos de uso para que la comunidad la revise y la apoye.",
     suggestion: {
-      title: "Envía una sugerencia para el roadmap",
+      title: "Envía una sugerencia para la hoja de ruta",
       description:
         "Cuéntanos qué funcionalidad te ayudaría a terminar más juegos. Tu sugerencia llega directo al inbox de producto.",
       trigger: "ENVIAR SUGERENCIA",
