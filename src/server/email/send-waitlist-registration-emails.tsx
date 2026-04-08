@@ -11,7 +11,7 @@ import { WaitlistConfirmationEmail } from "./templates/waitlist-confirmation-ema
 
 const userSubjectByLocale: Record<SupportedLocale, string> = {
   en: "You are on the OpenBacklog waitlist",
-  es: "Ya estas en la waitlist de OpenBacklog",
+  es: "Ya estás en la waitlist de OpenBacklog",
 }
 
 const adminSubject = "Nuevo registro en la waitlist de OpenBacklog"

@@ -13,7 +13,6 @@ export const en = {
         { label: "HOW IT WORKS", href: "#capabilities" },
         { label: "RESULTS", href: "#testimonials" },
         { label: "FAQ", href: "#faq" },
-        { label: "JOIN BETA", href: "#join" },
       ],
       register: "JOIN BETA",
       github: "GITHUB",
@@ -92,7 +91,7 @@ export const en = {
       circuitImageAlt:
         "Circuit board pattern with glowing green data traces and futuristic microchip components",
       circuitImageSrc:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuC5nlnUGGoCzWvrXAbIbJFeiAZCSubuQOLMdQD6mY4Rh1SHtedI-FOjBMiL5Wc8_jxz3YEltPzMePuDiu2CUn0poMZRGNMPIjGXEoCcRGDxHtX1PCtHBSfsjSu0X_nxmuVuNb_v-GvEIn0ogWGe662_n4M3d2ZGiQ8_ONpG7DPGP7I3Vf6lg4otnSKWLP7c_ggZbB1Q71HkzrYL_CP6uuUExTIlibyKhFPp3WcN8FSmN0Xr0jIkmj_oKCsSWDYCC0jJ2fTwi0W_yPc",
+        "/images/795696-cyberpunk-2077-playstation-4-front-cover-4048827496.webp",
     },
     testimonials: {
       eyebrow: "PLAYER STORIES",
@@ -163,8 +162,15 @@ export const en = {
           "You are registered. Confirmation email is pending.",
         alreadyRegistered: "This email is already on the waitlist.",
         invalidEmail: "Enter a valid email address.",
+        rateLimited:
+          "Too many attempts in a short period. Try again in a few minutes.",
         genericError: "Something went wrong. Please try again.",
       },
+      legalPrefix: "By joining, you agree to our",
+      legalPrivacy: "Privacy Policy",
+      legalTerms: "Terms of Service",
+      legalAnd: "and",
+      legalCookies: "Cookie Policy",
     },
     footer: {
       copyright: "© 2026 OpenBacklog. All rights reserved.",
@@ -176,8 +182,15 @@ export const en = {
         features: "ROADMAP",
         faq: "FAQ",
         github: "GITHUB",
+        privacy: "PRIVACY",
+        terms: "TERMS",
+        cookies: "COOKIES",
       },
-      mobileLinks: ["TODAY", "BACKLOG", "PROFILE"],
+      mobileLinks: {
+        home: "HOME",
+        roadmap: "ROADMAP",
+        changelog: "CHANGELOG",
+      },
       madeBy: "Made by Rafa Canosa",
       websiteLabel: "rafacanosa.dev",
     },
@@ -277,6 +290,77 @@ export const en = {
     backHome: "BACK TO HOMEPAGE",
     statusLive: "LIVE ROADMAP",
     statusCommunity: "COMMUNITY SUGGESTIONS OPEN",
+    developmentOrderTitle: "Development Order",
+    developmentOrderDescription:
+      "This is the current implementation sequence for upcoming features. We ship each phase before moving to the next one.",
+    phases: [
+      {
+        id: "PHASE 0",
+        status: "NOW",
+        title: "Foundation",
+        description:
+          "Core platform baseline so the product is stable, indexable, and ready to scale.",
+        items: [
+          "CI quality gates: lint, typecheck, and test before merge",
+          "Authentication with Better Auth and baseline user profile",
+          "Bilingual i18n baseline in English and Spanish",
+          "IGDB ingestion pipeline and canonical game data model",
+          "SEO baseline for public pages: metadata, canonicals, and JSON-LD",
+        ],
+      },
+      {
+        id: "PHASE 1",
+        status: "NEXT",
+        title: "Core Backlog",
+        description:
+          "Main backlog workflows needed for daily usage and progress tracking.",
+        items: [
+          "Library states: planned, playing, completed, dropped, on_hold",
+          "Ratings and short reviews",
+          "Search, filter, and sorting for personal library",
+          "Server-rendered public profile and review pages",
+        ],
+      },
+      {
+        id: "PHASE 2",
+        status: "PLANNED",
+        title: "Social First",
+        description:
+          "MVP social loop focused on accountability and retention before AI modules.",
+        items: [
+          "Friend system and activity feed",
+          "Reactions and lightweight interactions on activity",
+          "Completion streaks and monthly goals v1",
+          "Moderation and abuse controls for user-generated content",
+        ],
+      },
+      {
+        id: "PHASE 3",
+        status: "PLANNED",
+        title: "Productivity Engine",
+        description:
+          "Decision support that helps players choose better and finish more titles.",
+        items: [
+          '"What should I play today?" recommendation (rules-based v1)',
+          "Backlog completion score and drop-risk signals",
+          "Estimated total hours to clear backlog",
+          "Session planning and release reminders",
+        ],
+      },
+      {
+        id: "PHASE 4",
+        status: "PLANNED",
+        title: "Growth and Premium",
+        description:
+          "Monetization and expansion layer once the core loop is validated.",
+        items: [
+          "Steam import hardening and onboarding improvements",
+          "Premium smart recommendations (AI in later phase)",
+          "Free tier ad support and premium ad-free mode",
+          "Worker split for heavy jobs and mobile-ready API contracts",
+        ],
+      },
+    ],
     voteTitle: "Vote what we build next",
     voteBody:
       "Upvote planned features so we can prioritize what creates the highest impact on backlog completion.",
@@ -310,10 +394,125 @@ export const en = {
         invalidEmail: "Enter a valid email address.",
         invalidPayload:
           "Complete title and details so we can review your suggestion.",
+        rateLimited:
+          "Too many attempts in a short period. Try again in a few minutes.",
         genericError: "Something went wrong. Please try again.",
       },
     },
     changelogLink: "VIEW CHANGELOG",
+  },
+  legal: {
+    navigation: {
+      privacy: "Privacy",
+      terms: "Terms",
+      cookies: "Cookies",
+    },
+    common: {
+      backHome: "BACK TO HOMEPAGE",
+      effectiveDateLabel: "Effective Date:",
+      lastUpdated: "April 8, 2026",
+    },
+    privacy: {
+      metaTitle: "Privacy Policy | OpenBacklog",
+      metaDescription:
+        "Read how OpenBacklog collects, uses, and protects your data for the waitlist and product updates.",
+      title: "Privacy Policy",
+      intro:
+        "This policy explains how OpenBacklog handles personal data while operating the waitlist and early product access.",
+      sections: [
+        {
+          title: "Data We Collect",
+          body: [
+            "We collect the email address you submit through the waitlist and optional feature suggestion forms.",
+            "We also process limited technical information such as IP-derived rate-limit signals and request metadata for abuse prevention.",
+          ],
+        },
+        {
+          title: "How We Use Data",
+          body: [
+            "We use your email to confirm waitlist registration, send launch announcements, and share product updates.",
+            "We use security and abuse-prevention data to protect the platform and keep forms available for legitimate users.",
+          ],
+        },
+        {
+          title: "Sharing and Retention",
+          body: [
+            "We do not sell personal data. We only share data with infrastructure providers required to operate the service (for example email delivery and database hosting).",
+            "We keep data for as long as needed to operate the waitlist and related communications or to comply with legal obligations.",
+          ],
+        },
+        {
+          title: "Your Rights",
+          body: [
+            "You can request access, correction, or deletion of your data at any time by contacting hello@openbacklog.app.",
+          ],
+        },
+      ],
+    },
+    terms: {
+      metaTitle: "Terms of Service | OpenBacklog",
+      metaDescription:
+        "Review the terms that govern your access to OpenBacklog waitlist pages and early product use.",
+      title: "Terms of Service",
+      intro:
+        "By using OpenBacklog pages and joining the waitlist, you agree to these terms.",
+      sections: [
+        {
+          title: "Service Scope",
+          body: [
+            "OpenBacklog is provided as an evolving product. Features, access conditions, and availability may change during development.",
+          ],
+        },
+        {
+          title: "Acceptable Use",
+          body: [
+            "You agree not to abuse forms, attempt unauthorized access, or interfere with site operations.",
+            "Automated or malicious activity can be blocked or removed to protect service reliability.",
+          ],
+        },
+        {
+          title: "Intellectual Property",
+          body: [
+            "OpenBacklog branding, content, and software are protected by applicable intellectual property laws unless explicitly stated otherwise.",
+          ],
+        },
+        {
+          title: "Disclaimer and Liability",
+          body: [
+            'The service is provided on an "as is" basis without warranties of uninterrupted availability.',
+            "To the maximum extent allowed by law, OpenBacklog is not liable for indirect or consequential damages resulting from use of the service.",
+          ],
+        },
+      ],
+    },
+    cookies: {
+      metaTitle: "Cookie Policy | OpenBacklog",
+      metaDescription:
+        "Understand how OpenBacklog uses cookies and similar technologies on waitlist and product pages.",
+      title: "Cookie Policy",
+      intro:
+        "OpenBacklog uses limited cookies and similar technologies to operate core site functionality.",
+      sections: [
+        {
+          title: "Essential Cookies",
+          body: [
+            "Essential cookies may be used for security, session continuity, and language-related behavior.",
+          ],
+        },
+        {
+          title: "Analytics and Performance",
+          body: [
+            "As analytics capabilities are introduced, this policy will be updated to describe the exact providers and controls available to users.",
+          ],
+        },
+        {
+          title: "Managing Cookies",
+          body: [
+            "You can control or delete cookies through your browser settings. Blocking essential cookies may impact how the site works.",
+          ],
+        },
+      ],
+    },
   },
   common: {
     languageSwitcherLabel: "Language",

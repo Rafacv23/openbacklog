@@ -19,6 +19,7 @@ type WaitlistFormMessages = {
     createdEmailPending: string
     genericError: string
     invalidEmail: string
+    rateLimited: string
     success: string
   }
 }
@@ -29,6 +30,7 @@ type WaitlistResponseStatus =
   | "created_email_pending"
   | "error"
   | "invalid_email"
+  | "rate_limited"
 
 type WaitlistFormProps = {
   locale: SupportedLocale
@@ -36,6 +38,7 @@ type WaitlistFormProps = {
 }
 
 export function WaitlistForm({ locale, messages }: WaitlistFormProps) {
+  const [company, setCompany] = useState("")
   const [email, setEmail] = useState("")
   const [feedbackMessage, setFeedbackMessage] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -55,6 +58,10 @@ export function WaitlistForm({ locale, messages }: WaitlistFormProps) {
 
     if (status === "invalid_email") {
       return messages.feedback.invalidEmail
+    }
+
+    if (status === "rate_limited") {
+      return messages.feedback.rateLimited
     }
 
     return messages.feedback.genericError
@@ -78,6 +85,7 @@ export function WaitlistForm({ locale, messages }: WaitlistFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          company,
           email,
           locale,
         }),
@@ -100,16 +108,36 @@ export function WaitlistForm({ locale, messages }: WaitlistFormProps) {
 
   return (
     <form className="mx-auto mt-10 w-full max-w-[560px]" onSubmit={handleSubmit}>
+      <div aria-hidden="true" className="sr-only">
+        <label htmlFor="waitlist-company">Company</label>
+        <input
+          autoComplete="organization"
+          id="waitlist-company"
+          name="company"
+          onChange={(event) => setCompany(event.target.value)}
+          tabIndex={-1}
+          type="text"
+          value={company}
+        />
+      </div>
+
       <Card className="rounded-none border-0 bg-black py-0 ring-0">
         <CardContent className="flex flex-col gap-0 p-0 md:flex-row">
+          <label className="sr-only" htmlFor="waitlist-email">
+            {messages.ariaEmail}
+          </label>
           <Input
             aria-label={messages.ariaEmail}
             autoComplete="email"
             className="h-14 flex-1 rounded-none border-0 bg-transparent px-5 font-body text-xs tracking-[0.1em] text-primary placeholder:text-white/35 focus-visible:ring-0"
             disabled={isSubmitting}
+            id="waitlist-email"
+            inputMode="email"
+            name="email"
             onChange={(event) => setEmail(event.target.value)}
             placeholder={messages.emailPlaceholder}
             required
+            spellCheck={false}
             type="email"
             value={email}
           />

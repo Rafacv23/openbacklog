@@ -36,6 +36,7 @@ type RoadmapSuggestionMessages = {
     createdEmailPending: string
     invalidEmail: string
     invalidPayload: string
+    rateLimited: string
     genericError: string
   }
 }
@@ -46,6 +47,7 @@ type RoadmapSuggestionResponseStatus =
   | "error"
   | "invalid_email"
   | "invalid_payload"
+  | "rate_limited"
 
 type RoadmapSuggestionDialogProps = {
   locale: SupportedLocale
@@ -56,6 +58,7 @@ export function RoadmapSuggestionDialog({
   locale,
   messages,
 }: RoadmapSuggestionDialogProps) {
+  const [company, setCompany] = useState("")
   const [email, setEmail] = useState("")
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
@@ -79,6 +82,10 @@ export function RoadmapSuggestionDialog({
       return messages.feedback.invalidPayload
     }
 
+    if (status === "rate_limited") {
+      return messages.feedback.rateLimited
+    }
+
     return messages.feedback.genericError
   }
 
@@ -95,6 +102,7 @@ export function RoadmapSuggestionDialog({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          company,
           email,
           title,
           message,
@@ -110,6 +118,7 @@ export function RoadmapSuggestionDialog({
       setFeedbackMessage(mapFeedback(status))
 
       if (status === "created" || status === "created_email_pending") {
+        setCompany("")
         setEmail("")
         setTitle("")
         setMessage("")
@@ -137,28 +146,53 @@ export function RoadmapSuggestionDialog({
         </DialogDescription>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <div aria-hidden="true" className="sr-only">
+            <label htmlFor="roadmap-company">Company</label>
+            <input
+              autoComplete="organization"
+              id="roadmap-company"
+              name="company"
+              onChange={(event) => setCompany(event.target.value)}
+              tabIndex={-1}
+              type="text"
+              value={company}
+            />
+          </div>
+
           <div className="space-y-1.5">
-            <label className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+            <label
+              className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase"
+              htmlFor="roadmap-email"
+            >
               {messages.fields.emailLabel}
             </label>
             <Input
               autoComplete="email"
               disabled={isSubmitting}
+              id="roadmap-email"
+              inputMode="email"
+              name="email"
               onChange={(event) => setEmail(event.target.value)}
               placeholder={messages.fields.emailPlaceholder}
               required
+              spellCheck={false}
               type="email"
               value={email}
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+            <label
+              className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase"
+              htmlFor="roadmap-title"
+            >
               {messages.fields.titleLabel}
             </label>
             <Input
               disabled={isSubmitting}
+              id="roadmap-title"
               maxLength={120}
+              name="title"
               onChange={(event) => setTitle(event.target.value)}
               placeholder={messages.fields.titlePlaceholder}
               required
@@ -167,12 +201,17 @@ export function RoadmapSuggestionDialog({
           </div>
 
           <div className="space-y-1.5">
-            <label className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+            <label
+              className="font-body text-[11px] tracking-[0.08em] text-muted-foreground uppercase"
+              htmlFor="roadmap-message"
+            >
               {messages.fields.messageLabel}
             </label>
             <Textarea
               disabled={isSubmitting}
+              id="roadmap-message"
               maxLength={4000}
+              name="message"
               onChange={(event) => setMessage(event.target.value)}
               placeholder={messages.fields.messagePlaceholder}
               required

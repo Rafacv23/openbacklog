@@ -13,11 +13,13 @@ import { LanguageDropdown } from "@/components/landing/language-dropdown"
 type LandingHeaderProps = {
   dictionary: Dictionary
   locale: SupportedLocale
+  sections: ReadonlyArray<Dictionary["home"]["nav"]["sections"][number]>
 }
 
 export async function LandingHeader({
   dictionary,
   locale,
+  sections,
 }: LandingHeaderProps) {
   const stars = await getOpenBacklogRepoStars()
 
@@ -30,7 +32,7 @@ export async function LandingHeader({
   return (
     <nav
       aria-label={dictionary.home.aria.topNavigation}
-      className="fixed top-0 z-50 flex w-full items-center justify-between gap-3 border-b border-border/20 bg-popover/95 px-4 py-3 backdrop-blur xl:left-64 xl:w-[calc(100%-16rem)] xl:px-6"
+      className="fixed top-0 left-0 z-50 flex w-full items-center justify-between gap-3 border-b border-border/20 bg-popover/95 px-4 py-3 backdrop-blur xl:px-6"
     >
       <Link
         className="font-headline text-xl font-black tracking-[0.08em] md:text-2xl"
@@ -40,7 +42,7 @@ export async function LandingHeader({
       </Link>
 
       <div className="hidden items-center justify-center gap-6 md:flex lg:gap-8">
-        {dictionary.home.nav.sections.map((section) => (
+        {sections.map((section) => (
           <SmoothScrollLink
             key={section.href}
             className="px-1 py-1 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors duration-150 hover:text-primary"

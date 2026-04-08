@@ -6,6 +6,7 @@ import {
 
 export { SUPPORTED_LOCALES };
 export type { SupportedLocale };
+export const REQUEST_LOCALE_HEADER = "x-openbacklog-locale";
 
 export function assertSupportedLocale(locale: string): asserts locale is SupportedLocale {
   if (!isSupportedLocale(locale)) {

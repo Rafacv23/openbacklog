@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 
 import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
-import { getBaseUrl, SITE_NAME } from "@/lib/site"
+import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { getChangelogEntries } from "@/server/changelog/get-changelog-entries"
 
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +17,7 @@ type LocaleChangelogPageProps = {
 }
 
 const BASE_URL = getBaseUrl()
+const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
 
 export async function generateMetadata({
   params,
@@ -38,6 +39,7 @@ export async function generateMetadata({
       languages: {
         en: "/en/changelog",
         es: "/es/changelog",
+        "x-default": "/en/changelog",
       },
     },
     openGraph: {
@@ -47,11 +49,20 @@ export async function generateMetadata({
       locale,
       url: `${BASE_URL}/${locale}/changelog`,
       siteName: SITE_NAME,
+      images: [
+        {
+          url: DEFAULT_SOCIAL_IMAGE_URL,
+          width: 1200,
+          height: 630,
+          alt: dictionary.changelog.metaTitle,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: dictionary.changelog.metaTitle,
       description: dictionary.changelog.metaDescription,
+      images: [DEFAULT_SOCIAL_IMAGE_URL],
     },
   }
 }

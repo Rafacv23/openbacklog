@@ -217,12 +217,24 @@ Required env vars:
 - `RESEND_FROM_EMAIL`
 - `WAITLIST_ADMIN_EMAIL`
 - `ROADMAP_SUGGESTIONS_ADMIN_EMAIL` (optional, falls back to `WAITLIST_ADMIN_EMAIL`)
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` (optional, enables GA4)
+- `GOOGLE_SITE_VERIFICATION` (optional, enables GSC verification meta tag)
 
 Launch day mass email command (sends only users with `notification_sent = false` and marks them as sent):
 
 ```bash
 pnpm email:launch
 ```
+
+## Google Analytics + Search Console (Prepared)
+
+The app is already wired for both integrations:
+
+- GA4 script auto-loads if `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set.
+- Search Console verification meta tag is added if `GOOGLE_SITE_VERIFICATION` is set.
+- `robots.txt` and `sitemap.xml` are available for indexing.
+
+Once you share the IDs/tokens, just set them in environment variables and redeploy.
 
 ## Changelog entries (Markdown)
 

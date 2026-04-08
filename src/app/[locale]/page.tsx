@@ -21,7 +21,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
-import { getBaseUrl, SITE_NAME } from "@/lib/site"
+import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 type LocalePageProps = {
@@ -29,6 +29,8 @@ type LocalePageProps = {
 }
 
 const BASE_URL = getBaseUrl()
+const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
+const SHOW_SOCIAL_PROOF = false
 
 const GAME_CARD_LAYOUTS = [
   {
@@ -74,6 +76,7 @@ export async function generateMetadata({
       languages: {
         en: "/en",
         es: "/es",
+        "x-default": "/en",
       },
     },
     openGraph: {
@@ -83,11 +86,20 @@ export async function generateMetadata({
       locale,
       url: `${BASE_URL}/${locale}`,
       siteName: SITE_NAME,
+      images: [
+        {
+          url: DEFAULT_SOCIAL_IMAGE_URL,
+          width: 1200,
+          height: 630,
+          alt: dictionary.seo.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: dictionary.seo.title,
       description: dictionary.seo.description,
+      images: [DEFAULT_SOCIAL_IMAGE_URL],
     },
   }
 }
@@ -105,6 +117,11 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
   }
 
   const dictionary = getDictionary(locale)
+  const navigationSections = SHOW_SOCIAL_PROOF
+    ? dictionary.home.nav.sections
+    : dictionary.home.nav.sections.filter(
+        (section) => section.href !== "#testimonials",
+      )
   const faq = dictionary.home.faq ?? {
     eyebrow: "FAQ",
     title: "Frequently Asked Questions",
@@ -142,7 +159,11 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-background text-foreground">
-      <LandingHeader dictionary={dictionary} locale={locale} />
+      <LandingHeader
+        dictionary={dictionary}
+        locale={locale}
+        sections={navigationSections}
+      />
 
       <script
         type="application/ld+json"
@@ -171,7 +192,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
               variant="outline"
               className="rounded-none border-primary/40 bg-card/70 px-3 py-1 font-body text-[10px] tracking-[0.12em] text-primary uppercase hover:bg-primary/10"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
               {dictionary.home.hero.releaseBadgeLabel}
               <span className="text-foreground">
                 {dictionary.home.hero.releaseBadgeValue}
@@ -225,7 +246,6 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
                     className="mb-4 h-48 w-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
                     height={192}
                     src={card.imageSrc}
-                    unoptimized
                     width={320}
                   />
                   <h3 className="font-headline text-xl font-bold tracking-tight text-primary uppercase">
@@ -345,7 +365,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
             <Link
               aria-label={dictionary.home.aria.repository}
               className="mt-8 font-body text-xs tracking-[0.2em] text-primary uppercase hover:underline"
-              href="#"
+              href={`/${locale}/roadmap`}
             >
               {dictionary.home.capabilities.repository}
             </Link>
@@ -377,7 +397,6 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
                 className="absolute inset-0 h-full w-full object-cover opacity-30"
                 height={180}
                 src={dictionary.home.capabilities.circuitImageSrc}
-                unoptimized
                 width={320}
               />
               <span className="relative font-body text-[10px] tracking-[0.1em] text-primary uppercase">
@@ -388,60 +407,62 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
         </div>
       </section>
 
-      <section
-        id="testimonials"
-        aria-label={dictionary.home.aria.testimonialSection}
-        className="scroll-mt-24 bg-popover py-24"
-      >
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-16 flex flex-col items-end justify-between gap-4 md:flex-row">
-            <div>
-              <span className="font-body text-sm tracking-[0.3em] text-primary uppercase">
-                {dictionary.home.testimonials.eyebrow}
-              </span>
-              <h2 className="mt-2 font-headline text-5xl">
-                <span className="font-display italic">
-                  {dictionary.home.testimonials.title}
+      {SHOW_SOCIAL_PROOF ? (
+        <section
+          id="testimonials"
+          aria-label={dictionary.home.aria.testimonialSection}
+          className="scroll-mt-24 bg-popover py-24"
+        >
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-16 flex flex-col items-end justify-between gap-4 md:flex-row">
+              <div>
+                <span className="font-body text-sm tracking-[0.3em] text-primary uppercase">
+                  {dictionary.home.testimonials.eyebrow}
                 </span>
-              </h2>
+                <h2 className="mt-2 font-headline text-5xl">
+                  <span className="font-display italic">
+                    {dictionary.home.testimonials.title}
+                  </span>
+                </h2>
+              </div>
+              <div className="bg-card px-4 py-2 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase">
+                {dictionary.home.testimonials.activeOperators}
+              </div>
             </div>
-            <div className="bg-card px-4 py-2 font-body text-xs tracking-[0.1em] text-muted-foreground uppercase">
-              {dictionary.home.testimonials.activeOperators}
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
-            {dictionary.home.testimonials.items.map((item, index) => (
-              <Card
-                key={item.handle}
-                className="rounded-none bg-card p-8 ring-0 transition-colors hover:bg-muted"
-              >
-                <div className="mb-6 flex items-center gap-4">
-                  <Badge
-                    className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-none font-headline text-sm font-black",
-                      TESTIMONIAL_ACCENTS[index],
-                    )}
-                  >
-                    {item.initial}
-                  </Badge>
-                  <div>
-                    <div className="font-headline text-sm font-bold tracking-tight uppercase">
-                      {item.handle}
-                    </div>
-                    <div className="font-body text-[10px] tracking-[0.1em] text-muted-foreground uppercase">
-                      {item.stats}
+            <div className="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-3">
+              {dictionary.home.testimonials.items.map((item, index) => (
+                <Card
+                  key={item.handle}
+                  className="rounded-none bg-card p-8 ring-0 transition-colors hover:bg-muted"
+                >
+                  <div className="mb-6 flex items-center gap-4">
+                    <Badge
+                      className={cn(
+                        "flex h-12 w-12 items-center justify-center rounded-none font-headline text-sm font-black",
+                        TESTIMONIAL_ACCENTS[index],
+                      )}
+                    >
+                      {item.initial}
+                    </Badge>
+                    <div>
+                      <div className="font-headline text-sm font-bold tracking-tight uppercase">
+                        {item.handle}
+                      </div>
+                      <div className="font-body text-[10px] tracking-[0.1em] text-muted-foreground uppercase">
+                        {item.stats}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <p className="font-body text-xl leading-relaxed italic text-muted-foreground">
-                  {item.quote}
-                </p>
-              </Card>
-            ))}
+                  <p className="font-body text-xl leading-relaxed italic text-muted-foreground">
+                    {item.quote}
+                  </p>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section
         id="faq"
@@ -514,6 +535,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
                   alreadyRegistered:
                     dictionary.home.cta.feedback.alreadyRegistered,
                   invalidEmail: dictionary.home.cta.feedback.invalidEmail,
+                  rateLimited: dictionary.home.cta.feedback.rateLimited,
                   genericError: dictionary.home.cta.feedback.genericError,
                 },
               }}
@@ -522,6 +544,21 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
             <div className="mt-6 font-body text-[10px] tracking-[0.1em] text-black/55 uppercase">
               {dictionary.home.cta.security}
             </div>
+            <p className="mt-3 font-body text-[10px] tracking-[0.03em] text-black/70">
+              {dictionary.home.cta.legalPrefix}{" "}
+              <Link className="underline underline-offset-2" href={`/${locale}/privacy`}>
+                {dictionary.home.cta.legalPrivacy}
+              </Link>
+              ,{" "}
+              <Link className="underline underline-offset-2" href={`/${locale}/terms`}>
+                {dictionary.home.cta.legalTerms}
+              </Link>{" "}
+              {dictionary.home.cta.legalAnd}{" "}
+              <Link className="underline underline-offset-2" href={`/${locale}/cookies`}>
+                {dictionary.home.cta.legalCookies}
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>

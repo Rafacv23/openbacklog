@@ -32,6 +32,36 @@ export function LandingFooter({ dictionary, locale }: LandingFooterProps) {
       label: dictionary.home.footer.usefulLinks.github,
       external: true,
     },
+    {
+      href: `/${locale}/privacy`,
+      label: dictionary.home.footer.usefulLinks.privacy,
+      external: false,
+    },
+    {
+      href: `/${locale}/terms`,
+      label: dictionary.home.footer.usefulLinks.terms,
+      external: false,
+    },
+    {
+      href: `/${locale}/cookies`,
+      label: dictionary.home.footer.usefulLinks.cookies,
+      external: false,
+    },
+  ] as const
+
+  const mobileLinks = [
+    {
+      href: `/${locale}`,
+      label: dictionary.home.footer.mobileLinks.home,
+    },
+    {
+      href: `/${locale}/roadmap`,
+      label: dictionary.home.footer.mobileLinks.roadmap,
+    },
+    {
+      href: `/${locale}/changelog`,
+      label: dictionary.home.footer.mobileLinks.changelog,
+    },
   ] as const
 
   return (
@@ -73,6 +103,7 @@ export function LandingFooter({ dictionary, locale }: LandingFooterProps) {
                 <Link
                   className="text-primary underline underline-offset-4 hover:text-primary/85"
                   href="https://www.rafacanosa.dev/en"
+                  rel="noreferrer"
                   target="_blank"
                 >
                   {dictionary.home.footer.websiteLabel}
@@ -87,17 +118,18 @@ export function LandingFooter({ dictionary, locale }: LandingFooterProps) {
         aria-label={dictionary.home.aria.mobileNavigation}
         className="fixed bottom-0 z-[60] flex w-full items-center justify-around border-t border-border/30 bg-popover py-4 md:hidden"
       >
-        {dictionary.home.footer.mobileLinks.map((item, index) => (
-          <div
-            key={item}
+        {mobileLinks.map((item, index) => (
+          <Link
+            key={item.label}
             className={cn(
-              "flex flex-col items-center",
+              "flex flex-col items-center transition-colors",
               index === 0 ? "text-primary" : "text-muted-foreground",
             )}
+            href={item.href}
           >
             <span className="inline-block h-3 w-3 border border-current" />
-            <span className="mt-1 font-body text-[8px]">{item}</span>
-          </div>
+            <span className="mt-1 font-body text-[8px]">{item.label}</span>
+          </Link>
         ))}
       </nav>
     </>
