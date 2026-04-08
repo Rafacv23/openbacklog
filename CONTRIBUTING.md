@@ -28,7 +28,7 @@ When opening an issue, include:
 - Expected behavior
 - Current behavior
 - Reproduction steps
-- Environment details (OS, Bun version)
+- Environment details (OS, Node.js and pnpm versions)
 - Screenshots/logs if relevant
 
 For feature requests, include:
@@ -41,17 +41,17 @@ For feature requests, include:
 ## Development Setup
 
 ```bash
-bun install
-bun run dev
+pnpm install
+pnpm dev
 ```
 
 Run checks before submitting:
 
 ```bash
-bun run lint
-bun run typecheck
-bun run test
-bun run build
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
 ```
 
 ## Branch and PR Workflow

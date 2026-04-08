@@ -29,7 +29,8 @@ Build an open-source platform that helps players **finish more games**, not only
 ## Engineering Standards
 
 - Language: TypeScript end-to-end.
-- Runtime and package manager: Bun.
+- Runtime: Node.js.
+- Package manager: pnpm.
 - Transactional email provider: Resend.
 - Email templates: React Email.
 - Testing baseline:

@@ -157,16 +157,16 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 ## Local Development (target workflow)
 
 ```bash
-bun install
-bun run dev
+pnpm install
+pnpm dev
 ```
 
 Expected scripts once scaffolded:
 
-- `bun run lint`
-- `bun run typecheck`
-- `bun run test`
-- `bun run build`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
+- `pnpm build`
 
 ## Database (Turso + Drizzle)
 
@@ -194,8 +194,8 @@ turso db tokens create openbacklog
 # TURSO_AUTH_TOKEN=...
 
 # 4) Generate and run migrations
-bun run db:generate
-bun run db:migrate
+pnpm db:generate
+pnpm db:migrate
 ```
 
 ## Current Status
