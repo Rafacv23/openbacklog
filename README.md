@@ -167,6 +167,7 @@ Expected scripts once scaffolded:
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
+- `pnpm email:launch`
 
 ## Database (Turso + Drizzle)
 
@@ -192,11 +193,58 @@ turso db tokens create openbacklog
 # 3) Put them into .env
 # TURSO_DATABASE_URL=libsql://...
 # TURSO_AUTH_TOKEN=...
+# RESEND_API_KEY=re_...
+# RESEND_FROM_EMAIL=OpenBacklog <hello@updates.openbacklog.app>
+# WAITLIST_ADMIN_EMAIL=admin@openbacklog.app
 
 # 4) Generate and run migrations
 pnpm db:generate
 pnpm db:migrate
 ```
+
+## Waitlist Registration + Emails
+
+Landing waitlist flow now includes:
+
+- Save registration in Turso (`pre_registrations`)
+- Send confirmation email to the user (Resend + React Email template)
+- Send admin notification email for each new registration
+- Send roadmap suggestion notifications (`/{locale}/roadmap`) to admin + user confirmation
+
+Required env vars:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `WAITLIST_ADMIN_EMAIL`
+- `ROADMAP_SUGGESTIONS_ADMIN_EMAIL` (optional, falls back to `WAITLIST_ADMIN_EMAIL`)
+
+Launch day mass email command (sends only users with `notification_sent = false` and marks them as sent):
+
+```bash
+pnpm email:launch
+```
+
+## Changelog entries (Markdown)
+
+The changelog page reads markdown files from:
+
+- `content/changelog/en/*.md` (primary source)
+- `content/changelog/es/*.md` (optional)
+
+If a locale has no markdown entries (for example `/es`), the page automatically falls back to English content.
+
+Recommended frontmatter:
+
+```md
+---
+version: 0.0.2
+date: 2026-04-09
+title: "v0.0.2 - Short release title"
+summary: "One-line summary for cards and previews."
+---
+```
+
+Files are sorted by `date` (desc) and then `version` (desc).
 
 ## Current Status
 

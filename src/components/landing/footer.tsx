@@ -18,7 +18,7 @@ export function LandingFooter({ dictionary, locale }: LandingFooterProps) {
       external: false,
     },
     {
-      href: `/${locale}/features`,
+      href: `/${locale}/roadmap`,
       label: dictionary.home.footer.usefulLinks.features,
       external: false,
     },

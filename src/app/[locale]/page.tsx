@@ -8,6 +8,8 @@ import { getDictionary } from "@/lib/i18n"
 
 import { LandingFooter } from "@/components/landing/footer"
 import { LandingHeader } from "@/components/landing/header"
+import { SmoothScrollLink } from "@/components/landing/smooth-scroll-link"
+import { WaitlistForm } from "@/components/landing/waitlist-form"
 import {
   Accordion,
   AccordionContent,
@@ -15,9 +17,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, SITE_NAME } from "@/lib/site"
@@ -246,21 +247,26 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
           </h1>
 
           <div className="mt-12 flex flex-col justify-center gap-4 md:flex-row">
-            <Button
+            <SmoothScrollLink
               aria-label={dictionary.home.aria.primaryCta}
-              className="h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all hover:shadow-[0_0_20px_rgba(201,242,90,0.35)] active:scale-95"
-              type="button"
+              className={cn(
+                buttonVariants(),
+                "h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all hover:shadow-[0_0_20px_rgba(201,242,90,0.35)] active:scale-95",
+              )}
+              href="#join"
             >
               {dictionary.home.hero.primaryCta}
-            </Button>
-            <Button
+            </SmoothScrollLink>
+            <Link
               aria-label={dictionary.home.aria.secondaryCta}
-              className="h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all active:scale-95"
-              type="button"
-              variant="outline"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all active:scale-95",
+              )}
+              href={`/${locale}/roadmap`}
             >
               {dictionary.home.hero.secondaryCta}
-            </Button>
+            </Link>
           </div>
         </div>
 
@@ -552,24 +558,25 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
               {dictionary.home.cta.body}
             </p>
 
-            <Card className="mx-auto mt-10 w-full max-w-[560px] rounded-none border-0 bg-black py-0 ring-0">
-              <CardContent className="flex flex-col gap-0 p-0 md:flex-row">
-                <Input
-                  aria-label={dictionary.home.aria.email}
-                  className="h-14 flex-1 rounded-none border-0 bg-transparent px-5 font-body text-xs tracking-[0.1em] text-primary placeholder:text-white/35 focus-visible:ring-0"
-                  placeholder={dictionary.home.cta.emailPlaceholder}
-                  type="email"
-                />
-                <Button
-                  aria-label={dictionary.home.aria.submitEmail}
-                  className="h-14 rounded-none border-l border-white/15 bg-black px-7 font-headline text-xs font-bold tracking-[0.12em] text-primary uppercase hover:bg-white/5"
-                  type="button"
-                  variant="default"
-                >
-                  {dictionary.home.cta.button}
-                </Button>
-              </CardContent>
-            </Card>
+            <WaitlistForm
+              locale={locale}
+              messages={{
+                emailPlaceholder: dictionary.home.cta.emailPlaceholder,
+                button: dictionary.home.cta.button,
+                buttonSubmitting: dictionary.home.cta.buttonSubmitting,
+                ariaEmail: dictionary.home.aria.email,
+                ariaSubmit: dictionary.home.aria.submitEmail,
+                feedback: {
+                  success: dictionary.home.cta.feedback.success,
+                  createdEmailPending:
+                    dictionary.home.cta.feedback.createdEmailPending,
+                  alreadyRegistered:
+                    dictionary.home.cta.feedback.alreadyRegistered,
+                  invalidEmail: dictionary.home.cta.feedback.invalidEmail,
+                  genericError: dictionary.home.cta.feedback.genericError,
+                },
+              }}
+            />
 
             <div className="mt-6 font-body text-[10px] tracking-[0.1em] text-black/55 uppercase">
               {dictionary.home.cta.security}

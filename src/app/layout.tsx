@@ -23,10 +23,11 @@ const ibmPlexSerif = IBM_Plex_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseUrl()),
   title: {
-    default: `${SITE_NAME} | Finish More Games`,
+    default: `${SITE_NAME} | Game Backlog Tracker`,
     template: `%s | ${SITE_NAME}`,
   },
-  description: "OpenBacklog helps players finish more games with a backlog-first workflow.",
+  description:
+    "OpenBacklog is a game backlog tracker that helps players decide what to play next and finish more games.",
 };
 
 export default function RootLayout({

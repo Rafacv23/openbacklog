@@ -6,7 +6,6 @@ import { CheckIcon, ChevronDownIcon, LanguagesIcon } from "lucide-react"
 
 import type { SupportedLocale } from "@/lib/locales"
 
-import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,21 +35,28 @@ export function LanguageDropdown({
   label,
   options,
 }: LanguageDropdownProps) {
+  const controlClassName =
+    "inline-flex items-center gap-1 rounded-none px-2 py-1 font-body text-[10px] tracking-[0.08em] text-foreground uppercase transition-colors hover:border-primary hover:text-primary lg:gap-2 lg:px-2.5 lg:py-1.5 lg:text-[11px]"
+  const badgeClassName =
+    "inline-flex items-center gap-1 rounded-none bg-popover px-1.5 py-0.5 text-[10px] text-primary"
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={ariaLabel}
         render={
-          <Button
-            className="h-auto gap-1.5 rounded-none px-2 py-1 font-body text-[11px] tracking-[0.08em] uppercase"
-            size="sm"
-            variant="outline"
+          <button
+            className={controlClassName}
+            type="button"
           />
         }
       >
-        <LanguagesIcon data-icon="inline-start" />
-        {currentLocale.toUpperCase()}
-        <ChevronDownIcon data-icon="inline-end" />
+        <span className="hidden lg:inline">{label}</span>
+        <span className={badgeClassName}>
+          <LanguagesIcon className="size-4" />
+          <span>{currentLocale.toUpperCase()}</span>
+          <ChevronDownIcon className="size-3.5" />
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44 rounded-none">
         <DropdownMenuGroup>
