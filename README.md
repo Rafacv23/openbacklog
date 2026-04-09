@@ -64,6 +64,25 @@ Start with **Next.js backend** in the same app to move faster in the MVP:
 - IGDB API (game metadata)
 - Steam import (phase 1 external sync)
 
+### IGDB Integration Strategy (Implemented)
+
+Game reads should be **DB-first**:
+
+1. Query local Turso data first.
+2. If results are missing or stale, query IGDB.
+3. Upsert normalized data in Turso.
+4. Return data from local store whenever possible.
+
+This pattern reduces external dependency, controls rate usage, and improves latency.
+
+Current internal endpoint:
+
+- `GET /api/games/search?query=<text>&limit=<n>`
+  - Rate limited per IP
+  - Uses local cache + in-flight deduplication for burst traffic
+  - Uses retry/backoff for IGDB transient failures
+  - Writes IGDB results into `games` table for reuse
+
 ### Current Repository Setup
 
 - Single Next.js app repository (no workspaces)
@@ -169,16 +188,53 @@ Expected scripts once scaffolded:
 - `pnpm build`
 - `pnpm email:launch`
 
+## Authentication (Better Auth)
+
+Authentication is implemented with Better Auth on Next.js App Router:
+
+- API: `/api/auth/[...all]`
+- Auth pages:
+  - `/{locale}/login`
+  - `/{locale}/register`
+  - `/{locale}/forgot-password`
+  - `/{locale}/reset-password`
+- Supported locales: `en`, `es`
+- Sign-in methods:
+  - email + password
+  - Google OAuth (optional, requires env vars)
+  - GitHub OAuth (optional, requires env vars)
+- Security flows:
+  - email verification required before credential sign-in
+  - verification email re-send endpoint
+  - password reset via secure token email links
+
+Required auth environment variables:
+
+- `BETTER_AUTH_SECRET` (required in production)
+- `BETTER_AUTH_URL` (optional; defaults to `NEXT_PUBLIC_APP_BASE_URL`)
+
+Optional social auth environment variables:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+
+OAuth callback URLs for local development:
+
+- `http://localhost:3000/api/auth/callback/google`
+- `http://localhost:3000/api/auth/callback/github`
+
 ## Database (Turso + Drizzle)
 
-Initial scope for launch landing: one preregistration table only.
+Current schema includes both landing and authentication tables:
 
-Table: `pre_registrations`
-
-- `id`: auto-increment primary key
-- `email`: unique and required
-- `registered_at`: registration timestamp (unix epoch seconds)
-- `notification_sent`: boolean flag (`false` by default)
+- `pre_registrations`
+- `games`
+- `user`
+- `session`
+- `account`
+- `verification`
 
 Setup flow:
 
@@ -193,9 +249,17 @@ turso db tokens create openbacklog
 # 3) Put them into .env
 # TURSO_DATABASE_URL=libsql://...
 # TURSO_AUTH_TOKEN=...
+# BETTER_AUTH_SECRET=...
+# BETTER_AUTH_URL=http://localhost:3000
+# GOOGLE_CLIENT_ID=...
+# GOOGLE_CLIENT_SECRET=...
+# GITHUB_CLIENT_ID=...
+# GITHUB_CLIENT_SECRET=...
 # RESEND_API_KEY=re_...
 # RESEND_FROM_EMAIL=OpenBacklog <hello@updates.openbacklog.app>
 # WAITLIST_ADMIN_EMAIL=admin@openbacklog.app
+# IGDB_CLIENT_ID=...
+# IGDB_CLIENT_SECRET=...
 
 # 4) Generate and run migrations
 pnpm db:generate

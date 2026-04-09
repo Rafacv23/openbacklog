@@ -8,6 +8,20 @@
       "when": 1775518391489,
       "tag": "0000_cultured_menace",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1775746716641,
+      "tag": "0001_nifty_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1775747484356,
+      "tag": "0002_furry_silver_sable",
+      "breakpoints": true
     }
   ]
 }
