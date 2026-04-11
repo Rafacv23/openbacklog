@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { X } from "lucide-react"
+import Link from "next/link"
 
 import type { SupportedLocale } from "@/lib/locales"
 import { Card, CardContent } from "@/components/ui/card"
@@ -28,6 +29,8 @@ type SearchCopy = {
   platformsLabel: string
   ratingLabel: string
   resultsLabel: string
+  viewDetails: string
+  viewDetailsAriaLabel: string
 }
 
 type SearchGameResult = {
@@ -255,47 +258,57 @@ export function GameSearchClient({ dictionary, locale }: GameSearchClientProps) 
                 : dictionary.noReleaseDate
 
               return (
-                <Card key={game.igdbId} className="border border-border/60 bg-card/90 py-0">
-                  <CardContent className="space-y-3 p-4">
-                    <div className="flex items-start gap-3">
-                      <div
-                        aria-hidden="true"
-                        className="h-24 w-16 shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center"
-                        style={
-                          game.coverUrl
-                            ? {
-                                backgroundImage: `url(${game.coverUrl})`,
-                              }
-                            : undefined
-                        }
-                      />
+                <Link
+                  aria-label={`${dictionary.viewDetailsAriaLabel}: ${game.name}`}
+                  href={`/${locale}/game/${game.igdbId}`}
+                  key={game.igdbId}
+                >
+                  <Card className="border border-border/60 bg-card/90 py-0 transition-all hover:border-primary/60 hover:bg-card">
+                    <CardContent className="space-y-3 p-4">
+                      <div className="flex items-start gap-3">
+                        <div
+                          aria-hidden="true"
+                          className="h-24 w-16 shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center"
+                          style={
+                            game.coverUrl
+                              ? {
+                                  backgroundImage: `url(${game.coverUrl})`,
+                                }
+                              : undefined
+                          }
+                        />
 
-                      <div className="min-w-0 flex-1 space-y-1">
-                        <h3 className="truncate text-base font-semibold">{game.name}</h3>
-                        <p className="text-xs text-muted-foreground">/{game.slug}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {dictionary.firstReleaseDateLabel}: {releaseDate}
+                        <div className="min-w-0 flex-1 space-y-1">
+                          <h3 className="truncate text-base font-semibold">{game.name}</h3>
+                          <p className="text-xs text-muted-foreground">/{game.slug}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {dictionary.firstReleaseDateLabel}: {releaseDate}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {dictionary.ratingLabel}: {game.rating ? game.rating.toFixed(1) : "-"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <p className="line-clamp-3 text-sm text-muted-foreground">
+                        {game.summary ?? dictionary.noSummary}
+                      </p>
+
+                      <div className="space-y-1 text-xs text-muted-foreground">
+                        <p>
+                          {dictionary.platformsLabel}: {game.platforms.join(", ") || dictionary.noPlatforms}
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {dictionary.ratingLabel}: {game.rating ? game.rating.toFixed(1) : "-"}
+                        <p>
+                          {dictionary.genresLabel}: {game.genres.join(", ") || dictionary.noGenres}
                         </p>
                       </div>
-                    </div>
 
-                    <p className="line-clamp-3 text-sm text-muted-foreground">
-                      {game.summary ?? dictionary.noSummary}
-                    </p>
-
-                    <div className="space-y-1 text-xs text-muted-foreground">
-                      <p>
-                        {dictionary.platformsLabel}: {game.platforms.join(", ") || dictionary.noPlatforms}
+                      <p className="text-xs font-semibold tracking-[0.08em] text-primary uppercase">
+                        {dictionary.viewDetails}
                       </p>
-                      <p>
-                        {dictionary.genresLabel}: {game.genres.join(", ") || dictionary.noGenres}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </Link>
               )
             })}
           </div>
