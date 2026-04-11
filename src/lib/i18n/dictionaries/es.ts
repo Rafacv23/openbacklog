@@ -405,6 +405,36 @@ export const es = {
     },
     changelogLink: "VER EL CHANGELOG",
   },
+  search: {
+    metaTitle: "Buscar Juegos | OpenBacklog",
+    metaDescription:
+      "Busca videojuegos en OpenBacklog usando la API integrada y encuéntralos más rápido.",
+    title: "Búsqueda de Juegos",
+    description:
+      "Encuentra juegos al instante con búsqueda dinámica conectada a la API de juegos de OpenBacklog.",
+    backHome: "VOLVER AL INICIO",
+    inputLabel: "Buscar título del juego",
+    inputPlaceholder: "Escribe al menos 2 caracteres...",
+    clearSearchAriaLabel: "Limpiar búsqueda",
+    cooldown: "Búsqueda en vivo con cooldown de 450ms entre peticiones.",
+    minQuery: "Escribe al menos 2 caracteres para empezar a buscar.",
+    loading: "Buscando juegos...",
+    resultsLabel: "resultados",
+    emptyTitle: "No se encontraron juegos",
+    emptyBody: "Prueba con otro título, abreviatura o palabra clave.",
+    firstReleaseDateLabel: "Primer lanzamiento",
+    ratingLabel: "Puntuación",
+    platformsLabel: "Plataformas",
+    genresLabel: "Géneros",
+    noReleaseDate: "Desconocida",
+    noSummary: "No hay resumen disponible para este juego.",
+    noPlatforms: "Sin plataformas",
+    noGenres: "Sin géneros",
+    errorUnauthorized: "Tu sesión ha expirado. Inicia sesión de nuevo.",
+    errorRateLimited:
+      "Demasiadas búsquedas en poco tiempo. Espera un poco y vuelve a intentarlo.",
+    errorGeneric: "No pudimos completar la búsqueda. Inténtalo de nuevo.",
+  },
   legal: {
     navigation: {
       privacy: "Privacidad",

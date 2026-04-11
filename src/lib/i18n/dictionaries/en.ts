@@ -401,6 +401,36 @@ export const en = {
     },
     changelogLink: "VIEW CHANGELOG",
   },
+  search: {
+    metaTitle: "Search Games | OpenBacklog",
+    metaDescription:
+      "Search games in OpenBacklog using the integrated game API and add them to your flow faster.",
+    title: "Game Search",
+    description:
+      "Find games instantly with dynamic search connected to the OpenBacklog games API.",
+    backHome: "BACK TO HOMEPAGE",
+    inputLabel: "Search game title",
+    inputPlaceholder: "Type at least 2 characters...",
+    clearSearchAriaLabel: "Clear search",
+    cooldown: "Live search with 450ms cooldown between requests.",
+    minQuery: "Type at least 2 characters to start searching.",
+    loading: "Searching games...",
+    resultsLabel: "results",
+    emptyTitle: "No games found",
+    emptyBody: "Try a different title, abbreviation, or keyword.",
+    firstReleaseDateLabel: "First release",
+    ratingLabel: "Rating",
+    platformsLabel: "Platforms",
+    genresLabel: "Genres",
+    noReleaseDate: "Unknown",
+    noSummary: "No summary available for this game.",
+    noPlatforms: "No platforms",
+    noGenres: "No genres",
+    errorUnauthorized: "Your session has expired. Log in again to continue.",
+    errorRateLimited:
+      "Too many searches in a short time. Wait a bit and try again.",
+    errorGeneric: "We couldn't complete the search. Please try again.",
+  },
   legal: {
     navigation: {
       privacy: "Privacy",

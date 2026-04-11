@@ -124,6 +124,18 @@ h6 {
   );
 }
 
+.ob-search-input::-webkit-search-cancel-button,
+.ob-search-input::-webkit-search-decoration,
+.ob-search-input::-webkit-search-results-button,
+.ob-search-input::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.ob-search-input[type="search"] {
+  appearance: textfield;
+}
+
 .dark {
   --background: #080808;
   --foreground: #f4f4f4;

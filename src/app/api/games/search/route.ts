@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 
+import { auth } from "@/server/auth"
 import { searchGames } from "@/server/games/search-games"
 import { consumeRateLimit, getClientIp } from "@/server/security/rate-limit"
 
@@ -25,6 +26,19 @@ function parseLimit(value: string | null): number | undefined {
 }
 
 export async function GET(request: Request) {
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  })
+
+  if (!session) {
+    return NextResponse.json(
+      {
+        status: "unauthorized",
+      },
+      { status: 401 },
+    )
+  }
+
   const url = new URL(request.url)
   const query = (url.searchParams.get("query") ?? "").trim()
   const limit = parseLimit(url.searchParams.get("limit"))
@@ -63,7 +77,7 @@ export async function GET(request: Request) {
       },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+          "Cache-Control": "private, max-age=60, stale-while-revalidate=300",
         },
       },
     )
