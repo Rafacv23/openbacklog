@@ -84,7 +84,7 @@ export default async function LoginPage({ params, searchParams }: LoginPageProps
   const session = await getAuthSession()
 
   if (session) {
-    redirect(`/${locale}`)
+    redirect("/app")
   }
 
   const dictionary = getAuthDictionary(locale)

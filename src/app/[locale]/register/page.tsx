@@ -83,7 +83,7 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
   const session = await getAuthSession()
 
   if (session) {
-    redirect(`/${locale}`)
+    redirect("/app")
   }
 
   const dictionary = getAuthDictionary(locale)

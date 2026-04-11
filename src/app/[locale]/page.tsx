@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import { getDictionary } from "@/lib/i18n"
 
@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { cn } from "@/lib/utils"
+import { getAuthSession } from "@/server/auth/get-auth-session"
 
 type LocalePageProps = {
   params: Promise<{ locale: string }>
@@ -114,6 +115,12 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
 
   if (!locale) {
     notFound()
+  }
+
+  const session = await getAuthSession()
+
+  if (session) {
+    redirect("/app")
   }
 
   const dictionary = getDictionary(locale)
