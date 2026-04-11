@@ -416,6 +416,8 @@ export const en = {
     minQuery: "Type at least 2 characters to start searching.",
     loading: "Searching games...",
     resultsLabel: "results",
+    viewDetails: "OPEN GAME PAGE",
+    viewDetailsAriaLabel: "Open game page",
     emptyTitle: "No games found",
     emptyBody: "Try a different title, abbreviation, or keyword.",
     firstReleaseDateLabel: "First release",
@@ -430,6 +432,234 @@ export const en = {
     errorRateLimited:
       "Too many searches in a short time. Wait a bit and try again.",
     errorGeneric: "We couldn't complete the search. Please try again.",
+  },
+  app: {
+    metaTitle: "Your Backlog Hub | OpenBacklog",
+    metaDescription:
+      "OpenBacklog private hub with personalized game recommendations, social activity feed, and quick access to core tools.",
+    anonymousUser: "Player",
+    header: {
+      aria: "Authenticated navigation",
+      brand: "OPENBACKLOG APP",
+      recommendations: "RECOMMENDATIONS",
+      feed: "FEED",
+      search: "SEARCH",
+      profile: "PROFILE",
+      landing: "LANDING",
+    },
+    hero: {
+      badge: "PRIVATE HUB",
+      signedInAs: "Signed in as",
+      title: "Your backlog entry point",
+      description:
+        "Start here every time you log in: pick your next game, see what your friends are doing, and jump into your profile or search in one click.",
+    },
+    quickActions: {
+      search: "OPEN SEARCH",
+      profile: "OPEN PROFILE",
+      roadmap: "VIEW ROADMAP",
+    },
+    recommendations: {
+      title: "Recommended games for your next sessions",
+      description:
+        "A starter recommendation panel based on momentum, estimated playtime, and what is currently active in your backlog.",
+      items: [
+        {
+          state: "HIGH MOMENTUM",
+          title: "Hades II",
+          reason:
+            "Short sessions and fast progression make it ideal for keeping your completion streak active this week.",
+          timeHint: "Estimated: 3 sessions to clear your current goal.",
+        },
+        {
+          state: "FOCUS CANDIDATE",
+          title: "Cyberpunk 2077",
+          reason:
+            "You already invested hours recently, so continuing now reduces context-switching and improves completion odds.",
+          timeHint: "Estimated: 2-3 weeks with your current rhythm.",
+        },
+        {
+          state: "LOW FRICTION PICK",
+          title: "Balatro",
+          reason:
+            "Great fallback when you have limited time and still want meaningful progress in your active rotation.",
+          timeHint: "Estimated: 20-30 minute sessions.",
+        },
+      ],
+    },
+    feed: {
+      title: "Friends activity feed",
+      description:
+        "Follow progress from your friends to stay accountable and discover your next game naturally.",
+      items: [
+        {
+          friend: "MIA_GM",
+          action: "Completed Resident Evil 4",
+          detail: "Shared a quick review and moved Metaphor to 'Playing'.",
+          timeAgo: "12 min ago",
+        },
+        {
+          friend: "ALEX_R",
+          action: "Started Clair Obscur: Expedition 33",
+          detail: "Set a weekly goal of 4 sessions and invited friends to join.",
+          timeAgo: "47 min ago",
+        },
+        {
+          friend: "DANI_PLAYS",
+          action: "Updated backlog priorities",
+          detail: "Moved Hollow Knight to 'On hold' and promoted Hades II.",
+          timeAgo: "2 h ago",
+        },
+      ],
+    },
+  },
+  gameDetail: {
+    metaFallbackTitle: "Game Details | OpenBacklog",
+    metaDescriptionFallback:
+      "Game details page in OpenBacklog with quick actions and community comments.",
+    backToSearch: "BACK TO SEARCH",
+    backHome: "BACK TO HOMEPAGE",
+    heroBadge: "GAME DETAIL",
+    idLabel: "ID",
+    firstReleaseDateLabel: "First release",
+    ratingLabel: "Rating",
+    platformsLabel: "Platforms",
+    genresLabel: "Genres",
+    lastSyncedLabel: "Last synced",
+    unknownValue: "Unknown",
+    noSummary: "No summary available for this game.",
+    actionsTitle: "Quick Actions",
+    actionsDescription:
+      "These buttons are visual-only for now and will become interactive in future updates.",
+    actions: {
+      wishlist: "Add to Wishlist",
+      backlog: "Add to Backlog",
+      completed: "Mark as Completed",
+      recommend: "Recommend",
+      notRecommend: "Not Recommend",
+    },
+    commentsTitle: "Comments",
+    commentsDescription:
+      "Discuss this game with other players and share tips, opinions, and progress updates.",
+    commentsInputLabel: "Write a comment",
+    commentsInputPlaceholder:
+      "What do you think about this game? (UI only for now)",
+    commentsSubmit: "POST COMMENT",
+    commentsComingSoon:
+      "Comment publishing is not active yet. This is a frontend preview.",
+    commentsListTitle: "Recent comments",
+    commentsList: [
+      {
+        author: "Noah",
+        timeAgo: "2h ago",
+        body: "Strong opening and great atmosphere. I'm pacing it slowly and enjoying every session.",
+      },
+      {
+        author: "Mia",
+        timeAgo: "Yesterday",
+        body: "If you prioritize side quests early, progression feels much smoother.",
+      },
+      {
+        author: "Daniel",
+        timeAgo: "3 days ago",
+        body: "The gameplay loop is addictive. I'm close to completing it and still finding new things.",
+      },
+    ],
+  },
+  profile: {
+    metaTitleSuffix: "OpenBacklog Profile",
+    metaDescription:
+      "Public OpenBacklog profile preview with player stats and game gallery.",
+    backHome: "BACK TO HOMEPAGE",
+    previewBadge: "PUBLIC PROFILE PREVIEW",
+    idLabel: "Profile ID",
+    heroDescription:
+      "A first look at how each player profile can summarize progress, focus, and game history.",
+    joinedLabel: "Joined",
+    lastActivityLabel: "Last activity",
+    editButton: "EDIT PROFILE",
+    editNote:
+      "This button is visual-only for now. Profile editing will be enabled in a future update.",
+    libraryTitle: "Library Snapshot",
+    libraryDescription:
+      "Quick overview of this player's current backlog distribution.",
+    libraryStats: [
+      { label: "Completed", value: "24" },
+      { label: "Playing", value: "6" },
+      { label: "Planned", value: "38" },
+      { label: "On hold", value: "4" },
+    ],
+    focusTitle: "Current Focus",
+    focusDescription:
+      "Highlights that preview what this player is doing right now in their backlog.",
+    focusCards: [
+      {
+        label: "Now playing",
+        game: "Clair Obscur: Expedition 33",
+        detail: "14h logged this month",
+      },
+      {
+        label: "Next target",
+        game: "Hades II",
+        detail: "Estimated 3 sessions to complete",
+      },
+      {
+        label: "Recently completed",
+        game: "Resident Evil 4",
+        detail: "Finished last week",
+      },
+    ],
+    galleryTitle: "Game Gallery Preview",
+    galleryDescription:
+      "A visual slice of the player library that will expand in later iterations.",
+    galleryItems: [
+      {
+        title: "Elden Ring",
+        platform: "PS5",
+        state: "Completed",
+        progress: "142h total playtime",
+      },
+      {
+        title: "Cyberpunk 2077",
+        platform: "PC",
+        state: "Playing",
+        progress: "45h total playtime",
+      },
+      {
+        title: "Metaphor: ReFantazio",
+        platform: "PC",
+        state: "Playing",
+        progress: "42% story progress",
+      },
+      {
+        title: "Hollow Knight",
+        platform: "Switch",
+        state: "On hold",
+        progress: "61% completion",
+      },
+      {
+        title: "Final Fantasy VII Rebirth",
+        platform: "PS5",
+        state: "Planned",
+        progress: "Queued for next month",
+      },
+      {
+        title: "Balatro",
+        platform: "PC",
+        state: "Completed",
+        progress: "Daily runs active",
+      },
+    ],
+    collectionsTitle: "Quick Collections",
+    collectionsDescription:
+      "Saved library views that will become interactive profile filters soon.",
+    collections: [
+      "Completed this year",
+      "Playing now",
+      "Planned queue",
+      "On hold list",
+      "Dropped titles",
+    ],
   },
   legal: {
     navigation: {

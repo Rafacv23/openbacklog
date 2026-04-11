@@ -164,14 +164,25 @@ function escapeSearchTerm(searchTerm: string): string {
   return searchTerm.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
 }
 
+const IGDB_GAME_FIELDS =
+  "id,name,slug,summary,cover.url,first_release_date,rating,genres.name,platforms.abbreviation,platforms.name,checksum,updated_at,version_parent"
+
 function createSearchBody(query: string, limit: number): string {
   const escapedQuery = escapeSearchTerm(query)
 
   return [
-    "fields id,name,slug,summary,cover.url,first_release_date,rating,genres.name,platforms.abbreviation,platforms.name,checksum,updated_at,version_parent;",
+    `fields ${IGDB_GAME_FIELDS};`,
     `search \"${escapedQuery}\";`,
     "where version_parent = null;",
     `limit ${limit};`,
+  ].join(" ")
+}
+
+function createGameByIdBody(id: number): string {
+  return [
+    `fields ${IGDB_GAME_FIELDS};`,
+    `where id = ${id} & version_parent = null;`,
+    "limit 1;",
   ].join(" ")
 }
 
@@ -222,4 +233,37 @@ export async function searchIgdbGames(
   const data = (await response.json()) as IgdbGame[]
 
   return data.filter((game) => Boolean(game?.id && game?.name && game?.slug))
+}
+
+export async function getIgdbGameById(id: number): Promise<IgdbGame | null> {
+  if (!Number.isInteger(id) || id <= 0) {
+    return null
+  }
+
+  const clientId = getRequiredEnv("IGDB_CLIENT_ID")
+  const accessToken = await getAccessToken()
+
+  const response = await fetchWithRetry(
+    `${IGDB_BASE_URL}/games`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Client-ID": clientId,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: createGameByIdBody(id),
+      cache: "no-store",
+    },
+    getMaxRetries(),
+  )
+
+  if (!response.ok) {
+    throw new Error(`IGDB game fetch failed with status ${response.status}`)
+  }
+
+  const data = (await response.json()) as IgdbGame[]
+  const game = data.find((entry) => Boolean(entry?.id && entry?.name && entry?.slug))
+
+  return game ?? null
 }

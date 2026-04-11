@@ -420,6 +420,8 @@ export const es = {
     minQuery: "Escribe al menos 2 caracteres para empezar a buscar.",
     loading: "Buscando juegos...",
     resultsLabel: "resultados",
+    viewDetails: "ABRIR FICHA DEL JUEGO",
+    viewDetailsAriaLabel: "Abrir ficha del juego",
     emptyTitle: "No se encontraron juegos",
     emptyBody: "Prueba con otro título, abreviatura o palabra clave.",
     firstReleaseDateLabel: "Primer lanzamiento",
@@ -434,6 +436,235 @@ export const es = {
     errorRateLimited:
       "Demasiadas búsquedas en poco tiempo. Espera un poco y vuelve a intentarlo.",
     errorGeneric: "No pudimos completar la búsqueda. Inténtalo de nuevo.",
+  },
+  app: {
+    metaTitle: "Tu Centro de Backlog | OpenBacklog",
+    metaDescription:
+      "Centro privado de OpenBacklog con recomendaciones personalizadas, feed social y accesos rápidos a perfil y búsqueda.",
+    anonymousUser: "Jugador",
+    header: {
+      aria: "Navegación para usuarios autenticados",
+      brand: "OPENBACKLOG APP",
+      recommendations: "RECOMENDACIONES",
+      feed: "FEED",
+      search: "BUSCAR",
+      profile: "PERFIL",
+      landing: "LANDING",
+    },
+    hero: {
+      badge: "HUB PRIVADO",
+      signedInAs: "Sesión iniciada como",
+      title: "Tu punto de entrada al backlog",
+      description:
+        "Empieza aquí cada vez que hagas login: elige tu próximo juego, revisa lo que hacen tus amigos y entra a perfil o búsqueda en un clic.",
+    },
+    quickActions: {
+      search: "ABRIR BÚSQUEDA",
+      profile: "ABRIR PERFIL",
+      roadmap: "VER ROADMAP",
+    },
+    recommendations: {
+      title: "Recomendaciones para tus próximas sesiones",
+      description:
+        "Panel inicial de recomendaciones basado en tu ritmo, horas estimadas y títulos activos en tu backlog.",
+      items: [
+        {
+          state: "ALTO IMPULSO",
+          title: "Hades II",
+          reason:
+            "Sesiones cortas y progreso rápido: ideal para mantener activa tu racha de juegos completados esta semana.",
+          timeHint: "Estimado: 3 sesiones para cerrar tu objetivo actual.",
+        },
+        {
+          state: "CANDIDATO DE FOCO",
+          title: "Cyberpunk 2077",
+          reason:
+            "Ya has invertido horas recientemente, así que continuar ahora reduce el cambio de contexto y mejora la probabilidad de terminarlo.",
+          timeHint: "Estimado: 2-3 semanas con tu ritmo actual.",
+        },
+        {
+          state: "ELECCIÓN DE BAJA FRICCIÓN",
+          title: "Balatro",
+          reason:
+            "Buena opción cuando tienes poco tiempo y aun así quieres avanzar de forma útil en tu rotación activa.",
+          timeHint: "Estimado: sesiones de 20-30 minutos.",
+        },
+      ],
+    },
+    feed: {
+      title: "Feed de actividad de tus amigos",
+      description:
+        "Sigue el progreso de tus amigos para mantener responsabilidad social y descubrir qué jugar después.",
+      items: [
+        {
+          friend: "MIA_GM",
+          action: "Completó Resident Evil 4",
+          detail: "Publicó una review corta y movió Metaphor a 'Jugando'.",
+          timeAgo: "hace 12 min",
+        },
+        {
+          friend: "ALEX_R",
+          action: "Empezó Clair Obscur: Expedition 33",
+          detail:
+            "Marcó un objetivo semanal de 4 sesiones e invitó a amigos a sumarse.",
+          timeAgo: "hace 47 min",
+        },
+        {
+          friend: "DANI_PLAYS",
+          action: "Actualizó prioridades del backlog",
+          detail: "Movió Hollow Knight a 'En pausa' y subió Hades II.",
+          timeAgo: "hace 2 h",
+        },
+      ],
+    },
+  },
+  gameDetail: {
+    metaFallbackTitle: "Detalle del Juego | OpenBacklog",
+    metaDescriptionFallback:
+      "Ficha de videojuego en OpenBacklog con acciones rápidas y comentarios de la comunidad.",
+    backToSearch: "VOLVER A BÚSQUEDA",
+    backHome: "VOLVER AL INICIO",
+    heroBadge: "DETALLE DEL JUEGO",
+    idLabel: "ID",
+    firstReleaseDateLabel: "Primer lanzamiento",
+    ratingLabel: "Puntuación",
+    platformsLabel: "Plataformas",
+    genresLabel: "Géneros",
+    lastSyncedLabel: "Última sincronización",
+    unknownValue: "Desconocido",
+    noSummary: "No hay resumen disponible para este juego.",
+    actionsTitle: "Acciones Rápidas",
+    actionsDescription:
+      "Estos botones son solo visuales por ahora y serán interactivos en futuras actualizaciones.",
+    actions: {
+      wishlist: "Añadir a Deseados",
+      backlog: "Añadir a Backlog",
+      completed: "Marcar como Completado",
+      recommend: "Recomendar",
+      notRecommend: "No Recomendar",
+    },
+    commentsTitle: "Comentarios",
+    commentsDescription:
+      "Comenta este juego con otros jugadores y comparte consejos, opiniones y progreso.",
+    commentsInputLabel: "Escribe un comentario",
+    commentsInputPlaceholder:
+      "¿Qué te está pareciendo este juego? (solo UI por ahora)",
+    commentsSubmit: "PUBLICAR COMENTARIO",
+    commentsComingSoon:
+      "La publicación de comentarios aún no está activa. Esta es una vista previa de frontend.",
+    commentsListTitle: "Comentarios recientes",
+    commentsList: [
+      {
+        author: "Noah",
+        timeAgo: "hace 2 h",
+        body: "Inicio potente y ambientación muy buena. Lo estoy jugando sin prisa y cada sesión compensa.",
+      },
+      {
+        author: "Mia",
+        timeAgo: "Ayer",
+        body: "Si priorizas secundarias al principio, la progresión se siente mucho más fluida.",
+      },
+      {
+        author: "Daniel",
+        timeAgo: "hace 3 días",
+        body: "El loop de gameplay engancha muchísimo. Estoy cerca de terminarlo y aún encuentro cosas nuevas.",
+      },
+    ],
+  },
+  profile: {
+    metaTitleSuffix: "Perfil OpenBacklog",
+    metaDescription:
+      "Vista previa pública del perfil de OpenBacklog con estadísticas y galería de juegos.",
+    backHome: "VOLVER AL INICIO",
+    previewBadge: "PREVIEW DE PERFIL PÚBLICO",
+    idLabel: "ID de perfil",
+    heroDescription:
+      "Una primera vista de cómo cada perfil de jugador resumirá progreso, foco y recorrido en el backlog.",
+    joinedLabel: "Se unió",
+    lastActivityLabel: "Última actividad",
+    editButton: "EDITAR PERFIL",
+    editNote:
+      "Este botón es solo visual por ahora. La edición de perfil se activará en una actualización futura.",
+    libraryTitle: "Resumen de Librería",
+    libraryDescription:
+      "Vista rápida de la distribución actual del backlog de este jugador.",
+    libraryStats: [
+      { label: "Completados", value: "24" },
+      { label: "Jugando", value: "6" },
+      { label: "Planificados", value: "38" },
+      { label: "En pausa", value: "4" },
+    ],
+    focusTitle: "Foco Actual",
+    focusDescription:
+      "Bloques destacados para previsualizar en qué está ahora mismo este jugador.",
+    focusCards: [
+      {
+        label: "Jugando ahora",
+        game: "Clair Obscur: Expedition 33",
+        detail: "14h registradas este mes",
+      },
+      {
+        label: "Siguiente objetivo",
+        game: "Hades II",
+        detail: "3 sesiones estimadas para terminar",
+      },
+      {
+        label: "Completado reciente",
+        game: "Resident Evil 4",
+        detail: "Terminado la semana pasada",
+      },
+    ],
+    galleryTitle: "Preview de Galería de Juegos",
+    galleryDescription:
+      "Muestra visual de la librería del jugador que se ampliará en próximas iteraciones.",
+    galleryItems: [
+      {
+        title: "Elden Ring",
+        platform: "PS5",
+        state: "Completado",
+        progress: "142h de juego total",
+      },
+      {
+        title: "Cyberpunk 2077",
+        platform: "PC",
+        state: "Jugando",
+        progress: "45h de juego total",
+      },
+      {
+        title: "Metaphor: ReFantazio",
+        platform: "PC",
+        state: "Jugando",
+        progress: "42% de progreso en historia",
+      },
+      {
+        title: "Hollow Knight",
+        platform: "Switch",
+        state: "En pausa",
+        progress: "61% de completado",
+      },
+      {
+        title: "Final Fantasy VII Rebirth",
+        platform: "PS5",
+        state: "Planificado",
+        progress: "En cola para el próximo mes",
+      },
+      {
+        title: "Balatro",
+        platform: "PC",
+        state: "Completado",
+        progress: "Partidas diarias activas",
+      },
+    ],
+    collectionsTitle: "Colecciones Rápidas",
+    collectionsDescription:
+      "Vistas guardadas de librería que pronto serán filtros interactivos de perfil.",
+    collections: [
+      "Completados este año",
+      "Jugando ahora",
+      "Cola planificada",
+      "Lista en pausa",
+      "Títulos abandonados",
+    ],
   },
   legal: {
     navigation: {
