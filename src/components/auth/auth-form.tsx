@@ -34,8 +34,8 @@ type AuthFormProps = {
   enabledSocialProviders: Record<SocialAuthProvider, boolean>
 }
 
-function resolveRedirectPath(): string {
-  return "/app"
+function resolveRedirectPath(locale: SupportedLocale): string {
+  return `/${locale}/feed`
 }
 
 function resolveAbsoluteUrl(path: string): string {
@@ -181,7 +181,7 @@ export function AuthForm({
 
   const isRegister = mode === "register"
   const content = isRegister ? dictionary.register : dictionary.login
-  const redirectPath = resolveRedirectPath()
+  const redirectPath = resolveRedirectPath(locale)
 
   const providerOptions: Array<{
     id: SocialAuthProvider

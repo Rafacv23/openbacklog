@@ -73,7 +73,10 @@ export async function generateMetadata({
   }
 }
 
-export default async function LoginPage({ params, searchParams }: LoginPageProps) {
+export default async function LoginPage({
+  params,
+  searchParams,
+}: LoginPageProps) {
   const { locale: rawLocale } = await params
   const locale = toSupportedLocale(rawLocale)
 
@@ -84,13 +87,14 @@ export default async function LoginPage({ params, searchParams }: LoginPageProps
   const session = await getAuthSession()
 
   if (session) {
-    redirect("/app")
+    redirect(`/${locale}/feed`)
   }
 
   const dictionary = getAuthDictionary(locale)
   const resolvedSearchParams = await searchParams
   const showVerifiedMessage = resolvedSearchParams.verified === "1"
-  const showPasswordResetMessage = resolvedSearchParams.passwordReset === "success"
+  const showPasswordResetMessage =
+    resolvedSearchParams.passwordReset === "success"
 
   return (
     <main className="relative min-h-screen px-6 py-12 text-foreground">

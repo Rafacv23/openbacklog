@@ -20,7 +20,7 @@ export function AppHeader({ dictionary, locale, profileHref }: AppHeaderProps) {
     >
       <Link
         className="font-headline text-sm tracking-[0.12em] text-primary uppercase md:text-base"
-        href="/app"
+        href={`/${locale}/feed`}
       >
         {dictionary.brand}
       </Link>

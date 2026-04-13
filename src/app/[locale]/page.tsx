@@ -120,7 +120,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
   const session = await getAuthSession()
 
   if (session) {
-    redirect("/app")
+    redirect(`/${locale}/feed`)
   }
 
   const dictionary = getDictionary(locale)
@@ -490,7 +490,10 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
 
       <section
         id="faq"
-        aria-label={dictionary.home.aria.faqSection ?? "Frequently asked questions section"}
+        aria-label={
+          dictionary.home.aria.faqSection ??
+          "Frequently asked questions section"
+        }
         className="scroll-mt-24 border-y border-border/20 bg-card/40 py-24"
       >
         <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
@@ -499,9 +502,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
               {faq.eyebrow}
             </span>
             <h2 className="mt-3 font-headline text-4xl">
-              <span className="font-display italic">
-                {faq.title}
-              </span>
+              <span className="font-display italic">{faq.title}</span>
             </h2>
             <p className="mt-4 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
               {faq.description}
@@ -510,12 +511,12 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
 
           <Card className="rounded-none border border-border bg-popover/80 p-0">
             <CardContent className="p-6 md:p-8">
-              <Accordion
-                defaultValue={["item-1"]}
-                className="w-full"
-              >
+              <Accordion defaultValue={["item-1"]} className="w-full">
                 {faq.items.map((item, index) => (
-                  <AccordionItem key={item.question} value={`item-${index + 1}`}>
+                  <AccordionItem
+                    key={item.question}
+                    value={`item-${index + 1}`}
+                  >
                     <AccordionTrigger className="font-headline text-xs tracking-[0.1em] uppercase hover:no-underline">
                       {item.question}
                     </AccordionTrigger>
@@ -570,15 +571,24 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
             </div>
             <p className="mt-3 font-body text-[10px] tracking-[0.03em] text-black/70">
               {dictionary.home.cta.legalPrefix}{" "}
-              <Link className="underline underline-offset-2" href={`/${locale}/privacy`}>
+              <Link
+                className="underline underline-offset-2"
+                href={`/${locale}/privacy`}
+              >
                 {dictionary.home.cta.legalPrivacy}
               </Link>
               ,{" "}
-              <Link className="underline underline-offset-2" href={`/${locale}/terms`}>
+              <Link
+                className="underline underline-offset-2"
+                href={`/${locale}/terms`}
+              >
                 {dictionary.home.cta.legalTerms}
               </Link>{" "}
               {dictionary.home.cta.legalAnd}{" "}
-              <Link className="underline underline-offset-2" href={`/${locale}/cookies`}>
+              <Link
+                className="underline underline-offset-2"
+                href={`/${locale}/cookies`}
+              >
                 {dictionary.home.cta.legalCookies}
               </Link>
               .

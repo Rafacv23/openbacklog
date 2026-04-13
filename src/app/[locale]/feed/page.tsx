@@ -18,12 +18,15 @@ const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
 
 async function getRequestLocale() {
   const requestHeaders = await headers()
-  return toSupportedLocale(requestHeaders.get(REQUEST_LOCALE_HEADER) ?? "") ?? "en"
+  return (
+    toSupportedLocale(requestHeaders.get(REQUEST_LOCALE_HEADER) ?? "") ?? "en"
+  )
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale()
   const dictionary = getDictionary(locale)
+  const canonicalPath = `/${locale}/feed`
 
   return {
     title: dictionary.app.metaTitle,
@@ -33,14 +36,19 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: false,
     },
     alternates: {
-      canonical: "/app",
+      canonical: canonicalPath,
+      languages: {
+        en: "/en/feed",
+        es: "/es/feed",
+        "x-default": "/en/feed",
+      },
     },
     openGraph: {
       title: dictionary.app.metaTitle,
       description: dictionary.app.metaDescription,
       type: "website",
       locale,
-      url: `${BASE_URL}/app`,
+      url: `${BASE_URL}${canonicalPath}`,
       siteName: SITE_NAME,
       images: [
         {
@@ -144,12 +152,17 @@ export default async function AppEntryPage() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {dictionary.app.recommendations.items.map((item) => (
-              <Card key={item.title} className="border border-border/60 bg-card/80 py-0">
+              <Card
+                key={item.title}
+                className="border border-border/60 bg-card/80 py-0"
+              >
                 <CardContent className="space-y-3 p-5">
                   <p className="text-xs tracking-[0.09em] text-muted-foreground uppercase">
                     {item.state}
                   </p>
-                  <h3 className="font-headline text-xl uppercase">{item.title}</h3>
+                  <h3 className="font-headline text-xl uppercase">
+                    {item.title}
+                  </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
                     {item.reason}
                   </p>
@@ -162,7 +175,9 @@ export default async function AppEntryPage() {
 
         <section id="feed" className="space-y-4">
           <header className="space-y-1">
-            <h2 className="font-headline text-2xl uppercase">{dictionary.app.feed.title}</h2>
+            <h2 className="font-headline text-2xl uppercase">
+              {dictionary.app.feed.title}
+            </h2>
             <p className="text-sm text-muted-foreground">
               {dictionary.app.feed.description}
             </p>
@@ -178,10 +193,14 @@ export default async function AppEntryPage() {
                   <p className="font-headline text-sm uppercase text-foreground">
                     {item.friend}
                   </p>
-                  <p className="text-xs text-muted-foreground">{item.timeAgo}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {item.timeAgo}
+                  </p>
                 </div>
                 <p className="mt-2 text-sm text-foreground">{item.action}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{item.detail}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {item.detail}
+                </p>
               </article>
             ))}
           </div>
