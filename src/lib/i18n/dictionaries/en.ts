@@ -293,10 +293,16 @@ export const en = {
     developmentOrderTitle: "Development Order",
     developmentOrderDescription:
       "This is the current implementation sequence for upcoming features. We ship each phase before moving to the next one.",
+    projectVersionLabel: "PROJECT VERSION",
+    phaseGroups: {
+      completed: "Completed",
+      upcoming: "In Progress and Planned",
+    },
     phases: [
       {
         id: "PHASE 0",
-        status: "NOW",
+        status: "COMPLETED",
+        state: "completed",
         title: "Foundation",
         description:
           "Core platform baseline so the product is stable, indexable, and ready to scale.",
@@ -310,7 +316,8 @@ export const en = {
       },
       {
         id: "PHASE 1",
-        status: "NEXT",
+        status: "IN PROGRESS",
+        state: "in_progress",
         title: "Core Backlog",
         description:
           "Main backlog workflows needed for daily usage and progress tracking.",
@@ -324,6 +331,7 @@ export const en = {
       {
         id: "PHASE 2",
         status: "PLANNED",
+        state: "planned",
         title: "Social First",
         description:
           "MVP social loop focused on accountability and retention before AI modules.",
@@ -337,6 +345,7 @@ export const en = {
       {
         id: "PHASE 3",
         status: "PLANNED",
+        state: "planned",
         title: "Productivity Engine",
         description:
           "Decision support that helps players choose better and finish more titles.",
@@ -350,6 +359,7 @@ export const en = {
       {
         id: "PHASE 4",
         status: "PLANNED",
+        state: "planned",
         title: "Growth and Premium",
         description:
           "Monetization and expansion layer once the core loop is validated.",
@@ -517,7 +527,7 @@ export const en = {
   gameDetail: {
     metaFallbackTitle: "Game Details | OpenBacklog",
     metaDescriptionFallback:
-      "Game details page in OpenBacklog with quick actions and community comments.",
+      "Game details page in OpenBacklog with library and review actions.",
     backToSearch: "BACK TO SEARCH",
     backHome: "BACK TO HOMEPAGE",
     heroBadge: "GAME DETAIL",
@@ -529,138 +539,131 @@ export const en = {
     lastSyncedLabel: "Last synced",
     unknownValue: "Unknown",
     noSummary: "No summary available for this game.",
-    actionsTitle: "Quick Actions",
-    actionsDescription:
-      "These buttons are visual-only for now and will become interactive in future updates.",
-    actions: {
-      wishlist: "Add to Wishlist",
-      backlog: "Add to Backlog",
-      completed: "Mark as Completed",
-      recommend: "Recommend",
-      notRecommend: "Not Recommend",
+    libraryTitle: "Library",
+    libraryDescription:
+      "Add this game to your library and choose status immediately.",
+    reviewTitle: "Short Review",
+    reviewDescription:
+      "Share your recommendation, platform, and completion hours.",
+    states: {
+      planned: "Planned",
+      playing: "Playing",
+      completed: "Completed",
+      dropped: "Dropped",
+      on_hold: "On hold",
     },
-    commentsTitle: "Comments",
-    commentsDescription:
-      "Discuss this game with other players and share tips, opinions, and progress updates.",
-    commentsInputLabel: "Write a comment",
-    commentsInputPlaceholder:
-      "What do you think about this game? (UI only for now)",
-    commentsSubmit: "POST COMMENT",
-    commentsComingSoon:
-      "Comment publishing is not active yet. This is a frontend preview.",
-    commentsListTitle: "Recent comments",
-    commentsList: [
-      {
-        author: "Noah",
-        timeAgo: "2h ago",
-        body: "Strong opening and great atmosphere. I'm pacing it slowly and enjoying every session.",
-      },
-      {
-        author: "Mia",
-        timeAgo: "Yesterday",
-        body: "If you prioritize side quests early, progression feels much smoother.",
-      },
-      {
-        author: "Daniel",
-        timeAgo: "3 days ago",
-        body: "The gameplay loop is addictive. I'm close to completing it and still finding new things.",
-      },
-    ],
+    labels: {
+      state: "State",
+      platform: "Platform played",
+      hoursToComplete: "Hours to complete",
+      reviewBody: "Review",
+      recommend: "Recommend",
+      notRecommend: "Not recommend",
+    },
+    placeholders: {
+      platform: "Choose platform",
+      hoursToComplete: "Example: 35",
+      reviewBody: "Write your short review (max 500 chars)",
+    },
+    submit: {
+      saveLibrary: "SAVE LIBRARY ENTRY",
+      savingLibrary: "SAVING...",
+      saveReview: "SAVE REVIEW",
+      savingReview: "SAVING...",
+    },
+    feedback: {
+      librarySaved: "Library entry saved.",
+      reviewSaved: "Review saved.",
+      invalidPayload: "Complete all required fields correctly.",
+      invalidPlatform: "Choose a valid platform for this game or use Other.",
+      genericError: "Something went wrong. Try again.",
+    },
+  },
+  library: {
+    metaTitle: "My Library | OpenBacklog",
+    metaDescription:
+      "Manage your personal game library with status, search, filters, and sorting.",
+    title: "My Library",
+    description:
+      "Track progress with stable states and keep your backlog organized for daily decisions.",
+    filters: {
+      searchPlaceholder: "Search by title or slug",
+      allStates: "All states",
+      apply: "APPLY",
+    },
+    sort: {
+      updatedDesc: "Recently updated",
+      releaseDesc: "Release date (newest)",
+      ratingDesc: "Rating (highest)",
+    },
+    states: {
+      planned: "Planned",
+      playing: "Playing",
+      completed: "Completed",
+      dropped: "Dropped",
+      on_hold: "On hold",
+    },
+    labels: {
+      release: "Release",
+      rating: "Rating",
+    },
+    update: {
+      submit: "UPDATE",
+      submitting: "UPDATING...",
+      invalidPayload: "Invalid state selected.",
+      genericError: "Could not update this entry.",
+    },
+    openGame: "OPEN GAME PAGE",
+    openReview: "OPEN REVIEW",
+    unknownValue: "Unknown",
+    noSummary: "No summary available.",
+    emptyTitle: "Your library is empty",
+    emptyBody: "Add games from search and start tracking your backlog states.",
+    emptyCta: "GO TO SEARCH",
+    pagination: {
+      previous: "PREVIOUS",
+      next: "NEXT",
+      pageLabel: "Page {page} of {total}",
+    },
   },
   profile: {
     metaTitleSuffix: "OpenBacklog Profile",
     metaDescription:
-      "Public OpenBacklog profile preview with player stats and game gallery.",
-    backHome: "BACK TO HOMEPAGE",
-    previewBadge: "PUBLIC PROFILE PREVIEW",
-    idLabel: "Profile ID",
+      "Public OpenBacklog profile with real library stats and recent reviews.",
+    backApp: "BACK TO APP",
+    previewBadge: "PUBLIC PROFILE",
     heroDescription:
-      "A first look at how each player profile can summarize progress, focus, and game history.",
+      "Public summary of backlog states, activity, and review history.",
     joinedLabel: "Joined",
     lastActivityLabel: "Last activity",
-    editButton: "EDIT PROFILE",
-    editNote:
-      "This button is visual-only for now. Profile editing will be enabled in a future update.",
     libraryTitle: "Library Snapshot",
-    libraryDescription:
-      "Quick overview of this player's current backlog distribution.",
-    libraryStats: [
-      { label: "Completed", value: "24" },
-      { label: "Playing", value: "6" },
-      { label: "Planned", value: "38" },
-      { label: "On hold", value: "4" },
-    ],
-    focusTitle: "Current Focus",
-    focusDescription:
-      "Highlights that preview what this player is doing right now in their backlog.",
-    focusCards: [
-      {
-        label: "Now playing",
-        game: "Clair Obscur: Expedition 33",
-        detail: "14h logged this month",
-      },
-      {
-        label: "Next target",
-        game: "Hades II",
-        detail: "Estimated 3 sessions to complete",
-      },
-      {
-        label: "Recently completed",
-        game: "Resident Evil 4",
-        detail: "Finished last week",
-      },
-    ],
-    galleryTitle: "Game Gallery Preview",
-    galleryDescription:
-      "A visual slice of the player library that will expand in later iterations.",
-    galleryItems: [
-      {
-        title: "Elden Ring",
-        platform: "PS5",
-        state: "Completed",
-        progress: "142h total playtime",
-      },
-      {
-        title: "Cyberpunk 2077",
-        platform: "PC",
-        state: "Playing",
-        progress: "45h total playtime",
-      },
-      {
-        title: "Metaphor: ReFantazio",
-        platform: "PC",
-        state: "Playing",
-        progress: "42% story progress",
-      },
-      {
-        title: "Hollow Knight",
-        platform: "Switch",
-        state: "On hold",
-        progress: "61% completion",
-      },
-      {
-        title: "Final Fantasy VII Rebirth",
-        platform: "PS5",
-        state: "Planned",
-        progress: "Queued for next month",
-      },
-      {
-        title: "Balatro",
-        platform: "PC",
-        state: "Completed",
-        progress: "Daily runs active",
-      },
-    ],
-    collectionsTitle: "Quick Collections",
-    collectionsDescription:
-      "Saved library views that will become interactive profile filters soon.",
-    collections: [
-      "Completed this year",
-      "Playing now",
-      "Planned queue",
-      "On hold list",
-      "Dropped titles",
-    ],
+    libraryDescription: "Current distribution of this player's backlog.",
+    stateLabels: {
+      planned: "Planned",
+      playing: "Playing",
+      completed: "Completed",
+      dropped: "Dropped",
+      on_hold: "On hold",
+    },
+    recentReviewsTitle: "Recent Reviews",
+    recentReviewsDescription: "Latest short reviews published by this player.",
+    noRecentReviews: "No public reviews yet.",
+    openReview: "OPEN REVIEW",
+    recommend: "Recommend",
+    notRecommend: "Not recommend",
+    hoursLabel: "{hours}h to complete",
+    recentLibraryTitle: "Recent Library Activity",
+    recentLibraryDescription: "Recently updated games in this backlog.",
+    noRecentLibrary: "No library entries yet.",
+  },
+  reviewPage: {
+    metaTitleSuffix: "OpenBacklog Review",
+    backProfile: "BACK TO PROFILE",
+    backGame: "BACK TO GAME",
+    recommend: "Recommend",
+    notRecommend: "Not recommend",
+    updatedLabel: "Updated",
+    hoursLabel: "{hours}h to complete",
   },
   legal: {
     navigation: {
