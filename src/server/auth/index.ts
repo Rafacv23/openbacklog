@@ -3,6 +3,7 @@ import type { BetterAuthOptions } from "better-auth"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
+import { username } from "better-auth/plugins"
 
 import { getBaseUrl } from "@/lib/site"
 import { db } from "@/server/db"
@@ -177,7 +178,18 @@ export const auth = betterAuth({
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
   },
-  plugins: [nextCookies()],
+  plugins: [
+    username({
+      maxUsernameLength: 20,
+      minUsernameLength: 3,
+      usernameNormalization: (value) => value.toLowerCase(),
+      usernameValidator: (value) => /^[a-z0-9_]+$/.test(value),
+      validationOrder: {
+        username: "post-normalization",
+      },
+    }),
+    nextCookies(),
+  ],
 })
 
 export const AUTH_PROVIDER = "better-auth" as const
