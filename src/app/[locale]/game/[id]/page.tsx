@@ -6,13 +6,15 @@ import { notFound, redirect } from "next/navigation"
 import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
-import { getAuthSession } from "@/server/auth/get-auth-session"
+import { getAuthSession, getSessionUsername } from "@/server/auth/get-auth-session"
 import { getGameByIgdbId } from "@/server/games/get-game-by-id"
+import { getUserLibraryEntryForGame } from "@/server/library/service"
+import { getUserReviewForGame } from "@/server/reviews/service"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
+import { GameLibraryReviewPanel } from "@/components/game/game-library-review-panel"
 
 type GamePageProps = {
   params: Promise<{ locale: string; id: string }>
@@ -110,6 +112,12 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect(`/${locale}/login`)
   }
 
+  const username = getSessionUsername(session)
+
+  if (!username) {
+    redirect(`/${locale}/onboarding/username`)
+  }
+
   const gameId = parseGameId(rawId)
 
   if (!gameId) {
@@ -122,6 +130,17 @@ export default async function GamePage({ params }: GamePageProps) {
   if (!game) {
     notFound()
   }
+
+  const [libraryEntry, userReview] = await Promise.all([
+    getUserLibraryEntryForGame({
+      userId: session.user.id,
+      gameIgdbId: game.igdbId,
+    }),
+    getUserReviewForGame({
+      userId: session.user.id,
+      gameIgdbId: game.igdbId,
+    }),
+  ])
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     day: "2-digit",
@@ -277,89 +296,24 @@ export default async function GamePage({ params }: GamePageProps) {
           </div>
         </section>
 
-        <section className="space-y-4">
-          <header className="space-y-1">
-            <h2 className="font-headline text-xl uppercase">
-              {dictionary.gameDetail.actionsTitle}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {dictionary.gameDetail.actionsDescription}
-            </p>
-          </header>
-
-          <Card className="border border-border/60 bg-card/80 py-0">
-            <CardContent className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
-              <Button type="button" variant="outline">
-                {dictionary.gameDetail.actions.wishlist}
-              </Button>
-              <Button type="button" variant="outline">
-                {dictionary.gameDetail.actions.backlog}
-              </Button>
-              <Button type="button" variant="outline">
-                {dictionary.gameDetail.actions.completed}
-              </Button>
-              <Button type="button" variant="outline">
-                {dictionary.gameDetail.actions.recommend}
-              </Button>
-              <Button type="button" variant="outline">
-                {dictionary.gameDetail.actions.notRecommend}
-              </Button>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="space-y-4">
-          <header className="space-y-1">
-            <h2 className="font-headline text-xl uppercase">
-              {dictionary.gameDetail.commentsTitle}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {dictionary.gameDetail.commentsDescription}
-            </p>
-          </header>
-
-          <Card className="border border-border/60 bg-card/80 py-0">
-            <CardContent className="space-y-3 p-4">
-              <label className="text-sm font-medium" htmlFor="game-comment-input">
-                {dictionary.gameDetail.commentsInputLabel}
-              </label>
-              <Textarea
-                className="min-h-24"
-                id="game-comment-input"
-                placeholder={dictionary.gameDetail.commentsInputPlaceholder}
-              />
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-xs text-muted-foreground">
-                  {dictionary.gameDetail.commentsComingSoon}
-                </p>
-                <Button type="button">{dictionary.gameDetail.commentsSubmit}</Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="space-y-3">
-            <p className="text-sm font-semibold text-muted-foreground">
-              {dictionary.gameDetail.commentsListTitle}
-            </p>
-
-            {dictionary.gameDetail.commentsList.map((comment) => (
-              <Card
-                key={`${comment.author}-${comment.timeAgo}-${comment.body}`}
-                className="border border-border/60 bg-card/80 py-0"
-              >
-                <CardContent className="space-y-2 p-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold">{comment.author}</p>
-                    <p className="text-xs text-muted-foreground">{comment.timeAgo}</p>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {comment.body}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+        <GameLibraryReviewPanel
+          copy={dictionary.gameDetail}
+          game={{
+            igdbId: game.igdbId,
+            platforms: game.platforms,
+          }}
+          initialLibraryState={libraryEntry?.state ?? null}
+          initialReview={
+            userReview
+              ? {
+                  body: userReview.body,
+                  recommend: userReview.recommend,
+                  platformPlayed: userReview.platformPlayed,
+                  hoursToComplete: userReview.hoursToComplete,
+                }
+              : null
+          }
+        />
       </div>
     </main>
   )
