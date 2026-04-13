@@ -6,7 +6,7 @@ import { notFound, redirect } from "next/navigation"
 import { getDictionary } from "@/lib/i18n"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl } from "@/lib/site"
-import { getAuthSession } from "@/server/auth/get-auth-session"
+import { getAuthSession, getSessionUsername } from "@/server/auth/get-auth-session"
 
 import { GameSearchClient } from "@/components/games/game-search-client"
 
@@ -84,6 +84,10 @@ export default async function SearchPage({ params }: SearchPageProps) {
 
   if (!session) {
     redirect(`/${locale}/login`)
+  }
+
+  if (!getSessionUsername(session)) {
+    redirect(`/${locale}/onboarding/username`)
   }
 
   const dictionary = getDictionary(locale)
