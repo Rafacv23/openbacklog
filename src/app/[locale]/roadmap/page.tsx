@@ -1,13 +1,21 @@
 import type { Metadata } from "next"
+import packageJson from "../../../../package.json"
 
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { CheckCircle2, Clock3 } from "lucide-react"
 
 import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 
 import { RoadmapSuggestionDialog } from "@/components/roadmap/roadmap-suggestion-dialog"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -18,6 +26,7 @@ type LocaleRoadmapPageProps = {
 
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
+const PROJECT_VERSION = `v${packageJson.version}`
 const ROADMAP_SUGGESTION_FALLBACK = {
   title: "Send a roadmap suggestion",
   description:
@@ -130,6 +139,74 @@ export default async function RoadmapPage({
       ...(featureSuggestion.feedback ?? {}),
     },
   }
+  const completedPhases = dictionary.features.phases.filter(
+    (phase) => phase.state === "completed"
+  )
+  const upcomingPhases = dictionary.features.phases.filter(
+    (phase) => phase.state !== "completed"
+  )
+  type RoadmapPhase = (typeof dictionary.features.phases)[number]
+  const renderPhaseCards = (phases: readonly RoadmapPhase[]) => (
+    <div className="grid gap-4">
+      {phases.map((phase) => {
+        const isCompleted = phase.state === "completed"
+
+        return (
+          <Card
+            key={phase.id}
+            className="rounded-none border border-border bg-popover/70 p-0"
+          >
+            <CardContent
+              className={`space-y-4 border-l-4 p-6 ${
+                isCompleted
+                  ? "border-l-emerald-500/80"
+                  : "border-l-primary/60"
+              }`}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className="rounded-none border-primary/40 bg-card px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-primary uppercase"
+                >
+                  {phase.id}
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className={`rounded-none px-2 py-0.5 font-body text-[10px] tracking-[0.12em] uppercase ${
+                    isCompleted
+                      ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                      : "border-border/60 bg-card text-muted-foreground"
+                  }`}
+                >
+                  <span className="inline-flex items-center gap-1">
+                    {isCompleted ? (
+                      <CheckCircle2 className="size-3" />
+                    ) : (
+                      <Clock3 className="size-3" />
+                    )}
+                    {phase.status}
+                  </span>
+                </Badge>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="font-headline text-lg uppercase">{phase.title}</h3>
+                <p className="font-body text-sm leading-relaxed text-muted-foreground">
+                  {phase.description}
+                </p>
+              </div>
+
+              <ul className="list-disc space-y-2 pl-5 font-body text-sm leading-relaxed text-foreground/90">
+                {phase.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        )
+      })}
+    </div>
+  )
 
   return (
     <main className="min-h-screen bg-background px-6 py-20 text-foreground">
@@ -172,6 +249,12 @@ export default async function RoadmapPage({
           <span className="font-body text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
             {dictionary.features.statusCommunity}
           </span>
+          <Badge
+            variant="outline"
+            className="rounded-none border-border/70 bg-card px-3 py-1 font-body text-[10px] tracking-[0.12em] text-foreground uppercase"
+          >
+            {dictionary.features.projectVersionLabel}: {PROJECT_VERSION}
+          </Badge>
         </div>
 
         <section className="space-y-4">
@@ -182,46 +265,55 @@ export default async function RoadmapPage({
             {dictionary.features.developmentOrderDescription}
           </p>
 
-          <div className="grid gap-4">
-            {dictionary.features.phases.map((phase) => (
-              <Card
-                key={phase.id}
-                className="rounded-none border border-border bg-popover/70 p-0"
-              >
-                <CardContent className="space-y-4 p-6">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className="rounded-none border-primary/40 bg-card px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-primary uppercase"
-                    >
-                      {phase.id}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-none border-border/60 bg-card px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-muted-foreground uppercase"
-                    >
-                      {phase.status}
-                    </Badge>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h3 className="font-headline text-lg uppercase">
-                      {phase.title}
-                    </h3>
-                    <p className="font-body text-sm leading-relaxed text-muted-foreground">
-                      {phase.description}
+          <Accordion defaultValue={["upcoming"]} className="w-full gap-2">
+            <AccordionItem
+              value="completed"
+              className="rounded-none border border-border bg-popover/70 px-4"
+            >
+              <AccordionTrigger className="hover:no-underline">
+                <div className="flex w-full items-center justify-between gap-4 pr-4">
+                  <div className="space-y-1 text-left">
+                    <p className="font-headline text-base uppercase">
+                      {dictionary.features.phaseGroups.completed}
                     </p>
                   </div>
+                  <Badge
+                    variant="outline"
+                    className="rounded-none border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-emerald-700 uppercase dark:text-emerald-300"
+                  >
+                    {completedPhases.length}
+                  </Badge>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="pt-2 pb-4">
+                {renderPhaseCards(completedPhases)}
+              </AccordionContent>
+            </AccordionItem>
 
-                  <ul className="list-disc space-y-2 pl-5 font-body text-sm leading-relaxed text-foreground/90">
-                    {phase.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+            <AccordionItem
+              value="upcoming"
+              className="rounded-none border border-border bg-popover/70 px-4"
+            >
+              <AccordionTrigger className="hover:no-underline">
+                <div className="flex w-full items-center justify-between gap-4 pr-4">
+                  <div className="space-y-1 text-left">
+                    <p className="font-headline text-base uppercase">
+                      {dictionary.features.phaseGroups.upcoming}
+                    </p>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="rounded-none border-primary/40 bg-card px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-primary uppercase"
+                  >
+                    {upcomingPhases.length}
+                  </Badge>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="pt-2 pb-4">
+                {renderPhaseCards(upcomingPhases)}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </section>
 
         <Card className="rounded-none border border-border bg-popover/70 p-0">
