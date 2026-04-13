@@ -15,6 +15,8 @@ export type AuthPageDictionary = {
   form: {
     emailLabel: string
     emailPlaceholder: string
+    usernameLabel: string
+    usernamePlaceholder: string
     passwordLabel: string
     passwordPlaceholder: string
     confirmPasswordLabel: string
@@ -35,6 +37,8 @@ export type AuthPageDictionary = {
     providerNotEnabled: string
     emailNotVerified: string
     invalidResetToken: string
+    invalidUsername: string
+    usernameAlreadyInUse: string
   }
   messages: {
     verificationEmailSent: string
@@ -59,9 +63,29 @@ export type AuthPageDictionary = {
     metaDescription: string
     title: string
     subtitle: string
+    usernamePublicNote: string
     submit: string
     alternatePrompt: string
     alternateAction: string
+  }
+  usernameOnboarding: {
+    metaTitle: string
+    metaDescription: string
+    title: string
+    subtitle: string
+    description: string
+    helper: string
+    inputLabel: string
+    inputPlaceholder: string
+    submit: string
+    submitting: string
+    errors: {
+      generic: string
+      invalid: string
+      alreadyTaken: string
+      tooShort: string
+      tooLong: string
+    }
   }
   forgotPassword: {
     metaTitle: string
@@ -95,6 +119,8 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
     form: {
       emailLabel: "Email",
       emailPlaceholder: "you@email.com",
+      usernameLabel: "Username",
+      usernamePlaceholder: "your_public_name",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter your password",
       confirmPasswordLabel: "Confirm password",
@@ -116,6 +142,9 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
       emailNotVerified:
         "Your email is not verified yet. Check your inbox to continue.",
       invalidResetToken: "This reset link is invalid or expired.",
+      invalidUsername:
+        "Username must use only lowercase letters, numbers, or underscore (3-20 chars).",
+      usernameAlreadyInUse: "That username is already taken.",
     },
     messages: {
       verificationEmailSent: "Verification email sent. Check your inbox.",
@@ -145,9 +174,32 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
         "Create your OpenBacklog account to start tracking and finishing more games.",
       title: "Create your account",
       subtitle: "Use your email and password to get started.",
+      usernamePublicNote: "This username will be public across the app.",
       submit: "Create account",
       alternatePrompt: "Already have an account?",
       alternateAction: "Log in",
+    },
+    usernameOnboarding: {
+      metaTitle: "Choose Username | OpenBacklog",
+      metaDescription:
+        "Choose your public OpenBacklog username before entering your backlog hub.",
+      title: "Choose your public username",
+      subtitle: "One quick step before entering your account.",
+      description:
+        "Your username is part of your public profile URL and review pages.",
+      helper:
+        "Rules: 3-20 chars, lowercase letters, numbers, and underscore only.",
+      inputLabel: "Username",
+      inputPlaceholder: "your_public_name",
+      submit: "Save username",
+      submitting: "Saving...",
+      errors: {
+        generic: "We couldn't save your username. Try again.",
+        invalid: "Use only lowercase letters, numbers, or underscore (3-20).",
+        alreadyTaken: "That username is already taken.",
+        tooShort: "Username is too short.",
+        tooLong: "Username is too long.",
+      },
     },
     forgotPassword: {
       metaTitle: "Recover Password | OpenBacklog",
@@ -181,6 +233,8 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
     form: {
       emailLabel: "Correo electronico",
       emailPlaceholder: "tu@email.com",
+      usernameLabel: "Username publico",
+      usernamePlaceholder: "tu_nombre_publico",
       passwordLabel: "Contrasena",
       passwordPlaceholder: "Introduce tu contrasena",
       confirmPasswordLabel: "Confirmar contrasena",
@@ -201,7 +255,11 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
       providerNotEnabled: "Este proveedor aun no esta configurado.",
       emailNotVerified:
         "Tu correo aun no esta verificado. Revisa tu bandeja de entrada.",
-      invalidResetToken: "Este enlace de recuperacion es invalido o ha caducado.",
+      invalidResetToken:
+        "Este enlace de recuperacion es invalido o ha caducado.",
+      invalidUsername:
+        "El username debe usar solo minusculas, numeros o guion bajo (3-20 chars).",
+      usernameAlreadyInUse: "Ese username ya esta en uso.",
     },
     messages: {
       verificationEmailSent:
@@ -232,9 +290,31 @@ const authDictionaries: Record<SupportedLocale, AuthPageDictionary> = {
         "Crea tu cuenta de OpenBacklog para empezar a organizar y terminar mas juegos.",
       title: "Crea tu cuenta",
       subtitle: "Empieza con tu correo y una contrasena.",
+      usernamePublicNote: "Este username sera publico dentro de la app.",
       submit: "Crear cuenta",
       alternatePrompt: "Ya tienes cuenta?",
       alternateAction: "Iniciar sesion",
+    },
+    usernameOnboarding: {
+      metaTitle: "Elegir Username | OpenBacklog",
+      metaDescription:
+        "Elige tu username publico de OpenBacklog antes de entrar al hub privado.",
+      title: "Elige tu username publico",
+      subtitle: "Un paso rapido antes de entrar a tu cuenta.",
+      description:
+        "Tu username forma parte de la URL publica de perfil y reviews.",
+      helper: "Reglas: 3-20 caracteres, solo minusculas, numeros y guion bajo.",
+      inputLabel: "Username",
+      inputPlaceholder: "tu_nombre_publico",
+      submit: "Guardar username",
+      submitting: "Guardando...",
+      errors: {
+        generic: "No pudimos guardar tu username. Intentalo de nuevo.",
+        invalid: "Usa solo minusculas, numeros o guion bajo (3-20).",
+        alreadyTaken: "Ese username ya esta en uso.",
+        tooShort: "El username es demasiado corto.",
+        tooLong: "El username es demasiado largo.",
+      },
     },
     forgotPassword: {
       metaTitle: "Recuperar Contrasena | OpenBacklog",
