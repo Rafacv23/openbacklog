@@ -440,7 +440,7 @@ export const en = {
     anonymousUser: "Player",
     header: {
       aria: "Authenticated navigation",
-      brand: "OPENBACKLOG APP",
+      brand: "OPENBACKLOG",
       recommendations: "RECOMMENDATIONS",
       feed: "FEED",
       search: "SEARCH",
@@ -501,7 +501,8 @@ export const en = {
         {
           friend: "ALEX_R",
           action: "Started Clair Obscur: Expedition 33",
-          detail: "Set a weekly goal of 4 sessions and invited friends to join.",
+          detail:
+            "Set a weekly goal of 4 sessions and invited friends to join.",
           timeAgo: "47 min ago",
         },
         {
