@@ -90,6 +90,18 @@ function getErrorMessage(
     return dictionary.errors.emailAlreadyInUse
   }
 
+  if (code === "USERNAME_IS_ALREADY_TAKEN") {
+    return dictionary.errors.usernameAlreadyInUse
+  }
+
+  if (
+    code === "USERNAME_TOO_SHORT" ||
+    code === "USERNAME_TOO_LONG" ||
+    code === "INVALID_USERNAME"
+  ) {
+    return dictionary.errors.invalidUsername
+  }
+
   if (code === "INVALID_EMAIL_OR_PASSWORD") {
     return dictionary.errors.invalidCredentials
   }
@@ -172,6 +184,7 @@ export function AuthForm({
 }: AuthFormProps) {
   const router = useRouter()
   const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -208,6 +221,13 @@ export function AuthForm({
     const normalizedEmail = email.trim().toLowerCase()
 
     if (isRegister) {
+      const normalizedUsername = username.trim().toLowerCase()
+
+      if (!/^[a-z0-9_]{3,20}$/.test(normalizedUsername)) {
+        setErrorMessage(dictionary.errors.invalidUsername)
+        return
+      }
+
       if (password.length < 10) {
         setErrorMessage(dictionary.errors.passwordTooShort)
         return
@@ -225,6 +245,8 @@ export function AuthForm({
             email: normalizedEmail,
             password,
             name: buildDisplayNameFromEmail(normalizedEmail),
+            username: username.trim().toLowerCase(),
+            displayUsername: username.trim().toLowerCase(),
             callbackURL: resolveAbsoluteUrl(`/${locale}/login?verified=1`),
           })
         : await authClient.signIn.email({
@@ -329,6 +351,34 @@ export function AuthForm({
               value={email}
             />
           </div>
+
+          {isRegister ? (
+            <div className="space-y-2">
+              <label
+                className="text-xs tracking-wide text-muted-foreground uppercase"
+                htmlFor="username-input"
+              >
+                {dictionary.form.usernameLabel}
+              </label>
+              <Input
+                autoComplete="username"
+                className="h-10"
+                disabled={isPending}
+                id="username-input"
+                maxLength={20}
+                minLength={3}
+                name="username"
+                onChange={(event) => setUsername(event.target.value)}
+                pattern="[a-z0-9_]{3,20}"
+                placeholder={dictionary.form.usernamePlaceholder}
+                required
+                value={username}
+              />
+              <p className="text-xs text-muted-foreground">
+                {dictionary.register.usernamePublicNote}
+              </p>
+            </div>
+          ) : null}
 
           <div className="space-y-2">
             <label className="text-xs tracking-wide text-muted-foreground uppercase">
