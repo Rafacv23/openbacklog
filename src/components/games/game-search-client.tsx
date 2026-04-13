@@ -1,14 +1,13 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { X } from "lucide-react"
-import Link from "next/link"
 
 import type { SupportedLocale } from "@/lib/locales"
-import { Card, CardContent } from "@/components/ui/card"
+import { GameCard, GameCardSkeleton, type GameCardCopy, type GameCardData } from "@/components/app/game-card"
 import { Input } from "@/components/ui/input"
 
-type SearchCopy = {
+type SearchCopy = GameCardCopy & {
   cooldown: string
   clearSearchAriaLabel: string
   emptyBody: string
@@ -16,34 +15,15 @@ type SearchCopy = {
   errorGeneric: string
   errorRateLimited: string
   errorUnauthorized: string
-  firstReleaseDateLabel: string
-  genresLabel: string
   inputLabel: string
   inputPlaceholder: string
   loading: string
   minQuery: string
-  noGenres: string
-  noPlatforms: string
-  noReleaseDate: string
-  noSummary: string
-  platformsLabel: string
-  ratingLabel: string
   resultsLabel: string
-  viewDetails: string
-  viewDetailsAriaLabel: string
 }
 
-type SearchGameResult = {
-  coverUrl: string | null
-  firstReleaseDate: string | null
-  genres: string[]
-  igdbId: number
+type SearchGameResult = GameCardData & {
   lastSyncedAt: string
-  name: string
-  platforms: string[]
-  rating: number | null
-  slug: string
-  summary: string | null
 }
 
 type SearchResponse = {
@@ -59,52 +39,12 @@ type GameSearchClientProps = {
 const SEARCH_COOLDOWN_MS = 450
 const SKELETON_CARD_COUNT = 6
 
-function GameSearchCardSkeleton() {
-  return (
-    <Card aria-hidden="true" className="border border-border/60 bg-card/90 py-0">
-      <CardContent className="space-y-3 p-4">
-        <div className="flex items-start gap-3">
-          <div className="h-24 w-16 shrink-0 animate-pulse rounded-md border border-border/60 bg-muted" />
-
-          <div className="min-w-0 flex-1 space-y-2">
-            <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <div className="h-3 w-full animate-pulse rounded bg-muted" />
-          <div className="h-3 w-11/12 animate-pulse rounded bg-muted" />
-          <div className="h-3 w-10/12 animate-pulse rounded bg-muted" />
-        </div>
-
-        <div className="space-y-2">
-          <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
-          <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
 export function GameSearchClient({ dictionary, locale }: GameSearchClientProps) {
   const [query, setQuery] = useState("")
   const [debouncedQuery, setDebouncedQuery] = useState("")
   const [results, setResults] = useState<SearchGameResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const formatter = useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale, {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-    [locale],
-  )
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -230,7 +170,7 @@ export function GameSearchClient({ dictionary, locale }: GameSearchClientProps) 
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {Array.from({ length: SKELETON_CARD_COUNT }, (_, index) => (
-              <GameSearchCardSkeleton key={`game-search-skeleton-${index}`} />
+              <GameCardSkeleton key={`game-search-skeleton-${index}`} />
             ))}
           </div>
         </div>
@@ -252,65 +192,9 @@ export function GameSearchClient({ dictionary, locale }: GameSearchClientProps) 
           </p>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {results.map((game) => {
-              const releaseDate = game.firstReleaseDate
-                ? formatter.format(new Date(game.firstReleaseDate))
-                : dictionary.noReleaseDate
-
-              return (
-                <Link
-                  aria-label={`${dictionary.viewDetailsAriaLabel}: ${game.name}`}
-                  href={`/${locale}/game/${game.igdbId}`}
-                  key={game.igdbId}
-                >
-                  <Card className="border border-border/60 bg-card/90 py-0 transition-all hover:border-primary/60 hover:bg-card">
-                    <CardContent className="space-y-3 p-4">
-                      <div className="flex items-start gap-3">
-                        <div
-                          aria-hidden="true"
-                          className="h-24 w-16 shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center"
-                          style={
-                            game.coverUrl
-                              ? {
-                                  backgroundImage: `url(${game.coverUrl})`,
-                                }
-                              : undefined
-                          }
-                        />
-
-                        <div className="min-w-0 flex-1 space-y-1">
-                          <h3 className="truncate text-base font-semibold">{game.name}</h3>
-                          <p className="text-xs text-muted-foreground">/{game.slug}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {dictionary.firstReleaseDateLabel}: {releaseDate}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {dictionary.ratingLabel}: {game.rating ? game.rating.toFixed(1) : "-"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="line-clamp-3 text-sm text-muted-foreground">
-                        {game.summary ?? dictionary.noSummary}
-                      </p>
-
-                      <div className="space-y-1 text-xs text-muted-foreground">
-                        <p>
-                          {dictionary.platformsLabel}: {game.platforms.join(", ") || dictionary.noPlatforms}
-                        </p>
-                        <p>
-                          {dictionary.genresLabel}: {game.genres.join(", ") || dictionary.noGenres}
-                        </p>
-                      </div>
-
-                      <p className="text-xs font-semibold tracking-[0.08em] text-primary uppercase">
-                        {dictionary.viewDetails}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )
-            })}
+            {results.map((game) => (
+              <GameCard copy={dictionary} game={game} key={game.igdbId} locale={locale} />
+            ))}
           </div>
         </div>
       ) : null}
