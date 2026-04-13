@@ -3,23 +3,115 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { ArrowUpRight } from "lucide-react"
 
 import { AppHeader } from "@/components/app/app-header"
-import { Card, CardContent } from "@/components/ui/card"
+import { GameCard, type GameCardData } from "@/components/app/game-card"
 import { getDictionary } from "@/lib/i18n"
 import { REQUEST_LOCALE_HEADER, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
-import { getAuthSession } from "@/server/auth/get-auth-session"
-import { ArrowUpRight } from "lucide-react"
+import { getAuthSession, getSessionUsername } from "@/server/auth/get-auth-session"
 
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
+const GAMES_PER_FEED_SECTION = 3
+const POPULAR_GAME_QUERIES = ["Elden Ring", "Fortnite", "Minecraft"]
+const UPCOMING_GAME_QUERIES = ["Grand Theft Auto VI", "Death Stranding 2", "Fable"]
+
+type GamesSearchApiResponse = {
+  status: string
+  data?: GameCardData[]
+}
 
 async function getRequestLocale() {
   const requestHeaders = await headers()
-  return (
-    toSupportedLocale(requestHeaders.get(REQUEST_LOCALE_HEADER) ?? "") ?? "en"
+  return toSupportedLocale(requestHeaders.get(REQUEST_LOCALE_HEADER) ?? "") ?? "en"
+}
+
+async function fetchGamesByQuery({
+  cookieHeader,
+  forwardedFor,
+  limit = GAMES_PER_FEED_SECTION,
+  query,
+  realIp,
+}: {
+  cookieHeader: string
+  forwardedFor: string
+  limit?: number
+  query: string
+  realIp: string
+}): Promise<GameCardData[]> {
+  const params = new URLSearchParams({
+    query,
+    limit: String(limit),
+  })
+
+  const response = await fetch(`${BASE_URL}/api/games/search?${params.toString()}`, {
+    cache: "no-store",
+    headers: {
+      cookie: cookieHeader,
+      ...(forwardedFor ? { "x-forwarded-for": forwardedFor } : {}),
+      ...(realIp ? { "x-real-ip": realIp } : {}),
+    },
+  })
+
+  if (!response.ok) {
+    return []
+  }
+
+  const payload = (await response.json()) as GamesSearchApiResponse
+
+  if (payload.status !== "ok" || !Array.isArray(payload.data)) {
+    return []
+  }
+
+  return payload.data
+}
+
+async function fetchGamesByQueries({
+  cookieHeader,
+  forwardedFor,
+  limitPerQuery = 1,
+  maxResults = GAMES_PER_FEED_SECTION,
+  queries,
+  realIp,
+}: {
+  cookieHeader: string
+  forwardedFor: string
+  limitPerQuery?: number
+  maxResults?: number
+  queries: string[]
+  realIp: string
+}): Promise<GameCardData[]> {
+  const resultsPerQuery = await Promise.all(
+    queries.map((query) =>
+      fetchGamesByQuery({
+        cookieHeader,
+        forwardedFor,
+        query,
+        limit: limitPerQuery,
+        realIp,
+      }),
+    ),
   )
+
+  const uniqueGames: GameCardData[] = []
+  const seenGameIds = new Set<number>()
+
+  for (const game of resultsPerQuery.flat()) {
+    if (seenGameIds.has(game.igdbId)) {
+      continue
+    }
+
+    seenGameIds.add(game.igdbId)
+    uniqueGames.push(game)
+
+    if (uniqueGames.length >= maxResults) {
+      break
+    }
+  }
+
+  return uniqueGames
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -75,11 +167,39 @@ export default async function AppEntryPage() {
     redirect(`/${locale}/login`)
   }
 
+  const username = getSessionUsername(session)
+
+  if (!username) {
+    redirect(`/${locale}/onboarding/username`)
+  }
+
   const dictionary = getDictionary(locale)
-  const profileId = session.user?.id?.trim()
-  const profileHref = profileId
-    ? `/${locale}/profile/${encodeURIComponent(profileId)}`
-    : `/${locale}`
+  const requestHeaders = await headers()
+  const cookieHeader = requestHeaders.get("cookie") ?? ""
+  const forwardedFor = requestHeaders.get("x-forwarded-for") ?? ""
+  const realIp = requestHeaders.get("x-real-ip") ?? ""
+  const recommendationQueries = dictionary.app.recommendations.items.map((item) => item.title)
+  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
+  const [popularGames, recommendationGames, upcomingGames] = await Promise.all([
+    fetchGamesByQueries({
+      cookieHeader,
+      forwardedFor,
+      queries: POPULAR_GAME_QUERIES,
+      realIp,
+    }),
+    fetchGamesByQueries({
+      cookieHeader,
+      forwardedFor,
+      queries: recommendationQueries,
+      realIp,
+    }),
+    fetchGamesByQueries({
+      cookieHeader,
+      forwardedFor,
+      queries: UPCOMING_GAME_QUERIES,
+      realIp,
+    }),
+  ])
 
   return (
     <main className="relative min-h-screen bg-background text-foreground">
@@ -101,6 +221,26 @@ export default async function AppEntryPage() {
           </div>
         </section>
 
+        <section id="popular-games" className="space-y-4">
+          <header className="space-y-1">
+            <h2 className="font-headline text-2xl uppercase">Popular games</h2>
+            <p className="text-sm text-muted-foreground">
+              What other players are adding to their backlogs and playing the
+              most.
+            </p>
+          </header>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {popularGames.map((game) => (
+              <GameCard copy={dictionary.search} game={game} key={game.igdbId} locale={locale} />
+            ))}
+          </div>
+
+          {popularGames.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{dictionary.search.emptyBody}</p>
+          ) : null}
+        </section>
+
         <section id="recommendations" className="space-y-4">
           <header className="space-y-1">
             <h2 className="font-headline text-2xl uppercase">
@@ -112,26 +252,34 @@ export default async function AppEntryPage() {
           </header>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {dictionary.app.recommendations.items.map((item) => (
-              <Card
-                key={item.title}
-                className="border border-border/60 bg-card/80 py-0"
-              >
-                <CardContent className="space-y-3 p-5">
-                  <p className="text-xs tracking-[0.09em] text-muted-foreground uppercase">
-                    {item.state}
-                  </p>
-                  <h3 className="font-headline text-xl uppercase">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {item.reason}
-                  </p>
-                  <p className="text-xs text-primary">{item.timeHint}</p>
-                </CardContent>
-              </Card>
+            {recommendationGames.map((game) => (
+              <GameCard copy={dictionary.search} game={game} key={game.igdbId} locale={locale} />
             ))}
           </div>
+
+          {recommendationGames.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{dictionary.search.emptyBody}</p>
+          ) : null}
+        </section>
+
+        <section id="upcoming-games" className="space-y-4">
+          <header className="space-y-1">
+            <h2 className="font-headline text-2xl uppercase">Upcoming games</h2>
+            <p className="text-sm text-muted-foreground">
+              Games that are coming out soon and are being added to players
+              backlogs.
+            </p>
+          </header>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {upcomingGames.map((game) => (
+              <GameCard copy={dictionary.search} game={game} key={game.igdbId} locale={locale} />
+            ))}
+          </div>
+
+          {upcomingGames.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{dictionary.search.emptyBody}</p>
+          ) : null}
         </section>
 
         <section id="feed" className="space-y-4">
