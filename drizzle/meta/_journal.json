@@ -22,6 +22,13 @@
       "when": 1775747484356,
       "tag": "0002_furry_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1776094254463,
+      "tag": "0003_complex_masked_marvel",
+      "breakpoints": true
     }
   ]
 }
