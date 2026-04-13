@@ -5,13 +5,12 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { AppHeader } from "@/components/app/app-header"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getDictionary } from "@/lib/i18n"
 import { REQUEST_LOCALE_HEADER, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { getAuthSession } from "@/server/auth/get-auth-session"
+import { ArrowUpRight } from "lucide-react"
 
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
@@ -81,7 +80,6 @@ export default async function AppEntryPage() {
   const profileHref = profileId
     ? `/${locale}/profile/${encodeURIComponent(profileId)}`
     : `/${locale}`
-  const displayName = session.user?.name?.trim() || dictionary.app.anonymousUser
 
   return (
     <main className="relative min-h-screen bg-background text-foreground">
@@ -93,19 +91,6 @@ export default async function AppEntryPage() {
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-8 md:py-10">
         <section className="space-y-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge
-              variant="outline"
-              className="rounded-none border-primary/40 bg-primary/10 text-primary"
-            >
-              {dictionary.app.hero.badge}
-            </Badge>
-            <p className="text-xs text-muted-foreground">
-              {dictionary.app.hero.signedInAs}:{" "}
-              <span className="text-foreground">{displayName}</span>
-            </p>
-          </div>
-
           <div className="space-y-2">
             <h1 className="font-display text-4xl italic text-primary md:text-5xl">
               {dictionary.app.hero.title}
@@ -113,30 +98,6 @@ export default async function AppEntryPage() {
             <p className="max-w-3xl text-sm text-muted-foreground md:text-base">
               {dictionary.app.hero.description}
             </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href={`/${locale}/search`}>
-              <Button className="rounded-none font-body text-[10px] tracking-[0.12em] uppercase">
-                {dictionary.app.quickActions.search}
-              </Button>
-            </Link>
-            <Link href={profileHref}>
-              <Button
-                variant="outline"
-                className="rounded-none font-body text-[10px] tracking-[0.12em] uppercase"
-              >
-                {dictionary.app.quickActions.profile}
-              </Button>
-            </Link>
-            <Link href={`/${locale}/roadmap`}>
-              <Button
-                variant="outline"
-                className="rounded-none font-body text-[10px] tracking-[0.12em] uppercase"
-              >
-                {dictionary.app.quickActions.roadmap}
-              </Button>
-            </Link>
           </div>
         </section>
 
@@ -178,9 +139,19 @@ export default async function AppEntryPage() {
             <h2 className="font-headline text-2xl uppercase">
               {dictionary.app.feed.title}
             </h2>
-            <p className="text-sm text-muted-foreground">
-              {dictionary.app.feed.description}
-            </p>
+            <div className="flex justify-between">
+              <p className="text-sm text-muted-foreground">
+                {dictionary.app.feed.description}
+              </p>
+              <Link
+                href={`/${locale}/friends`}
+                title="Friends activity"
+                className="flex gap-2 items-center hover:text-primary transition-colors"
+              >
+                Watch more
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
           </header>
 
           <div className="space-y-3">
