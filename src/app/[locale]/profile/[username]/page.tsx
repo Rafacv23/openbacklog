@@ -194,6 +194,21 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   <span className="text-foreground">{lastActivityDate}</span>
                 </p>
               </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <article className="rounded-md border border-border/60 bg-background/70 p-3">
+                  <p className="text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+                    {dictionary.profile.followersLabel}
+                  </p>
+                  <p className="mt-1 font-display text-2xl italic text-primary">{profile.followerCount}</p>
+                </article>
+                <article className="rounded-md border border-border/60 bg-background/70 p-3">
+                  <p className="text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+                    {dictionary.profile.followingLabel}
+                  </p>
+                  <p className="mt-1 font-display text-2xl italic text-primary">{profile.followingCount}</p>
+                </article>
+              </div>
             </CardContent>
           </Card>
 

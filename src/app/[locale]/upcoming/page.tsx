@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
 import { GameCard } from "@/components/app/game-card"
 import { Card, CardContent } from "@/components/ui/card"
@@ -130,7 +131,7 @@ export default async function UpcomingPage({ params }: UpcomingPageProps) {
     <main className="relative min-h-screen bg-background text-foreground">
       <AppHeader dictionary={dictionary.app.header} locale={locale} profileHref={profileHref} />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8 md:py-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 md:py-10">
         <header className="space-y-2">
           <h1 className="font-display text-4xl italic text-primary md:text-5xl">
             {dictionary.app.upcoming.title}
@@ -193,6 +194,8 @@ export default async function UpcomingPage({ params }: UpcomingPageProps) {
           </section>
         )}
       </div>
+
+      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
     </main>
   )
 }

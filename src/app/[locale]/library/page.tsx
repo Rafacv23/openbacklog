@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArrowRight, ArrowUpRight, MessageSquareText } from "lucide-react"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
 import { LibraryEntryStateForm } from "@/components/library/library-entry-state-form"
 import { LibraryFilters } from "@/components/library/library-filters"
@@ -163,7 +164,7 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
     <main className="relative min-h-screen bg-background text-foreground">
       <AppHeader dictionary={dictionary.app.header} locale={locale} profileHref={profileHref} />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6">
         <header className="flex flex-col gap-2">
           <h1 className="font-display text-4xl italic text-primary md:text-5xl">{dictionary.library.title}</h1>
           <p className="max-w-3xl text-sm text-muted-foreground md:text-base">{dictionary.library.description}</p>
@@ -204,7 +205,7 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
 
               return (
                 <Card key={item.entryId} className="border border-border/60 bg-card/80 py-0">
-                  <CardContent className="grid gap-4 p-4 md:grid-cols-[120px_minmax(0,1fr)_320px]">
+                  <CardContent className="grid gap-4 p-4 md:grid-cols-[120px_minmax(0,1fr)] lg:grid-cols-[120px_minmax(0,1fr)_280px]">
                     <div
                       aria-hidden="true"
                       className="aspect-[3/4] w-full rounded-md border border-border/60 bg-muted bg-cover bg-center"
@@ -233,7 +234,9 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
 
                       <h2 className="truncate font-headline text-xl uppercase">{item.game.name}</h2>
                       <p className="truncate text-xs text-muted-foreground">/{item.game.slug}</p>
-                      <p className="text-sm text-muted-foreground">{item.game.summary ?? dictionary.library.noSummary}</p>
+                      <p className="line-clamp-3 text-sm text-muted-foreground">
+                        {item.game.summary ?? dictionary.library.noSummary}
+                      </p>
                       <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                         <span>
                           {dictionary.library.labels.release}: {releaseDate}
@@ -244,7 +247,7 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 md:col-span-2 lg:col-span-1">
                       <LibraryEntryStateForm
                         entryId={item.entryId}
                         labels={dictionary.library.states}
@@ -275,7 +278,7 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
 
               return (
                 <Card key={item.entryId} className="border border-border/60 bg-card/80 py-0">
-                  <CardContent className="flex flex-col gap-3 p-3">
+                  <CardContent className="flex min-h-[24rem] flex-col gap-3 p-3">
                     <div
                       aria-hidden="true"
                       className="aspect-[3/4] w-full rounded-md border border-border/60 bg-muted bg-cover bg-center"
@@ -306,9 +309,11 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
                       <p className="truncate text-xs text-muted-foreground">/{item.game.slug}</p>
                     </div>
 
-                    <p className="truncate text-xs text-muted-foreground">{item.game.summary ?? dictionary.library.noSummary}</p>
+                    <p className="line-clamp-3 min-h-[2.9rem] text-xs text-muted-foreground">
+                      {item.game.summary ?? dictionary.library.noSummary}
+                    </p>
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                    <div className="grid grid-cols-1 gap-1 text-xs text-muted-foreground sm:grid-cols-2 sm:gap-2">
                       <span>
                         {dictionary.library.labels.release}: {releaseDate}
                       </span>
@@ -384,6 +389,8 @@ export default async function LibraryPage({ params, searchParams }: LibraryPageP
           </nav>
         ) : null}
       </div>
+
+      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
     </main>
   )
 }

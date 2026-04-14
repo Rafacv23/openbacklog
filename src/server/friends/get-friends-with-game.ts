@@ -1,4 +1,4 @@
-import { and, desc, eq, ne, or } from "drizzle-orm"
+import { and, desc, eq, ne } from "drizzle-orm"
 
 import { db } from "@/server/db"
 import { friendships, games, libraryEntries, user } from "@/server/db/schema"
@@ -37,17 +37,8 @@ export async function getFriendsWithGame(input: {
     .innerJoin(
       friendships,
       and(
-        eq(friendships.status, "accepted"),
-        or(
-          and(
-            eq(friendships.requesterUserId, input.userId),
-            eq(friendships.addresseeUserId, libraryEntries.userId),
-          ),
-          and(
-            eq(friendships.addresseeUserId, input.userId),
-            eq(friendships.requesterUserId, libraryEntries.userId),
-          ),
-        ),
+        eq(friendships.requesterUserId, input.userId),
+        eq(friendships.addresseeUserId, libraryEntries.userId),
       ),
     )
     .where(and(eq(games.igdbId, input.gameIgdbId), ne(libraryEntries.userId, input.userId)))

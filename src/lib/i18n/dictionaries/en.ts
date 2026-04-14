@@ -316,8 +316,8 @@ export const en = {
       },
       {
         id: "PHASE 1",
-        status: "IN PROGRESS",
-        state: "in_progress",
+        status: "COMPLETED",
+        state: "completed",
         title: "Core Backlog",
         description:
           "Main backlog workflows needed for daily usage and progress tracking.",
@@ -330,8 +330,8 @@ export const en = {
       },
       {
         id: "PHASE 2",
-        status: "PLANNED",
-        state: "planned",
+        status: "IN PROGRESS",
+        state: "in_progress",
         title: "Social First",
         description:
           "MVP social loop focused on accountability and retention before AI modules.",
@@ -455,9 +455,47 @@ export const en = {
       recommendations: "RECOMMENDATIONS",
       feed: "FEED",
       upcoming: "UPCOMING",
+      library: "LIBRARY",
+      friends: "FRIENDS",
       search: "SEARCH",
       profile: "PROFILE",
       landing: "LANDING",
+      menu: "MENU",
+      closeMenu: "CLOSE MENU",
+    },
+    footer: {
+      title: "OPENBACKLOG.APP",
+      description:
+        "Finish more games with less friction. Track progress, discover next picks, and follow project updates from one place.",
+      sections: {
+        product: "PLAY & TRACK",
+        account: "ACCOUNT & PROGRESS",
+        community: "COMMUNITY",
+        legal: "LEGAL",
+      },
+      usefulLinks: {
+        feed: "FEED",
+        library: "LIBRARY",
+        search: "SEARCH",
+        popular: "POPULAR",
+        upcoming: "UPCOMING",
+        profile: "PROFILE",
+        roadmap: "ROADMAP",
+        changelog: "CHANGELOG",
+        github: "GITHUB",
+        contribute: "CONTRIBUTE",
+        issues: "ISSUES",
+        privacy: "PRIVACY",
+        terms: "TERMS",
+        cookies: "COOKIES",
+      },
+      madeBy: "Made by Rafa Canosa",
+      websiteLabel: "rafacanosa.dev",
+      copyright: "© 2026 OpenBacklog. All rights reserved.",
+      aria: {
+        footer: "Authenticated footer",
+        footerLink: "Open footer link",
+      },
     },
     hero: {
       badge: "PRIVATE HUB",
@@ -503,27 +541,48 @@ export const en = {
       title: "Friends activity feed",
       description:
         "Follow progress from your friends to stay accountable and discover your next game naturally.",
-      items: [
-        {
-          friend: "MIA_GM",
-          action: "Completed Resident Evil 4",
-          detail: "Shared a quick review and moved Metaphor to 'Playing'.",
-          timeAgo: "12 min ago",
-        },
-        {
-          friend: "ALEX_R",
-          action: "Started Clair Obscur: Expedition 33",
-          detail:
-            "Set a weekly goal of 4 sessions and invited friends to join.",
-          timeAgo: "47 min ago",
-        },
-        {
-          friend: "DANI_PLAYS",
-          action: "Updated backlog priorities",
-          detail: "Moved Hollow Knight to 'On hold' and promoted Hades II.",
-          timeAgo: "2 h ago",
-        },
-      ],
+      emptyTitle: "No activity from your friends yet",
+      emptyDescription: "Follow players from Friends tab to start your social feed.",
+      justNow: "just now",
+      actions: {
+        libraryUpdated: "Moved {game} to {state}",
+        reviewRecommended: "Recommended {game}",
+        reviewNotRecommended: "Did not recommend {game}",
+      },
+      details: {
+        libraryUpdated: "Backlog state updated.",
+        reviewPublished: "Published a new review.",
+      },
+    },
+    friends: {
+      metaTitle: "Friends | OpenBacklog",
+      metaDescription:
+        "Follow and unfollow players to personalize your OpenBacklog social feed.",
+      title: "Friends",
+      description:
+        "Social graph works like followers: follow players to receive their updates in your feed.",
+      searchLabel: "Search players",
+      searchPlaceholder: "Find by username or display name...",
+      searchAction: "SEARCH",
+      clearSearch: "CLEAR",
+      followingTitle: "People you follow",
+      followingDescription: "These players currently appear in your social feed.",
+      discoverTitle: "Discover players",
+      discoverDescription: "Find new players and follow them in one click.",
+      followersLabel: "Followers",
+      followingLabel: "Following",
+      emptyFollowingTitle: "You are not following anyone yet",
+      emptyFollowingBody:
+        "Start by following a few players. Their library and review updates will show in your feed.",
+      emptyDiscoverTitle: "No players found",
+      emptyDiscoverBody: "Try a different search term.",
+      actions: {
+        follow: "FOLLOW",
+        unfollow: "UNFOLLOW",
+        followSubmitting: "FOLLOWING...",
+        unfollowSubmitting: "UNFOLLOWING...",
+        genericError: "Could not update follow status.",
+      },
     },
     upcoming: {
       metaTitle: "Upcoming Releases | OpenBacklog",
@@ -569,7 +628,7 @@ export const en = {
           "Fresh releases and games with recent review activity.",
         friendsTitle: "Most popular among your friends",
         friendsDescription:
-          "Games your accepted friends are adding and updating the most.",
+          "Games players you follow are adding and updating the most.",
       },
       filters: {
         title: "Popular by genre and platform",
@@ -738,6 +797,8 @@ export const en = {
       "Public summary of backlog states, activity, and review history.",
     joinedLabel: "Joined",
     lastActivityLabel: "Last activity",
+    followersLabel: "Followers",
+    followingLabel: "Following",
     libraryTitle: "Library Snapshot",
     libraryDescription: "Current distribution of this player's backlog.",
     stateLabels: {

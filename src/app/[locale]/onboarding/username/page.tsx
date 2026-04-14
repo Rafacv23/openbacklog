@@ -3,8 +3,10 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { UsernameOnboardingForm } from "@/components/onboarding/username-onboarding-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getDictionary } from "@/lib/i18n"
 import { getAuthDictionary } from "@/lib/i18n/auth-dictionary"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl } from "@/lib/site"
@@ -90,6 +92,7 @@ export default async function UsernameOnboardingPage({ params }: UsernameOnboard
     redirect(`/${locale}/feed`)
   }
 
+  const appDictionary = getDictionary(locale)
   const dictionary = getAuthDictionary(locale)
 
   return (
@@ -114,6 +117,8 @@ export default async function UsernameOnboardingPage({ params }: UsernameOnboard
           </CardContent>
         </Card>
       </div>
+
+      <AppFooter dictionary={appDictionary.app.footer} locale={locale} />
     </main>
   )
 }

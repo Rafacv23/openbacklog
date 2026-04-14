@@ -320,8 +320,8 @@ export const es = {
       },
       {
         id: "FASE 1",
-        status: "EN PROGRESO",
-        state: "in_progress",
+        status: "COMPLETADA",
+        state: "completed",
         title: "Núcleo del Backlog",
         description:
           "Flujos principales de backlog para uso diario y seguimiento de progreso.",
@@ -334,8 +334,8 @@ export const es = {
       },
       {
         id: "FASE 2",
-        status: "PLANIFICADO",
-        state: "planned",
+        status: "EN PROGRESO",
+        state: "in_progress",
         title: "Social Primero",
         description:
           "Loop social MVP centrado en responsabilidad y retención antes de módulos AI.",
@@ -459,9 +459,47 @@ export const es = {
       recommendations: "RECOMENDACIONES",
       feed: "FEED",
       upcoming: "PRÓXIMOS",
+      library: "BIBLIOTECA",
+      friends: "AMIGOS",
       search: "BUSCAR",
       profile: "PERFIL",
       landing: "LANDING",
+      menu: "MENÚ",
+      closeMenu: "CERRAR MENÚ",
+    },
+    footer: {
+      title: "OPENBACKLOG.APP",
+      description:
+        "Termina más juegos con menos fricción. Controla progreso, descubre próximo juego y sigue novedades del proyecto en un solo lugar.",
+      sections: {
+        product: "JUGAR Y SEGUIMIENTO",
+        account: "CUENTA Y PROGRESO",
+        community: "COMUNIDAD",
+        legal: "LEGAL",
+      },
+      usefulLinks: {
+        feed: "FEED",
+        library: "LIBRERÍA",
+        search: "BUSCAR",
+        popular: "POPULAR",
+        upcoming: "PRÓXIMOS",
+        profile: "PERFIL",
+        roadmap: "ROADMAP",
+        changelog: "CHANGELOG",
+        github: "GITHUB",
+        contribute: "CONTRIBUIR",
+        issues: "ISSUES",
+        privacy: "PRIVACIDAD",
+        terms: "TÉRMINOS",
+        cookies: "COOKIES",
+      },
+      madeBy: "Made by Rafa Canosa",
+      websiteLabel: "rafacanosa.dev",
+      copyright: "© 2026 OpenBacklog. Todos los derechos reservados.",
+      aria: {
+        footer: "Footer autenticado",
+        footerLink: "Abrir enlace del footer",
+      },
     },
     hero: {
       badge: "HUB PRIVADO",
@@ -507,27 +545,48 @@ export const es = {
       title: "Feed de actividad de tus amigos",
       description:
         "Sigue el progreso de tus amigos para mantener responsabilidad social y descubrir qué jugar después.",
-      items: [
-        {
-          friend: "MIA_GM",
-          action: "Completó Resident Evil 4",
-          detail: "Publicó una review corta y movió Metaphor a 'Jugando'.",
-          timeAgo: "hace 12 min",
-        },
-        {
-          friend: "ALEX_R",
-          action: "Empezó Clair Obscur: Expedition 33",
-          detail:
-            "Marcó un objetivo semanal de 4 sesiones e invitó a amigos a sumarse.",
-          timeAgo: "hace 47 min",
-        },
-        {
-          friend: "DANI_PLAYS",
-          action: "Actualizó prioridades del backlog",
-          detail: "Movió Hollow Knight a 'En pausa' y subió Hades II.",
-          timeAgo: "hace 2 h",
-        },
-      ],
+      emptyTitle: "Todavía no hay actividad de tus amigos",
+      emptyDescription: "Sigue jugadores desde la pestaña Amigos para activar tu feed social.",
+      justNow: "justo ahora",
+      actions: {
+        libraryUpdated: "Movió {game} a {state}",
+        reviewRecommended: "Recomendó {game}",
+        reviewNotRecommended: "No recomendó {game}",
+      },
+      details: {
+        libraryUpdated: "Estado del backlog actualizado.",
+        reviewPublished: "Publicó una review nueva.",
+      },
+    },
+    friends: {
+      metaTitle: "Amigos | OpenBacklog",
+      metaDescription:
+        "Sigue o deja de seguir jugadores para personalizar tu feed social de OpenBacklog.",
+      title: "Amigos",
+      description:
+        "Sistema social tipo followers: sigue jugadores para ver sus actualizaciones en tu feed.",
+      searchLabel: "Buscar jugadores",
+      searchPlaceholder: "Busca por username o nombre visible...",
+      searchAction: "BUSCAR",
+      clearSearch: "LIMPIAR",
+      followingTitle: "Jugadores que sigues",
+      followingDescription: "Estos jugadores aparecen ahora en tu feed social.",
+      discoverTitle: "Descubrir jugadores",
+      discoverDescription: "Encuentra nuevos jugadores y síguelos en un clic.",
+      followersLabel: "Seguidores",
+      followingLabel: "Siguiendo",
+      emptyFollowingTitle: "Aún no sigues a nadie",
+      emptyFollowingBody:
+        "Empieza siguiendo algunos jugadores. Sus cambios de librería y reviews aparecerán en tu feed.",
+      emptyDiscoverTitle: "No se encontraron jugadores",
+      emptyDiscoverBody: "Prueba con otra búsqueda.",
+      actions: {
+        follow: "SEGUIR",
+        unfollow: "DEJAR DE SEGUIR",
+        followSubmitting: "SIGUIENDO...",
+        unfollowSubmitting: "QUITANDO...",
+        genericError: "No se pudo actualizar el seguimiento.",
+      },
     },
     upcoming: {
       metaTitle: "Próximos Lanzamientos | OpenBacklog",
@@ -573,7 +632,7 @@ export const es = {
           "Lanzamientos recientes y juegos con actividad nueva de reviews.",
         friendsTitle: "Más populares entre tus amigos",
         friendsDescription:
-          "Juegos que tus amigos aceptados más añaden y actualizan.",
+          "Juegos que los jugadores que sigues más añaden y actualizan.",
       },
       filters: {
         title: "Populares por género y plataforma",
@@ -742,6 +801,8 @@ export const es = {
       "Resumen público de estados del backlog, actividad y reviews.",
     joinedLabel: "Se unió",
     lastActivityLabel: "Última actividad",
+    followersLabel: "Seguidores",
+    followingLabel: "Siguiendo",
     libraryTitle: "Resumen de Librería",
     libraryDescription: "Distribución actual del backlog de este jugador.",
     stateLabels: {

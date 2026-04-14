@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
@@ -145,6 +146,7 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   const dictionary = getDictionary(locale)
+  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
   const game = await getGameByIgdbId(gameId)
 
   if (!game) {
@@ -472,6 +474,8 @@ export default async function GamePage({ params }: GamePageProps) {
           reviews={recentReviews}
         />
       </div>
+
+      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
     </main>
   )
 }

@@ -52,12 +52,12 @@ export function GameCard({ copy, game, locale }: GameCardProps) {
       href={`/${locale}/game/${game.igdbId}`}
     >
       <Card className="h-full border border-border/60 bg-card/90 py-0 transition-all hover:border-primary/60 hover:bg-card">
-        <CardContent className="flex h-full flex-col p-4">
+        <CardContent className="flex h-full min-h-[20rem] flex-col p-4 sm:min-h-[18.5rem]">
           <div className="space-y-3">
             <div className="flex items-start gap-3">
               <div
                 aria-hidden="true"
-                className="h-24 w-16 shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center"
+                className="h-28 w-[4.6rem] shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center sm:h-24 sm:w-16"
                 style={
                   game.coverUrl
                     ? {
@@ -68,7 +68,7 @@ export function GameCard({ copy, game, locale }: GameCardProps) {
               />
 
               <div className="min-w-0 flex-1 space-y-1">
-                <h3 className="truncate text-base font-semibold">
+                <h3 className="line-clamp-2 text-base font-semibold">
                   {game.name}
                 </h3>
                 <p className="text-xs text-muted-foreground">/{game.slug}</p>
@@ -82,18 +82,18 @@ export function GameCard({ copy, game, locale }: GameCardProps) {
               </div>
             </div>
 
-            <p className="line-clamp-3 text-sm text-muted-foreground">
+            <p className="line-clamp-3 min-h-[3.75rem] text-sm text-muted-foreground">
               {game.summary ?? copy.noSummary}
             </p>
           </div>
 
           <div className="mt-auto space-y-3">
             <div className="space-y-1 text-xs text-muted-foreground">
-              <p>
+              <p className="line-clamp-1">
                 {copy.platformsLabel}:{" "}
                 {game.platforms.join(", ") || copy.noPlatforms}
               </p>
-              <p>
+              <p className="line-clamp-1">
                 {copy.genresLabel}: {game.genres.join(", ") || copy.noGenres}
               </p>
             </div>

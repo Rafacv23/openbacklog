@@ -1,7 +1,7 @@
 import { desc, eq, sql } from "drizzle-orm"
 
 import { db } from "@/server/db"
-import { games, libraryEntries, reviews, user } from "@/server/db/schema"
+import { friendships, games, libraryEntries, reviews, user } from "@/server/db/schema"
 import { LIBRARY_STATES, type LibraryState } from "@/server/library/states"
 import { fromRecommendBoolean } from "@/server/reviews/constants"
 
@@ -11,6 +11,8 @@ export type PublicProfileData = {
   displayName: string
   joinedAt: string
   lastActivityAt: string
+  followerCount: number
+  followingCount: number
   libraryStats: Record<LibraryState, number>
   recentLibrary: Array<{
     entryId: number
@@ -105,7 +107,15 @@ export async function getPublicProfileByUsername(
     return null
   }
 
-  const [statsRows, recentLibraryRows, recentReviewRows, latestLibraryRows, latestReviewRows] =
+  const [
+    statsRows,
+    recentLibraryRows,
+    recentReviewRows,
+    latestLibraryRows,
+    latestReviewRows,
+    followerCountRows,
+    followingCountRows,
+  ] =
     await Promise.all([
       db
         .select({
@@ -147,6 +157,18 @@ export async function getPublicProfileByUsername(
         .where(eq(reviews.userId, profileUser.id))
         .orderBy(desc(reviews.updatedAt))
         .limit(1),
+      db
+        .select({
+          count: sql<number>`count(*)`,
+        })
+        .from(friendships)
+        .where(eq(friendships.addresseeUserId, profileUser.id)),
+      db
+        .select({
+          count: sql<number>`count(*)`,
+        })
+        .from(friendships)
+        .where(eq(friendships.requesterUserId, profileUser.id)),
     ])
 
   const libraryStats = Object.fromEntries(
@@ -173,6 +195,8 @@ export async function getPublicProfileByUsername(
     displayName: profileUser.displayUsername ?? profileUser.username,
     joinedAt: profileUser.createdAt.toISOString(),
     lastActivityAt: lastActivityAt.toISOString(),
+    followerCount: Number(followerCountRows[0]?.count ?? 0),
+    followingCount: Number(followingCountRows[0]?.count ?? 0),
     libraryStats,
     recentLibrary: recentLibraryRows.map((row) => ({
       entryId: row.entry.id,

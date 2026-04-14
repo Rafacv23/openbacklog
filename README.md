@@ -20,7 +20,7 @@ Positioning: **help players decide what to play and finish more games** (not jus
 - Game tracking and personal library (Backlog-style)
 - Ratings and reviews (Steam-like model)
 - Time-to-beat tracking (HTLB-style integration)
-- Friends + activity feed
+- Friends (followers model) + activity feed
 - Completion streaks and goals
 - Monthly release calendar + reminders
 
@@ -125,8 +125,8 @@ Current internal endpoint:
 
 ### Phase 2: Social first
 
-- Friends + activity feed
-- Profiles and social interactions (follow/friend, reactions)
+- Friends (followers model) + activity feed
+- Profiles and social interactions (follow/unfollow, reactions)
 - Streaks/goals v1
 
 ### Phase 3: Productivity

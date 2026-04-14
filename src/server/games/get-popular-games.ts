@@ -210,17 +210,8 @@ async function readFriendsPopularGames({
     .innerJoin(
       friendships,
       and(
-        eq(friendships.status, "accepted"),
-        or(
-          and(
-            eq(friendships.requesterUserId, userId),
-            eq(friendships.addresseeUserId, libraryEntries.userId),
-          ),
-          and(
-            eq(friendships.addresseeUserId, userId),
-            eq(friendships.requesterUserId, libraryEntries.userId),
-          ),
-        ),
+        eq(friendships.requesterUserId, userId),
+        eq(friendships.addresseeUserId, libraryEntries.userId),
       ),
     )
     .where(ne(libraryEntries.userId, userId))

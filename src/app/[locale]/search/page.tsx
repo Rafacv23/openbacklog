@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { getDictionary } from "@/lib/i18n"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl } from "@/lib/site"
@@ -86,11 +87,14 @@ export default async function SearchPage({ params }: SearchPageProps) {
     redirect(`/${locale}/login`)
   }
 
-  if (!getSessionUsername(session)) {
+  const username = getSessionUsername(session)
+
+  if (!username) {
     redirect(`/${locale}/onboarding/username`)
   }
 
   const dictionary = getDictionary(locale)
+  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
 
   return (
     <main className="relative min-h-screen px-6 py-12 text-foreground">
@@ -113,6 +117,8 @@ export default async function SearchPage({ params }: SearchPageProps) {
 
         <GameSearchClient dictionary={dictionary.search} locale={locale} />
       </div>
+
+      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
     </main>
   )
 }

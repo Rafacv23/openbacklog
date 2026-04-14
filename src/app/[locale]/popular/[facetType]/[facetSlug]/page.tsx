@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
 import { GameCard } from "@/components/app/game-card"
 import { Card, CardContent } from "@/components/ui/card"
@@ -243,6 +244,8 @@ export default async function PopularFacetPage({ params }: PopularFacetPageProps
           )}
         </section>
       </div>
+
+      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
     </main>
   )
 }
