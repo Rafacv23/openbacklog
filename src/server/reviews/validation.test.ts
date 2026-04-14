@@ -8,6 +8,7 @@ import {
 } from "@/server/reviews/constants"
 import {
   parseReviewBody,
+  parseReviewContainsSpoilers,
   parseReviewHours,
   parseReviewPlatform,
   validateReviewInput,
@@ -37,6 +38,13 @@ test("review optional fields validate format", () => {
   assert.equal(parseReviewPlatform("PS5"), "PS5")
   assert.equal(parseReviewPlatform(""), null)
   assert.equal(parseReviewPlatform("x".repeat(61)), null)
+
+  assert.equal(parseReviewContainsSpoilers(true), true)
+  assert.equal(parseReviewContainsSpoilers(false), false)
+  assert.equal(parseReviewContainsSpoilers(undefined), false)
+  assert.equal(parseReviewContainsSpoilers("true"), true)
+  assert.equal(parseReviewContainsSpoilers("false"), false)
+  assert.equal(parseReviewContainsSpoilers("invalid"), null)
 })
 
 test("validateReviewInput enforces recommend + body", () => {
@@ -45,6 +53,7 @@ test("validateReviewInput enforces recommend + body", () => {
     recommend: "recommend",
     platformPlayed: "PS5",
     hoursToComplete: "45",
+    containsSpoilers: true,
   })
 
   assert.deepEqual(valid, {
@@ -52,6 +61,7 @@ test("validateReviewInput enforces recommend + body", () => {
     recommend: "recommend",
     platformPlayed: "PS5",
     hoursToComplete: 45,
+    containsSpoilers: true,
   })
 
   assert.equal(
@@ -60,6 +70,7 @@ test("validateReviewInput enforces recommend + body", () => {
       recommend: "recommend",
       platformPlayed: null,
       hoursToComplete: null,
+      containsSpoilers: false,
     }),
     null,
   )
@@ -70,6 +81,7 @@ test("validateReviewInput enforces recommend + body", () => {
       recommend: null,
       platformPlayed: null,
       hoursToComplete: null,
+      containsSpoilers: false,
     }),
     null,
   )

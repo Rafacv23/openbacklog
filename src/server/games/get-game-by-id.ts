@@ -19,6 +19,16 @@ export type GameDetails = {
   name: string
   platforms: string[]
   rating: number | null
+  timeToBeatCompletionistSeconds: number | null
+  timeToBeatMainSeconds: number | null
+  similarGames: Array<{
+    igdbId: number
+    name: string
+    slug: string
+    coverUrl: string | null
+    rating: number | null
+    firstReleaseDate: string | null
+  }>
   slug: string
   summary: string | null
 }
@@ -42,6 +52,50 @@ function safeParseStringArray(value: string): string[] {
     }
 
     return parsed.filter((entry): entry is string => typeof entry === "string")
+  } catch {
+    return []
+  }
+}
+
+function safeParseSimilarGames(
+  value: string,
+): Array<{
+  igdbId: number
+  name: string
+  slug: string
+  coverUrl: string | null
+  rating: number | null
+  firstReleaseDate: string | null
+}> {
+  try {
+    const parsed = JSON.parse(value) as unknown
+
+    if (!Array.isArray(parsed)) {
+      return []
+    }
+
+    return parsed
+      .filter(
+        (
+          entry,
+        ): entry is {
+          igdbId: number
+          name: string
+          slug: string
+          coverUrl: string | null
+          rating: number | null
+          firstReleaseDate: string | null
+        } =>
+          typeof entry === "object" &&
+          entry !== null &&
+          Number.isInteger(entry.igdbId) &&
+          typeof entry.name === "string" &&
+          typeof entry.slug === "string" &&
+          (typeof entry.coverUrl === "string" || entry.coverUrl === null) &&
+          (typeof entry.rating === "number" || entry.rating === null) &&
+          (typeof entry.firstReleaseDate === "string" || entry.firstReleaseDate === null),
+      )
+      .slice(0, 6)
   } catch {
     return []
   }
@@ -72,8 +126,11 @@ function toGameDetails(game: typeof games.$inferSelect): GameDetails {
     coverUrl: game.coverUrl,
     firstReleaseDate: toIsoString(game.firstReleaseDate),
     rating: game.rating,
+    timeToBeatMainSeconds: game.timeToBeatMainSeconds,
+    timeToBeatCompletionistSeconds: game.timeToBeatCompletionistSeconds,
     platforms: safeParseStringArray(game.platforms),
     genres: safeParseStringArray(game.genres),
+    similarGames: safeParseSimilarGames(game.similarGames),
     lastSyncedAt: game.lastSyncedAt.toISOString(),
   }
 }
@@ -89,10 +146,31 @@ function toGameDetailsFromIgdbGame(game: IgdbGame): GameDetails {
     coverUrl: toCoverImageUrl(game.cover?.url),
     firstReleaseDate: toIsoString(toDateFromUnixSeconds(game.first_release_date)),
     rating: typeof game.rating === "number" ? game.rating : null,
+    timeToBeatMainSeconds:
+      typeof game.time_to_beat?.normally === "number"
+        ? game.time_to_beat.normally
+        : null,
+    timeToBeatCompletionistSeconds:
+      typeof game.time_to_beat?.completely === "number"
+        ? game.time_to_beat.completely
+        : null,
     platforms: uniqueNonEmptyValues(
       game.platforms?.map((platform) => platform.abbreviation ?? platform.name) ?? [],
     ),
     genres: uniqueNonEmptyValues(game.genres?.map((genre) => genre.name) ?? []),
+    similarGames: (game.similar_games ?? [])
+      .filter((similarGame) => Boolean(similarGame.id && similarGame.name && similarGame.slug))
+      .slice(0, 6)
+      .map((similarGame) => ({
+        igdbId: similarGame.id,
+        name: similarGame.name?.trim() ?? "",
+        slug: similarGame.slug?.trim() ?? "",
+        coverUrl: toCoverImageUrl(similarGame.cover?.url),
+        rating: typeof similarGame.rating === "number" ? similarGame.rating : null,
+        firstReleaseDate: toIsoString(
+          toDateFromUnixSeconds(similarGame.first_release_date),
+        ),
+      })),
     lastSyncedAt: nowIso,
   }
 }
@@ -127,8 +205,31 @@ async function upsertIgdbGame(game: IgdbGame): Promise<void> {
       coverUrl: toCoverImageUrl(game.cover?.url),
       firstReleaseDate: toDateFromUnixSeconds(game.first_release_date),
       rating: typeof game.rating === "number" ? game.rating : null,
+      timeToBeatMainSeconds:
+        typeof game.time_to_beat?.normally === "number"
+          ? game.time_to_beat.normally
+          : null,
+      timeToBeatCompletionistSeconds:
+        typeof game.time_to_beat?.completely === "number"
+          ? game.time_to_beat.completely
+          : null,
       platforms: JSON.stringify(platforms),
       genres: JSON.stringify(genres),
+      similarGames: JSON.stringify(
+        (game.similar_games ?? [])
+          .filter((similarGame) => Boolean(similarGame.id && similarGame.name && similarGame.slug))
+          .slice(0, 6)
+          .map((similarGame) => ({
+            igdbId: similarGame.id,
+            name: similarGame.name?.trim() ?? "",
+            slug: similarGame.slug?.trim() ?? "",
+            coverUrl: toCoverImageUrl(similarGame.cover?.url),
+            rating: typeof similarGame.rating === "number" ? similarGame.rating : null,
+            firstReleaseDate: toIsoString(
+              toDateFromUnixSeconds(similarGame.first_release_date),
+            ),
+          })),
+      ),
       checksum: game.checksum?.trim() || null,
       igdbUpdatedAt: toDateFromUnixSeconds(game.updated_at),
       updatedAt: new Date(),
@@ -143,8 +244,11 @@ async function upsertIgdbGame(game: IgdbGame): Promise<void> {
         coverUrl: sql`excluded.cover_url`,
         firstReleaseDate: sql`excluded.first_release_date`,
         rating: sql`excluded.rating`,
+        timeToBeatMainSeconds: sql`excluded.time_to_beat_main_seconds`,
+        timeToBeatCompletionistSeconds: sql`excluded.time_to_beat_completionist_seconds`,
         platforms: sql`excluded.platforms`,
         genres: sql`excluded.genres`,
+        similarGames: sql`excluded.similar_games`,
         checksum: sql`excluded.checksum`,
         igdbUpdatedAt: sql`excluded.igdb_updated_at`,
         updatedAt: sql`(unixepoch())`,

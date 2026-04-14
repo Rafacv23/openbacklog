@@ -7,6 +7,7 @@ export const REVIEW_BODY_MAX_LENGTH = 500
 
 export type ValidatedReviewInput = {
   body: string
+  containsSpoilers: boolean
   hoursToComplete: number | null
   platformPlayed: string | null
   recommend: ReviewRecommend
@@ -58,8 +59,29 @@ export function parseReviewPlatform(value: unknown): string | null {
   return normalized
 }
 
+export function parseReviewContainsSpoilers(value: unknown): boolean | null {
+  if (value === null || value === undefined || value === "") {
+    return false
+  }
+
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  if (value === "true") {
+    return true
+  }
+
+  if (value === "false") {
+    return false
+  }
+
+  return null
+}
+
 export function validateReviewInput(input: {
   body: unknown
+  containsSpoilers: unknown
   hoursToComplete: unknown
   platformPlayed: unknown
   recommend: unknown
@@ -83,10 +105,17 @@ export function validateReviewInput(input: {
     return null
   }
 
+  const containsSpoilers = parseReviewContainsSpoilers(input.containsSpoilers)
+
+  if (containsSpoilers === null) {
+    return null
+  }
+
   return {
     body,
     recommend,
     platformPlayed,
     hoursToComplete,
+    containsSpoilers,
   }
 }

@@ -15,6 +15,7 @@ export type UserReview = {
   gameIgdbId: number
   userId: string
   body: string
+  containsSpoilers: boolean
   recommend: ReviewRecommend
   platformPlayed: string | null
   hoursToComplete: number | null
@@ -25,6 +26,7 @@ export type UserReview = {
 export type PublicReviewDetails = {
   id: number
   body: string
+  containsSpoilers: boolean
   recommend: ReviewRecommend
   platformPlayed: string | null
   hoursToComplete: number | null
@@ -44,6 +46,21 @@ export type PublicReviewDetails = {
     rating: number | null
     platforms: string[]
     genres: string[]
+  }
+}
+
+export type GameReviewListItem = {
+  id: number
+  body: string
+  containsSpoilers: boolean
+  recommend: ReviewRecommend
+  platformPlayed: string | null
+  hoursToComplete: number | null
+  createdAt: string
+  updatedAt: string
+  author: {
+    username: string
+    displayName: string
   }
 }
 
@@ -77,6 +94,7 @@ function toUserReview(row: typeof reviews.$inferSelect & { gameIgdbId: number })
     gameIgdbId: row.gameIgdbId,
     userId: row.userId,
     body: row.body,
+    containsSpoilers: row.containsSpoilers,
     recommend: fromRecommendBoolean(row.recommend),
     platformPlayed: row.platformPlayed,
     hoursToComplete: row.hoursToComplete,
@@ -102,6 +120,7 @@ function isAllowedPlatform(
 
 export async function upsertReviewForGame(input: {
   body: unknown
+  containsSpoilers: unknown
   gameIgdbId: number
   hoursToComplete: unknown
   platformPlayed: unknown
@@ -116,6 +135,7 @@ export async function upsertReviewForGame(input: {
 
   const validatedInput = validateReviewInput({
     body: input.body,
+    containsSpoilers: input.containsSpoilers,
     recommend: input.recommend,
     platformPlayed: input.platformPlayed,
     hoursToComplete: input.hoursToComplete,
@@ -138,6 +158,7 @@ export async function upsertReviewForGame(input: {
       gameId: game.id,
       body: validatedInput.body,
       recommend: toRecommendBoolean(validatedInput.recommend),
+      containsSpoilers: validatedInput.containsSpoilers,
       platformPlayed: validatedInput.platformPlayed,
       hoursToComplete: validatedInput.hoursToComplete,
       createdAt: new Date(),
@@ -148,6 +169,7 @@ export async function upsertReviewForGame(input: {
       set: {
         body: sql`excluded.body`,
         recommend: sql`excluded.recommend`,
+        containsSpoilers: sql`excluded.contains_spoilers`,
         platformPlayed: sql`excluded.platform_played`,
         hoursToComplete: sql`excluded.hours_to_complete`,
         updatedAt: sql`(unixepoch())`,
@@ -254,6 +276,7 @@ export async function getPublicReviewById(reviewId: number): Promise<PublicRevie
   return {
     id: row.review.id,
     body: row.review.body,
+    containsSpoilers: row.review.containsSpoilers,
     recommend: fromRecommendBoolean(row.review.recommend),
     platformPlayed: row.review.platformPlayed,
     hoursToComplete: row.review.hoursToComplete,
@@ -275,4 +298,46 @@ export async function getPublicReviewById(reviewId: number): Promise<PublicRevie
       genres: safeParseStringArray(row.game.genres),
     },
   }
+}
+
+export async function getRecentReviewsForGame(input: {
+  gameIgdbId: number
+  limit: number
+}): Promise<GameReviewListItem[]> {
+  if (!Number.isInteger(input.gameIgdbId) || input.gameIgdbId <= 0) {
+    return []
+  }
+
+  const safeLimit = Number.isInteger(input.limit)
+    ? Math.min(Math.max(input.limit, 1), 30)
+    : 10
+
+  const rows = await db
+    .select({
+      review: reviews,
+      author: user,
+    })
+    .from(reviews)
+    .innerJoin(games, eq(reviews.gameId, games.id))
+    .innerJoin(user, eq(reviews.userId, user.id))
+    .where(eq(games.igdbId, input.gameIgdbId))
+    .orderBy(desc(reviews.updatedAt))
+    .limit(safeLimit)
+
+  return rows
+    .filter((row) => Boolean(row.author.username))
+    .map((row) => ({
+      id: row.review.id,
+      body: row.review.body,
+      containsSpoilers: row.review.containsSpoilers,
+      recommend: fromRecommendBoolean(row.review.recommend),
+      platformPlayed: row.review.platformPlayed,
+      hoursToComplete: row.review.hoursToComplete,
+      createdAt: row.review.createdAt.toISOString(),
+      updatedAt: row.review.updatedAt.toISOString(),
+      author: {
+        username: row.author.username!,
+        displayName: row.author.displayUsername ?? row.author.username!,
+      },
+    }))
 }

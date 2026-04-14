@@ -7,14 +7,20 @@ import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { getAuthSession, getSessionUsername } from "@/server/auth/get-auth-session"
+import { getFriendsWithGame } from "@/server/friends/get-friends-with-game"
 import { getGameByIgdbId } from "@/server/games/get-game-by-id"
 import { getUserLibraryEntryForGame } from "@/server/library/service"
-import { getUserReviewForGame } from "@/server/reviews/service"
+import {
+  getRecentReviewsForGame,
+  getUserReviewForGame,
+} from "@/server/reviews/service"
 
+import { GameLibraryReviewPanel } from "@/components/game/game-library-review-panel"
+import { GameShareButton } from "@/components/game/game-share-button"
+import { GameUserReviewsList } from "@/components/game/game-user-reviews-list"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { GameLibraryReviewPanel } from "@/components/game/game-library-review-panel"
 
 type GamePageProps = {
   params: Promise<{ locale: string; id: string }>
@@ -35,6 +41,20 @@ function parseGameId(rawId: string): number | null {
   }
 
   return parsedId
+}
+
+function formatHoursFromSeconds(seconds: number | null, fallback: string): string {
+  if (!Number.isFinite(seconds) || !seconds || seconds < 1) {
+    return fallback
+  }
+
+  const hours = seconds / 3600
+
+  if (hours >= 10) {
+    return `${Math.round(hours)}h`
+  }
+
+  return `${hours.toFixed(1)}h`
 }
 
 export async function generateMetadata({
@@ -131,7 +151,7 @@ export default async function GamePage({ params }: GamePageProps) {
     notFound()
   }
 
-  const [libraryEntry, userReview] = await Promise.all([
+  const [libraryEntry, userReview, recentReviews, friendsWithGame] = await Promise.all([
     getUserLibraryEntryForGame({
       userId: session.user.id,
       gameIgdbId: game.igdbId,
@@ -139,6 +159,15 @@ export default async function GamePage({ params }: GamePageProps) {
     getUserReviewForGame({
       userId: session.user.id,
       gameIgdbId: game.igdbId,
+    }),
+    getRecentReviewsForGame({
+      gameIgdbId: game.igdbId,
+      limit: 12,
+    }),
+    getFriendsWithGame({
+      userId: session.user.id,
+      gameIgdbId: game.igdbId,
+      limit: 8,
     }),
   ])
 
@@ -159,12 +188,22 @@ export default async function GamePage({ params }: GamePageProps) {
     ? dateFormatter.format(new Date(game.firstReleaseDate))
     : dictionary.gameDetail.unknownValue
   const lastSyncedDate = dateTimeFormatter.format(new Date(game.lastSyncedAt))
+  const mainTimeToBeat = formatHoursFromSeconds(
+    game.timeToBeatMainSeconds,
+    dictionary.gameDetail.unknownValue,
+  )
+  const completionistTimeToBeat = formatHoursFromSeconds(
+    game.timeToBeatCompletionistSeconds,
+    dictionary.gameDetail.unknownValue,
+  )
+
+  const gameUrl = `${BASE_URL}/${locale}/game/${game.igdbId}`
 
   const gameJsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "VideoGame",
     name: game.name,
-    url: `${BASE_URL}/${locale}/game/${game.igdbId}`,
+    url: gameUrl,
     description: game.summary ?? dictionary.gameDetail.metaDescriptionFallback,
     image: game.coverUrl ?? DEFAULT_SOCIAL_IMAGE_URL,
     inLanguage: locale,
@@ -216,6 +255,16 @@ export default async function GamePage({ params }: GamePageProps) {
               {dictionary.gameDetail.backHome}
             </Button>
           </Link>
+
+          <GameShareButton
+            labels={{
+              share: dictionary.gameDetail.sharePage,
+              shared: dictionary.gameDetail.sharedPage,
+            }}
+            text={dictionary.gameDetail.shareText.replace("{game}", game.name)}
+            title={game.name}
+            url={gameUrl}
+          />
         </div>
 
         <section className="grid gap-6 lg:grid-cols-[260px_1fr]">
@@ -235,8 +284,8 @@ export default async function GamePage({ params }: GamePageProps) {
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
-            <header className="space-y-3">
+          <div className="flex flex-col gap-6">
+            <header className="flex flex-col gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant="outline"
@@ -247,9 +296,7 @@ export default async function GamePage({ params }: GamePageProps) {
                 <span className="text-xs text-muted-foreground">
                   {dictionary.gameDetail.idLabel} {game.igdbId}
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  /{game.slug}
-                </span>
+                <span className="text-xs text-muted-foreground">/{game.slug}</span>
               </div>
 
               <h1 className="font-display text-4xl italic text-primary md:text-5xl">
@@ -259,6 +306,25 @@ export default async function GamePage({ params }: GamePageProps) {
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                 {game.summary ?? dictionary.gameDetail.noSummary}
               </p>
+
+              {friendsWithGame.length > 0 ? (
+                <div className="flex flex-col gap-2 rounded-md border border-border/60 bg-muted/20 p-3">
+                  <p className="text-xs font-medium tracking-[0.08em] text-muted-foreground uppercase">
+                    {dictionary.gameDetail.friendsOwnThis}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {friendsWithGame.map((friend) => (
+                      <Badge
+                        key={friend.userId}
+                        variant="outline"
+                        className="rounded-none border-border/60 bg-background px-2 py-0.5 text-[10px] uppercase"
+                      >
+                        @{friend.username}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </header>
 
             <Card className="border border-border/60 bg-card/80 py-0">
@@ -287,6 +353,14 @@ export default async function GamePage({ params }: GamePageProps) {
                     {game.genres.join(", ") || dictionary.gameDetail.unknownValue}
                   </span>
                 </p>
+                <p className="text-muted-foreground">
+                  {dictionary.gameDetail.estimatedMainLabel}:{" "}
+                  <span className="text-foreground">{mainTimeToBeat}</span>
+                </p>
+                <p className="text-muted-foreground">
+                  {dictionary.gameDetail.estimatedCompletionistLabel}:{" "}
+                  <span className="text-foreground">{completionistTimeToBeat}</span>
+                </p>
                 <p className="text-muted-foreground sm:col-span-2">
                   {dictionary.gameDetail.lastSyncedLabel}:{" "}
                   <span className="text-foreground">{lastSyncedDate}</span>
@@ -307,12 +381,95 @@ export default async function GamePage({ params }: GamePageProps) {
             userReview
               ? {
                   body: userReview.body,
+                  containsSpoilers: userReview.containsSpoilers,
                   recommend: userReview.recommend,
                   platformPlayed: userReview.platformPlayed,
                   hoursToComplete: userReview.hoursToComplete,
                 }
               : null
           }
+        />
+
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-headline text-2xl uppercase">
+              {dictionary.gameDetail.similarGamesTitle}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {dictionary.gameDetail.similarGamesDescription}
+            </p>
+          </div>
+
+          {game.similarGames.length > 0 ? (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {game.similarGames.map((similarGame) => {
+                const similarRelease = similarGame.firstReleaseDate
+                  ? dateFormatter.format(new Date(similarGame.firstReleaseDate))
+                  : dictionary.gameDetail.unknownValue
+
+                return (
+                  <Link
+                    key={similarGame.igdbId}
+                    className="block h-full"
+                    href={`/${locale}/game/${similarGame.igdbId}`}
+                  >
+                    <Card className="h-full border border-border/60 bg-card/80 py-0 transition-colors hover:border-primary/60">
+                      <CardContent className="flex h-full flex-col gap-3 p-4">
+                        <div className="flex items-start gap-3">
+                          <div
+                            aria-hidden="true"
+                            className="h-20 w-14 shrink-0 rounded-md border border-border/60 bg-muted bg-cover bg-center"
+                            style={
+                              similarGame.coverUrl
+                                ? { backgroundImage: `url(${similarGame.coverUrl})` }
+                                : undefined
+                            }
+                          />
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <p className="truncate text-sm font-semibold">{similarGame.name}</p>
+                            <p className="text-xs text-muted-foreground">/{similarGame.slug}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {dictionary.gameDetail.firstReleaseDateLabel}: {similarRelease}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {dictionary.gameDetail.ratingLabel}:{" "}
+                              {typeof similarGame.rating === "number"
+                                ? similarGame.rating.toFixed(1)
+                                : dictionary.gameDetail.unknownValue}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
+          ) : (
+            <Card className="border border-border/60 bg-card/80 py-0">
+              <CardContent className="p-4 text-sm text-muted-foreground">
+                {dictionary.gameDetail.noSimilarGames}
+              </CardContent>
+            </Card>
+          )}
+        </section>
+
+        <GameUserReviewsList
+          copy={{
+            title: dictionary.gameDetail.userReviewsTitle,
+            description: dictionary.gameDetail.userReviewsDescription,
+            noReviews: dictionary.gameDetail.noUserReviews,
+            recommend: dictionary.gameDetail.labels.recommend,
+            notRecommend: dictionary.gameDetail.labels.notRecommend,
+            hoursLabel: dictionary.reviewPage.hoursLabel,
+            platformLabel: dictionary.gameDetail.labels.platform,
+            updatedLabel: dictionary.reviewPage.updatedLabel,
+            revealSpoiler: dictionary.gameDetail.revealSpoiler,
+            spoilerHidden: dictionary.gameDetail.spoilerLabel,
+            openReview: dictionary.gameDetail.openReview,
+          }}
+          locale={locale}
+          reviews={recentReviews}
         />
       </div>
     </main>

@@ -2,7 +2,11 @@ import { asc, like, or, sql } from "drizzle-orm"
 
 import { db } from "@/server/db"
 import { games } from "@/server/db/schema"
-import { searchIgdbGames, toCoverImageUrl, type IgdbGame } from "@/server/igdb/client"
+import {
+  searchIgdbGames,
+  toCoverImageUrl,
+  type IgdbGame,
+} from "@/server/igdb/client"
 
 const DEFAULT_LIMIT = 12
 const MAX_LIMIT = 24
@@ -149,7 +153,7 @@ function hasStaleEntries(rows: Array<typeof games.$inferSelect>): boolean {
   return rows.some((row) => now - row.lastSyncedAt.getTime() > syncTtlMs)
 }
 
-async function upsertIgdbGames(igdbGames: IgdbGame[]): Promise<void> {
+export async function upsertIgdbGames(igdbGames: IgdbGame[]): Promise<void> {
   if (igdbGames.length === 0) {
     return
   }
@@ -168,8 +172,31 @@ async function upsertIgdbGames(igdbGames: IgdbGame[]): Promise<void> {
       coverUrl: toCoverImageUrl(game.cover?.url),
       firstReleaseDate: toDateFromUnixSeconds(game.first_release_date),
       rating: typeof game.rating === "number" ? game.rating : null,
+      timeToBeatMainSeconds:
+        typeof game.time_to_beat?.normally === "number"
+          ? game.time_to_beat.normally
+          : null,
+      timeToBeatCompletionistSeconds:
+        typeof game.time_to_beat?.completely === "number"
+          ? game.time_to_beat.completely
+          : null,
       platforms: JSON.stringify(platforms),
       genres: JSON.stringify(genres),
+      similarGames: JSON.stringify(
+        (game.similar_games ?? [])
+          .filter((similarGame) => Boolean(similarGame.id && similarGame.name && similarGame.slug))
+          .slice(0, 6)
+          .map((similarGame) => ({
+            igdbId: similarGame.id,
+            name: similarGame.name?.trim() ?? "",
+            slug: similarGame.slug?.trim() ?? "",
+            coverUrl: toCoverImageUrl(similarGame.cover?.url),
+            rating: typeof similarGame.rating === "number" ? similarGame.rating : null,
+            firstReleaseDate: toIsoString(
+              toDateFromUnixSeconds(similarGame.first_release_date),
+            ),
+          })),
+      ),
       checksum: game.checksum?.trim() || null,
       igdbUpdatedAt: toDateFromUnixSeconds(game.updated_at),
       updatedAt: new Date(),
@@ -189,8 +216,11 @@ async function upsertIgdbGames(igdbGames: IgdbGame[]): Promise<void> {
         coverUrl: sql`excluded.cover_url`,
         firstReleaseDate: sql`excluded.first_release_date`,
         rating: sql`excluded.rating`,
+        timeToBeatMainSeconds: sql`excluded.time_to_beat_main_seconds`,
+        timeToBeatCompletionistSeconds: sql`excluded.time_to_beat_completionist_seconds`,
         platforms: sql`excluded.platforms`,
         genres: sql`excluded.genres`,
+        similarGames: sql`excluded.similar_games`,
         checksum: sql`excluded.checksum`,
         igdbUpdatedAt: sql`excluded.igdb_updated_at`,
         updatedAt: sql`(unixepoch())`,

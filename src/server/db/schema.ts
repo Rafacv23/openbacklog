@@ -31,8 +31,11 @@ export const games = sqliteTable(
     coverUrl: text("cover_url"),
     firstReleaseDate: integer("first_release_date", { mode: "timestamp" }),
     rating: real("rating"),
+    timeToBeatMainSeconds: integer("time_to_beat_main_seconds"),
+    timeToBeatCompletionistSeconds: integer("time_to_beat_completionist_seconds"),
     platforms: text("platforms").notNull().default("[]"),
     genres: text("genres").notNull().default("[]"),
+    similarGames: text("similar_games").notNull().default("[]"),
     checksum: text("checksum"),
     igdbUpdatedAt: integer("igdb_updated_at", { mode: "timestamp" }),
     lastSyncedAt: integer("last_synced_at", { mode: "timestamp" })
@@ -91,6 +94,9 @@ export const reviews = sqliteTable(
       .references(() => games.id, { onDelete: "cascade" }),
     body: text("body").notNull(),
     recommend: integer("recommend", { mode: "boolean" }).notNull(),
+    containsSpoilers: integer("contains_spoilers", { mode: "boolean" })
+      .notNull()
+      .default(false),
     platformPlayed: text("platform_played"),
     hoursToComplete: integer("hours_to_complete"),
     createdAt: integer("created_at", { mode: "timestamp" })
@@ -108,6 +114,35 @@ export const reviews = sqliteTable(
   ],
 )
 
+export const friendships = sqliteTable(
+  "friendships",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    requesterUserId: text("requester_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    addresseeUserId: text("addressee_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    status: text("status").notNull().default("accepted"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    uniqueIndex("friendships_requester_addressee_unique").on(
+      table.requesterUserId,
+      table.addresseeUserId,
+    ),
+    index("friendships_requester_idx").on(table.requesterUserId),
+    index("friendships_addressee_idx").on(table.addresseeUserId),
+    index("friendships_status_idx").on(table.status),
+  ],
+)
+
 export type PreRegistration = typeof preRegistrations.$inferSelect
 export type NewPreRegistration = typeof preRegistrations.$inferInsert
 export type Game = typeof games.$inferSelect
@@ -116,5 +151,7 @@ export type LibraryEntry = typeof libraryEntries.$inferSelect
 export type NewLibraryEntry = typeof libraryEntries.$inferInsert
 export type Review = typeof reviews.$inferSelect
 export type NewReview = typeof reviews.$inferInsert
+export type Friendship = typeof friendships.$inferSelect
+export type NewFriendship = typeof friendships.$inferInsert
 
 export * from "./better-auth-schema"

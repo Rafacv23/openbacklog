@@ -28,15 +28,15 @@ export function AppHeader({ dictionary, locale, profileHref }: AppHeaderProps) {
       <div className="hidden items-center gap-6 md:flex">
         <Link
           className="font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-foreground"
-          href="#popular-games"
+          href={`/${locale}/popular`}
         >
-          POPULAR
+          {dictionary.popular}
         </Link>
         <Link
           className="font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-foreground"
-          href="#upcoming-games"
+          href={`/${locale}/upcoming`}
         >
-          UPCOMING
+          {dictionary.upcoming}
         </Link>
         <Link
           className="font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-foreground"

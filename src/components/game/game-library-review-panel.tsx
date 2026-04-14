@@ -4,8 +4,19 @@ import { useMemo, useState, useTransition } from "react"
 
 import type { LibraryState } from "@/server/library/states"
 import type { ReviewRecommend } from "@/server/reviews/constants"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -15,6 +26,11 @@ type GameLibraryReviewPanelProps = {
     libraryDescription: string
     reviewTitle: string
     reviewDescription: string
+    actions: {
+      openLibraryModal: string
+      openReviewModal: string
+      closeModal: string
+    }
     states: Record<LibraryState, string>
     labels: {
       state: string
@@ -23,6 +39,7 @@ type GameLibraryReviewPanelProps = {
       reviewBody: string
       recommend: string
       notRecommend: string
+      containsSpoilers: string
     }
     placeholders: {
       platform: string
@@ -50,6 +67,7 @@ type GameLibraryReviewPanelProps = {
   initialLibraryState: LibraryState | null
   initialReview: {
     body: string
+    containsSpoilers: boolean
     hoursToComplete: number | null
     platformPlayed: string | null
     recommend: ReviewRecommend
@@ -74,6 +92,9 @@ export function GameLibraryReviewPanel({
     initialLibraryState ?? "",
   )
   const [reviewBody, setReviewBody] = useState(initialReview?.body ?? "")
+  const [containsSpoilers, setContainsSpoilers] = useState(
+    initialReview?.containsSpoilers ?? false,
+  )
   const [recommend, setRecommend] = useState<ReviewRecommend | null>(
     initialReview?.recommend ?? null,
   )
@@ -149,6 +170,7 @@ export function GameLibraryReviewPanel({
           body: JSON.stringify({
             body: reviewBody,
             recommend,
+            containsSpoilers,
             platformPlayed: platformPlayed.trim() || null,
             hoursToComplete: hoursToComplete.trim() || null,
           }),
@@ -181,134 +203,216 @@ export function GameLibraryReviewPanel({
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <Card className="border border-border/60 bg-card/80 py-0">
-        <CardContent className="space-y-4 p-4">
-          <header className="space-y-1">
+      <Card className="border border-border/60 bg-gradient-to-br from-card via-card to-primary/10 py-0">
+        <CardContent className="flex flex-col gap-4 p-5">
+          <div className="flex flex-col gap-1">
             <h2 className="font-headline text-xl uppercase">{copy.libraryTitle}</h2>
             <p className="text-sm text-muted-foreground">{copy.libraryDescription}</p>
-          </header>
-
-          <div className="space-y-2">
-            <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
-              {copy.labels.state}
-            </label>
-            <select
-              className="h-10 w-full border border-border/70 bg-background px-3 text-sm"
-              disabled={isSavingLibrary}
-              onChange={(event) => setLibraryState(event.target.value as LibraryState)}
-              value={libraryState}
-            >
-              <option value="">{copy.labels.state}</option>
-              {ORDERED_STATES.map((state) => (
-                <option key={state} value={state}>
-                  {copy.states[state]}
-                </option>
-              ))}
-            </select>
           </div>
 
-          <Button
-            className="w-full rounded-none text-[10px] tracking-[0.12em] uppercase"
-            disabled={isSavingLibrary}
-            onClick={saveLibrary}
-            type="button"
-          >
-            {isSavingLibrary ? copy.submit.savingLibrary : copy.submit.saveLibrary}
-          </Button>
-
-          {libraryMessage ? (
-            <p className="text-xs text-muted-foreground">{libraryMessage}</p>
+          {libraryState ? (
+            <Badge
+              variant="outline"
+              className="w-fit rounded-none border-primary/40 bg-background px-2 py-0.5 text-[10px] uppercase"
+            >
+              {copy.labels.state}: {copy.states[libraryState]}
+            </Badge>
           ) : null}
+
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button className="w-full rounded-none text-[10px] tracking-[0.12em] uppercase" />
+              }
+            >
+              {copy.actions.openLibraryModal}
+            </DialogTrigger>
+
+            <DialogContent className="border-border/60 bg-popover/95">
+              <DialogTitle>{copy.libraryTitle}</DialogTitle>
+              <DialogDescription>{copy.libraryDescription}</DialogDescription>
+
+              <div className="mt-6 flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                    {copy.labels.state}
+                  </label>
+                  <select
+                    className="h-10 w-full border border-border/70 bg-background px-3 text-sm"
+                    disabled={isSavingLibrary}
+                    onChange={(event) => setLibraryState(event.target.value as LibraryState)}
+                    value={libraryState}
+                  >
+                    <option value="">{copy.labels.state}</option>
+                    {ORDERED_STATES.map((state) => (
+                      <option key={state} value={state}>
+                        {copy.states[state]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    className="rounded-none text-[10px] tracking-[0.12em] uppercase"
+                    disabled={isSavingLibrary}
+                    onClick={saveLibrary}
+                    type="button"
+                  >
+                    {isSavingLibrary ? copy.submit.savingLibrary : copy.submit.saveLibrary}
+                  </Button>
+
+                  <DialogClose
+                    render={
+                      <Button
+                        className="rounded-none text-[10px] tracking-[0.12em] uppercase"
+                        variant="outline"
+                      />
+                    }
+                  >
+                    {copy.actions.closeModal}
+                  </DialogClose>
+                </div>
+
+                {libraryMessage ? (
+                  <p className="text-xs text-muted-foreground">{libraryMessage}</p>
+                ) : null}
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
 
-      <Card className="border border-border/60 bg-card/80 py-0">
-        <CardContent className="space-y-4 p-4">
-          <header className="space-y-1">
+      <Card className="border border-border/60 bg-gradient-to-br from-card via-card to-muted/30 py-0">
+        <CardContent className="flex flex-col gap-4 p-5">
+          <div className="flex flex-col gap-1">
             <h2 className="font-headline text-xl uppercase">{copy.reviewTitle}</h2>
             <p className="text-sm text-muted-foreground">{copy.reviewDescription}</p>
-          </header>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
-                {copy.labels.platform}
-              </label>
-              <select
-                className="h-10 w-full border border-border/70 bg-background px-3 text-sm"
-                disabled={isSavingReview}
-                onChange={(event) => setPlatformPlayed(event.target.value)}
-                value={platformPlayed}
-              >
-                <option value="">{copy.placeholders.platform}</option>
-                {platformOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
-                {copy.labels.hoursToComplete}
-              </label>
-              <Input
-                disabled={isSavingReview}
-                min={1}
-                onChange={(event) => setHoursToComplete(event.target.value)}
-                placeholder={copy.placeholders.hoursToComplete}
-                type="number"
-                value={hoursToComplete}
-              />
-            </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
-              {copy.labels.reviewBody}
-            </label>
-            <Textarea
-              className="min-h-24"
-              disabled={isSavingReview}
-              maxLength={500}
-              onChange={(event) => setReviewBody(event.target.value)}
-              placeholder={copy.placeholders.reviewBody}
-              value={reviewBody}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              className="rounded-none text-[10px] tracking-[0.1em] uppercase"
-              disabled={isSavingReview}
-              onClick={() => setRecommend("recommend")}
-              type="button"
-              variant={recommend === "recommend" ? "default" : "outline"}
+          <Dialog>
+            <DialogTrigger
+              render={
+                <Button
+                  className="w-full rounded-none text-[10px] tracking-[0.12em] uppercase"
+                  variant="outline"
+                />
+              }
             >
-              {copy.labels.recommend}
-            </Button>
-            <Button
-              className="rounded-none text-[10px] tracking-[0.1em] uppercase"
-              disabled={isSavingReview}
-              onClick={() => setRecommend("not_recommend")}
-              type="button"
-              variant={recommend === "not_recommend" ? "default" : "outline"}
-            >
-              {copy.labels.notRecommend}
-            </Button>
-          </div>
+              {copy.actions.openReviewModal}
+            </DialogTrigger>
 
-          <Button
-            className="w-full rounded-none text-[10px] tracking-[0.12em] uppercase"
-            disabled={isSavingReview}
-            onClick={saveReview}
-            type="button"
-          >
-            {isSavingReview ? copy.submit.savingReview : copy.submit.saveReview}
-          </Button>
+            <DialogContent className="max-w-2xl border-border/60 bg-popover/95">
+              <DialogTitle>{copy.reviewTitle}</DialogTitle>
+              <DialogDescription>{copy.reviewDescription}</DialogDescription>
 
-          {reviewMessage ? <p className="text-xs text-muted-foreground">{reviewMessage}</p> : null}
+              <div className="mt-6 flex flex-col gap-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                      {copy.labels.platform}
+                    </label>
+                    <select
+                      className="h-10 w-full border border-border/70 bg-background px-3 text-sm"
+                      disabled={isSavingReview}
+                      onChange={(event) => setPlatformPlayed(event.target.value)}
+                      value={platformPlayed}
+                    >
+                      <option value="">{copy.placeholders.platform}</option>
+                      {platformOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                      {copy.labels.hoursToComplete}
+                    </label>
+                    <Input
+                      disabled={isSavingReview}
+                      min={1}
+                      onChange={(event) => setHoursToComplete(event.target.value)}
+                      placeholder={copy.placeholders.hoursToComplete}
+                      type="number"
+                      value={hoursToComplete}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                    {copy.labels.reviewBody}
+                  </label>
+                  <Textarea
+                    className="min-h-28"
+                    disabled={isSavingReview}
+                    maxLength={500}
+                    onChange={(event) => setReviewBody(event.target.value)}
+                    placeholder={copy.placeholders.reviewBody}
+                    value={reviewBody}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    className="rounded-none text-[10px] tracking-[0.1em] uppercase"
+                    disabled={isSavingReview}
+                    onClick={() => setRecommend("recommend")}
+                    type="button"
+                    variant={recommend === "recommend" ? "default" : "outline"}
+                  >
+                    {copy.labels.recommend}
+                  </Button>
+                  <Button
+                    className="rounded-none text-[10px] tracking-[0.1em] uppercase"
+                    disabled={isSavingReview}
+                    onClick={() => setRecommend("not_recommend")}
+                    type="button"
+                    variant={recommend === "not_recommend" ? "default" : "outline"}
+                  >
+                    {copy.labels.notRecommend}
+                  </Button>
+                </div>
+
+                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Checkbox
+                    checked={containsSpoilers}
+                    onCheckedChange={(checked) => setContainsSpoilers(Boolean(checked))}
+                  />
+                  {copy.labels.containsSpoilers}
+                </label>
+
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    className="rounded-none text-[10px] tracking-[0.12em] uppercase"
+                    disabled={isSavingReview}
+                    onClick={saveReview}
+                    type="button"
+                  >
+                    {isSavingReview ? copy.submit.savingReview : copy.submit.saveReview}
+                  </Button>
+
+                  <DialogClose
+                    render={
+                      <Button
+                        className="rounded-none text-[10px] tracking-[0.12em] uppercase"
+                        variant="outline"
+                      />
+                    }
+                  >
+                    {copy.actions.closeModal}
+                  </DialogClose>
+                </div>
+
+                {reviewMessage ? (
+                  <p className="text-xs text-muted-foreground">{reviewMessage}</p>
+                ) : null}
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
     </div>

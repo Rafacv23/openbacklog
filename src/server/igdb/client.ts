@@ -29,6 +29,20 @@ type IgdbPlatform = {
   name?: string | null
 }
 
+type IgdbTimeToBeat = {
+  completely?: number | null
+  normally?: number | null
+}
+
+type IgdbSimilarGame = {
+  id: number
+  name?: string | null
+  slug?: string | null
+  cover?: IgdbCover | null
+  first_release_date?: number | null
+  rating?: number | null
+}
+
 export type IgdbGame = {
   id: number
   name: string
@@ -39,6 +53,8 @@ export type IgdbGame = {
   rating?: number | null
   genres?: IgdbNamedEntity[] | null
   platforms?: IgdbPlatform[] | null
+  time_to_beat?: IgdbTimeToBeat | null
+  similar_games?: IgdbSimilarGame[] | null
   checksum?: string | null
   updated_at?: number | null
 }
@@ -164,8 +180,27 @@ function escapeSearchTerm(searchTerm: string): string {
   return searchTerm.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
 }
 
-const IGDB_GAME_FIELDS =
-  "id,name,slug,summary,cover.url,first_release_date,rating,genres.name,platforms.abbreviation,platforms.name,checksum,updated_at,version_parent"
+const IGDB_GAME_FIELDS = [
+  "id",
+  "name",
+  "slug",
+  "summary",
+  "cover.url",
+  "first_release_date",
+  "rating",
+  "genres.name",
+  "platforms.abbreviation",
+  "platforms.name",
+  "similar_games.id",
+  "similar_games.name",
+  "similar_games.slug",
+  "similar_games.cover.url",
+  "similar_games.first_release_date",
+  "similar_games.rating",
+  "checksum",
+  "updated_at",
+  "version_parent",
+].join(",")
 
 function createSearchBody(query: string, limit: number): string {
   const escapedQuery = escapeSearchTerm(query)
@@ -186,12 +221,37 @@ function createGameByIdBody(id: number): string {
   ].join(" ")
 }
 
+function createUpcomingByDateRangeBody(
+  fromUnixSeconds: number,
+  toUnixSeconds: number,
+  limit: number,
+): string {
+  return [
+    `fields ${IGDB_GAME_FIELDS};`,
+    [
+      "where version_parent = null",
+      "& first_release_date != null",
+      `& first_release_date >= ${fromUnixSeconds}`,
+      `& first_release_date < ${toUnixSeconds};`,
+    ].join(" "),
+    "sort first_release_date asc;",
+    `limit ${limit};`,
+  ].join(" ")
+}
+
 export function toCoverImageUrl(url: string | null | undefined): string | null {
+  return normalizeIgdbImageUrl(url, "t_cover_big")
+}
+
+function normalizeIgdbImageUrl(
+  url: string | null | undefined,
+  imageVariant: string,
+): string | null {
   if (!url) {
     return null
   }
 
-  const normalizedUrl = url.replace("t_thumb", "t_cover_big")
+  const normalizedUrl = url.replace("t_thumb", imageVariant)
 
   if (normalizedUrl.startsWith("//")) {
     return `https:${normalizedUrl}`
@@ -266,4 +326,66 @@ export async function getIgdbGameById(id: number): Promise<IgdbGame | null> {
   const game = data.find((entry) => Boolean(entry?.id && entry?.name && entry?.slug))
 
   return game ?? null
+}
+
+export async function getIgdbUpcomingGamesByDateRange({
+  fromUnixSeconds,
+  limit,
+  toUnixSeconds,
+}: {
+  fromUnixSeconds: number
+  limit: number
+  toUnixSeconds: number
+}): Promise<IgdbGame[]> {
+  if (
+    !Number.isFinite(fromUnixSeconds) ||
+    !Number.isFinite(toUnixSeconds) ||
+    !Number.isFinite(limit)
+  ) {
+    return []
+  }
+
+  const cappedLimit = Math.min(Math.max(Math.floor(limit), 1), 100)
+  const normalizedFrom = Math.floor(fromUnixSeconds)
+  const normalizedTo = Math.floor(toUnixSeconds)
+
+  if (normalizedFrom <= 0 || normalizedTo <= normalizedFrom) {
+    return []
+  }
+
+  const clientId = getRequiredEnv("IGDB_CLIENT_ID")
+  const accessToken = await getAccessToken()
+
+  const response = await fetchWithRetry(
+    `${IGDB_BASE_URL}/games`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Client-ID": clientId,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: createUpcomingByDateRangeBody(normalizedFrom, normalizedTo, cappedLimit),
+      cache: "no-store",
+    },
+    getMaxRetries(),
+  )
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    console.warn("[igdb] Upcoming games request failed", {
+      fromUnixSeconds: normalizedFrom,
+      limit: cappedLimit,
+      status: response.status,
+      toUnixSeconds: normalizedTo,
+      // Keep log compact to avoid huge server console noise.
+      body: errorBody.slice(0, 400),
+    })
+
+    return []
+  }
+
+  const data = (await response.json()) as IgdbGame[]
+
+  return data.filter((game) => Boolean(game?.id && game?.name && game?.slug))
 }

@@ -455,8 +455,10 @@ export const es = {
     header: {
       aria: "Navegación para usuarios autenticados",
       brand: "OPENBACKLOG APP",
+      popular: "POPULAR",
       recommendations: "RECOMENDACIONES",
       feed: "FEED",
+      upcoming: "PRÓXIMOS",
       search: "BUSCAR",
       profile: "PERFIL",
       landing: "LANDING",
@@ -527,6 +529,73 @@ export const es = {
         },
       ],
     },
+    upcoming: {
+      metaTitle: "Próximos Lanzamientos | OpenBacklog",
+      metaDescription:
+        "Sigue lanzamientos próximos por semana actual, mes actual y lista general para planificar mejor tu backlog.",
+      title: "Próximos Lanzamientos",
+      description:
+        "Consulta lanzamientos próximos por semana actual, mes actual y horizonte general.",
+      weekLabel: "Próximos lanzamientos de esta semana",
+      weekHint: "Lanzamientos desde hoy hasta el cierre de la semana actual.",
+      monthLabel: "Lanzamientos destacados en {month}",
+      monthHint:
+        "Lanzamientos destacados desde hoy hasta el final del mes actual, excluyendo los de esta semana.",
+      generalLabel: "Próximos lanzamientos generales",
+      generalHint: "Siguientes lanzamientos confirmados después de este mes.",
+      sectionEmpty: "Aún no hay lanzamientos confirmados en este rango.",
+      fallbackTitle: "Próximos lanzamientos confirmados",
+      fallbackDescription:
+        "Aún no hay fechas confirmadas en este mes. Mostramos los títulos más cercanos en salir.",
+      emptyTitle: "No hay destacados próximos disponibles",
+      emptyBody:
+        "Vuelve más tarde o usa la búsqueda para descubrir más juegos próximos.",
+      emptyCta: "ABRIR BÚSQUEDA",
+    },
+    popular: {
+      metaTitle: "Juegos Populares | OpenBacklog",
+      metaDescription:
+        "Explora los juegos más populares globales, lanzamientos recién activos y tendencias entre tus amigos.",
+      title: "Juegos Populares",
+      description:
+        "Revisa rápido qué está en tendencia ahora: popularidad global, lanzamientos recientes activos, actividad entre amigos y filtros por plataforma o género.",
+      sectionEmpty: "Aún no hay juegos disponibles en esta sección.",
+      emptyTitle: "No hay juegos populares disponibles ahora",
+      emptyBody:
+        "Vuelve más tarde o usa búsqueda para añadir y descubrir más juegos.",
+      emptyCta: "ABRIR BÚSQUEDA",
+      sections: {
+        globalTitle: "Juegos más populares",
+        globalDescription:
+          "Juegos con mayor actividad en librerías y reviews de usuarios.",
+        recentTitle: "Recién salidos o con nuevas notas",
+        recentDescription:
+          "Lanzamientos recientes y juegos con actividad nueva de reviews.",
+        friendsTitle: "Más populares entre tus amigos",
+        friendsDescription:
+          "Juegos que tus amigos aceptados más añaden y actualizan.",
+      },
+      filters: {
+        title: "Populares por género y plataforma",
+        description:
+          "Elige plataforma o género para abrir página dedicada de ranking.",
+        platformsTitle: "Plataformas",
+        genresTitle: "Géneros",
+        platformSingular: "plataforma",
+        genreSingular: "género",
+        metaTitle: "Populares por {type}: {facet} | OpenBacklog",
+        metaDescription:
+          "Consulta los juegos más populares para {type} {facet} según actividad actual en OpenBacklog.",
+        backToPopular: "VOLVER A POPULARES",
+        detailTitle: "Más populares por {type}: {facet}",
+        detailDescription:
+          "Ranking actualizado con actividad reciente de librería y reviews.",
+        switcherTitle: "Cambiar filtro",
+        emptyTitle: "No hay juegos para este filtro",
+        emptyBody:
+          "Prueba otro filtro o usa búsqueda para descubrir más títulos.",
+      },
+    },
   },
   gameDetail: {
     metaFallbackTitle: "Detalle del Juego | OpenBacklog",
@@ -534,21 +603,43 @@ export const es = {
       "Ficha de videojuego en OpenBacklog con acciones de librería y review.",
     backToSearch: "VOLVER A BÚSQUEDA",
     backHome: "VOLVER AL INICIO",
+    sharePage: "COMPARTIR",
+    sharedPage: "LINK COPIADO",
+    shareText: "Mira este juego en OpenBacklog: {game}",
     heroBadge: "DETALLE DEL JUEGO",
     idLabel: "ID",
+    friendsOwnThis: "Amigos que ya tienen este juego",
     firstReleaseDateLabel: "Primer lanzamiento",
     ratingLabel: "Puntuación",
     platformsLabel: "Plataformas",
     genresLabel: "Géneros",
+    estimatedMainLabel: "Duración estimada (historia principal)",
+    estimatedCompletionistLabel: "Duración estimada (completista)",
     lastSyncedLabel: "Última sincronización",
     unknownValue: "Desconocido",
     noSummary: "No hay resumen disponible para este juego.",
+    similarGamesTitle: "Juegos similares",
+    similarGamesDescription:
+      "Más opciones de estilo y gameplay parecido para avanzar tu backlog.",
+    noSimilarGames: "No hay juegos similares disponibles ahora mismo.",
+    userReviewsTitle: "Reviews de usuarios",
+    userReviewsDescription:
+      "Lee opiniones recientes de la comunidad antes de decidir si encaja en tu backlog.",
+    noUserReviews: "Aún no hay reviews públicas de este juego.",
+    revealSpoiler: "MOSTRAR SPOILER",
+    spoilerLabel: "SPOILER",
+    openReview: "ABRIR REVIEW",
     libraryTitle: "Librería",
     libraryDescription:
-      "Añade este juego a tu librería y define estado al momento.",
+      "Actualiza el estado de este juego en tu backlog desde un modal rápido.",
     reviewTitle: "Review Corta",
     reviewDescription:
-      "Comparte recomendación, plataforma y horas de completado.",
+      "Deja una review breve con recomendación, progreso y control de spoiler.",
+    actions: {
+      openLibraryModal: "GESTIONAR EN LIBRERÍA",
+      openReviewModal: "ESCRIBIR REVIEW",
+      closeModal: "CERRAR",
+    },
     states: {
       planned: "Planificado",
       playing: "Jugando",
@@ -563,6 +654,7 @@ export const es = {
       reviewBody: "Review",
       recommend: "Recomendar",
       notRecommend: "No recomendar",
+      containsSpoilers: "Esta review contiene spoilers",
     },
     placeholders: {
       platform: "Elige plataforma",
@@ -591,9 +683,16 @@ export const es = {
     description:
       "Sigue progreso con estados estables y mantén backlog ordenado para decidir mejor.",
     filters: {
+      searchLabel: "Buscar",
       searchPlaceholder: "Buscar por título o slug",
+      clearSearchAriaLabel: "Limpiar búsqueda de librería",
+      autoApplyHint: "Resultados se actualizan automáticamente al escribir.",
+      stateLabel: "Estado",
+      sortLabel: "Ordenar por",
+      viewToggleLabel: "Diseño",
+      rowView: "Filas",
+      gridView: "Grid compacto",
       allStates: "Todos los estados",
-      apply: "APLICAR",
     },
     sort: {
       updatedDesc: "Actualizado recientemente",
@@ -612,8 +711,11 @@ export const es = {
       rating: "Puntuación",
     },
     update: {
-      submit: "ACTUALIZAR",
-      submitting: "ACTUALIZANDO...",
+      stateLabel: "Actualizar estado",
+      stateHelp: "Elige estado siguiente y guarda cambio.",
+      currentState: "Actual: {state}",
+      submit: "GUARDAR ESTADO",
+      submitting: "GUARDANDO...",
       invalidPayload: "Estado inválido.",
       genericError: "No se pudo actualizar esta entrada.",
     },

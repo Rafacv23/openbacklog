@@ -13,6 +13,7 @@ type Params = {
 
 type UpsertReviewBody = {
   body?: unknown
+  containsSpoilers?: unknown
   recommend?: unknown
   platformPlayed?: unknown
   hoursToComplete?: unknown
@@ -117,6 +118,7 @@ export async function PUT(request: Request, { params }: Params) {
     userId: session.user.id,
     gameIgdbId,
     body: body.body,
+    containsSpoilers: body.containsSpoilers,
     recommend: body.recommend,
     platformPlayed: body.platformPlayed,
     hoursToComplete: body.hoursToComplete,
