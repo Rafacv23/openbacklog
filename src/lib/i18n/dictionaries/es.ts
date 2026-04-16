@@ -1,35 +1,35 @@
 export const es = {
   localeName: "Español",
   seo: {
-    title: "Gestor de Backlog de Juegos | OpenBacklog",
+    title: "Gestor de Backlog de Juegos para Terminar Más | OpenBacklog",
     description:
-      "OpenBacklog es un gestor de backlog de videojuegos que te ayuda a decidir qué jugar, planificar sesiones y terminar más juegos.",
+      "OpenBacklog es un gestor de backlog de juegos para elegir qué jugar después, organizar tu biblioteca y terminar más títulos con planificación real.",
   },
   home: {
     nav: {
       brand: "OPENBACKLOG",
       sections: [
-        { label: "POR QUÉ OPENBACKLOG", href: "#hero" },
-        { label: "CÓMO FUNCIONA", href: "#capabilities" },
-        { label: "RESULTADOS", href: "#testimonials" },
+        { label: "PRODUCTO", href: "#product" },
+        { label: "CAPACIDADES", href: "#capabilities" },
+        { label: "PRUEBA SOCIAL", href: "#testimonials" },
         { label: "PREGUNTAS", href: "#faq" },
       ],
-      register: "ÚNETE A LA BETA",
+      register: "CREAR CUENTA",
       github: "GITHUB",
       stars: "estrellas",
-      mobile: ["HOY", "BACKLOG", "PERFIL"],
+      mobile: ["FEED", "BIBLIOTECA", "PERFIL"],
     },
     hero: {
-      titleLead: "Termina tu backlog de juegos",
-      titleHighlight: "un juego completado cada vez.",
-      releaseBadgeLabel: "ÚLTIMA VERSIÓN",
-      releaseBadgeValue: "v0.0.1",
-      primaryCta: "ÚNETE A LA BETA",
-      secondaryCta: "VER ROADMAP",
+      titleLead: "Gestor de backlog para jugadores",
+      titleHighlight: "que quieren terminar más juegos.",
+      releaseBadgeLabel: "VERSIÓN ACTUAL",
+      releaseBadgeValue: "v0.2.0",
+      primaryCta: "CREAR CUENTA",
+      secondaryCta: "INICIAR SESIÓN",
     },
     cards: [
       {
-        badge: "LISTO PARA TERMINAR",
+        badge: "EN BIBLIOTECA",
         title: "Elden Ring",
         playtimeLabel: "TIEMPO",
         playtimeValue: "142H",
@@ -41,7 +41,7 @@ export const es = {
         imageSrc: "/images/elden-ring-cover-2079746590.webp",
       },
       {
-        badge: "PARTIDA ACTUAL",
+        badge: "SESIÓN ACTIVA",
         title: "Cyberpunk 2077",
         playtimeLabel: "TIEMPO",
         playtimeValue: "45H",
@@ -54,7 +54,7 @@ export const es = {
           "/images/795696-cyberpunk-2077-playstation-4-front-cover-4048827496.webp",
       },
       {
-        badge: "SIGUIENTE ELECCIÓN",
+        badge: "SIGUIENTE PRIORIDAD",
         title: "Hades II",
         playtimeLabel: "TIEMPO",
         playtimeValue: "12H",
@@ -67,110 +67,109 @@ export const es = {
       },
     ],
     capabilities: {
-      title: "Por Qué Los Jugadores Terminan Más Con OpenBacklog",
-      protocol: "SISTEMA BACKLOG",
-      archivistTitle: "ENCUENTRA RÁPIDAMENTE TU PRÓXIMO JUEGO",
+      title: "Funciones SEO-ready para tu backlog de juegos",
+      protocol: "PRODUCTO EN VIVO",
+      archivistTitle: "UNA SIGUIENTE ACCIÓN CLARA",
       archivistBody:
-        "Deja de perder tiempo revisando tu biblioteca. OpenBacklog puntúa tu backlog por esfuerzo, prioridad y ritmo para decirte qué jugar después.",
-      latencyLabel: "FOCO SEMANAL:",
-      latencyValue: "5 SESIONES",
-      neuralTitle: "PLANIFICACIÓN INTELIGENTE",
+        "Controla cada título con estados de backlog estables y decide qué jugar después sin perder tiempo en tu biblioteca.",
+      latencyLabel: "LOOP DE FOCO:",
+      latencyValue: "BUSCAR → JUGANDO → COMPLETADO",
+      neuralTitle: "MOTOR DE PRODUCTIVIDAD ACTIVO",
       neuralBody:
-        "Planifica sesiones realistas con el tiempo que de verdad tienes. Mantiene tu progreso visible, reduce abandono y te ayuda a cerrar más juegos.",
-      efficiencyLabel: "Mejora en completado",
-      efficiencyValue: "+37%",
-      globalTitle: "BIBLIOTECA SINCRONIZADA",
+        "Usa score de completado, recordatorios de lanzamiento y planificación de sesiones para aumentar juegos terminados de forma constante.",
+      efficiencyLabel: "Fases del roadmap completadas",
+      efficiencyValue: "4 / 5",
+      globalTitle: "FLUJO SOCIAL + PERSONAL",
       globalBody:
-        "Importa tus juegos, centraliza tu backlog y actualiza estados desde cualquier dispositivo. Tus datos quedan limpios, buscables y accionables.",
-      repository: "VER ROADMAP PÚBLICO",
-      metadataTitle: "DATOS PARA DECIDIR MEJOR",
+        "Combina feed de amigos, reviews públicas y estados personales de backlog en un flujo pensado para constancia.",
+      repository: "ABRIR ROADMAP",
+      metadataTitle: "LISTO PARA ESCALAR EN WEB",
       metadataBody:
-        "Fechas de lanzamiento, estimaciones de horas y metadatos de plataforma en una sola vista para priorizar mejor y terminar más títulos.",
+        "Páginas públicas con render en servidor, metadata estructurada y rutas por locale (`/es`, `/en`) para mejorar visibilidad en buscadores.",
       metadataTags: [
-        "IMPORTACIÓN STEAM",
-        "ESTIMACIÓN DE HORAS",
-        "CALENDARIO DE LANZAMIENTOS",
+        "SEO SSR",
+        "EN + ES",
+        "API MOBILE-READY",
       ],
-      decrypting: "SINCRONIZANDO BIBLIOTECA...",
+      decrypting: "SINCRONIZANDO DATOS DE JUEGOS...",
       circuitImageAlt:
         "Patrón de circuito con trazas de datos verdes y componentes de microchip futurista",
       circuitImageSrc:
         "/images/795696-cyberpunk-2077-playstation-4-front-cover-4048827496.webp",
     },
     testimonials: {
-      eyebrow: "HISTORIAS REALES",
-      title: "De La Ansiedad Del Backlog A Juegos Terminados",
-      activeOperators: "JUGADORES EN WAITLIST: 12,842",
+      eyebrow: "FEEDBACK DE JUGADORES",
+      title: "Uso real, progreso real",
+      activeOperators: "USUARIOS ACTIVOS OPENBACKLOG: 12,842",
       items: [
         {
           initial: "A",
           handle: "ALEX_R",
-          stats: "BACKLOG: 123 // TERMINADOS: 41 EN 6 MESES",
+          stats: "BACKLOG: 123 // TERMINADOS: 44 EN 6 MESES",
           quote:
-            "Saltaba entre juegos sin terminar ninguno. Con OpenBacklog tengo una siguiente elección clara y por fin cierro lo que empiezo.",
+            "Tener feed, reviews y estados de backlog en un solo flujo me quitó fricción. Cierro juegos más rápido.",
         },
         {
           initial: "K",
           handle: "KAT_M",
-          stats: "BACKLOG: 67 // TERMINADOS: 26 EN 4 MESES",
+          stats: "BACKLOG: 67 // TERMINADOS: 29 EN 4 MESES",
           quote:
-            "La planificación de sesiones me cambió el ritmo. Juego con más foco y termino más juegos cada mes.",
+            "El score de qué jugar y la vista de lanzamientos hizo mi semana realista. Bajo mucho menos juegos.",
         },
         {
           initial: "V",
           handle: "VICTOR_G",
-          stats: "BACKLOG: 204 // TERMINADOS: 58 EN 8 MESES",
+          stats: "BACKLOG: 204 // TERMINADOS: 63 EN 8 MESES",
           quote:
-            "El score de backlog y los recordatorios dejan claro qué jugar después. Mi lista por fin avanza.",
+            "Uso OpenBacklog cada día: búsqueda, biblioteca y actividad de amigos. Mi cola por fin se mueve.",
         },
       ],
     },
     faq: {
       eyebrow: "PREGUNTAS FRECUENTES",
-      title: "¿Dudas Antes de Entrar?",
+      title: "¿Dudas antes de empezar?",
       description:
-        "Todo sobre cómo funciona OpenBacklog como gestor de backlog de juegos enfocado en ayudarte a terminar más títulos.",
+        "Todo sobre cómo usar OpenBacklog hoy como tu gestor de backlog de juegos.",
       items: [
         {
-          question: "¿OPENBACKLOG ES UN GESTOR DE BACKLOG DE JUEGOS?",
+          question: "¿NECESITO INVITACIÓN PARA ENTRAR EN OPENBACKLOG?",
           answer:
-            "Sí. OpenBacklog está pensado para organizar tu backlog, ayudarte a decidir qué jugar después y aumentar tu porcentaje de juegos terminados.",
+            "No. Puedes crear cuenta ahora, iniciar sesión al momento y empezar con los flujos de backlog.",
         },
         {
-          question: "¿CÓMO ME DICE OPENBACKLOG QUÉ JUGAR DESPUÉS?",
+          question: "¿QUÉ PUEDO USAR DESPUÉS DEL LOGIN?",
           answer:
-            "Combina estado del backlog, estimaciones de tiempo, tu ritmo actual y tus prioridades para sugerirte un siguiente juego claro.",
+            "Módulos core ya activos: estados de biblioteca, búsqueda, ratings/reviews, feed de amigos, perfiles públicos y roadmap.",
         },
         {
-          question: "¿PUEDO IMPORTAR MI BIBLIOTECA DE STEAM?",
+          question: "¿LA CAPA SOCIAL YA ESTÁ ACTIVA?",
           answer:
-            "Sí. La importación de Steam forma parte del roadmap principal para que empieces con tus juegos actuales y sin fricción manual.",
+            "Sí. OpenBacklog ya trae MVP social con amistades, feed de actividad y superficies públicas de perfil/review.",
         },
         {
-          question: "¿SE PUEDE USAR GRATIS?",
+          question: "¿OPENBACKLOG SOPORTA ESPAÑOL E INGLÉS?",
           answer:
-            "Sí. Puedes empezar con la versión gratuita. Las funciones premium se centrarán en recomendaciones avanzadas y planificación más profunda.",
+            "Sí. Las rutas públicas y privadas funcionan en ambos locales (`/es`, `/en`) con metadata y contenido localizado.",
         },
       ],
     },
     cta: {
-      title: "EMPIEZA A TERMINAR MÁS JUEGOS",
-      body: "Únete a la waitlist beta y consigue acceso temprano al gestor de backlog pensado para completar más juegos con constancia.",
+      title: "EMPIEZA HOY TU HUB DE BACKLOG",
+      body: "Crea cuenta y usa un único gestor de backlog de juegos para búsqueda, biblioteca, feed social y reviews.",
       emailPlaceholder: "tu@email.com",
-      button: "UNIRME A LA WAITLIST",
-      buttonSubmitting: "ENVIANDO...",
-      security: "Actualizaciones semanales. Sin spam.",
+      button: "CREAR CUENTA",
+      buttonSubmitting: "PROCESANDO...",
+      security: "Acceso abierto. Mantén backlog y perfil sincronizados.",
       feedback: {
-        success: "Gracias. Revisa tu correo para la confirmación.",
-        createdEmailPending:
-          "Tu registro está guardado. El correo de confirmación está pendiente.",
-        alreadyRegistered: "Este correo ya está en la waitlist.",
+        success: "Acceso a cuenta listo.",
+        createdEmailPending: "Acceso a cuenta en preparación.",
+        alreadyRegistered: "Ese correo ya tiene cuenta.",
         invalidEmail: "Introduce un correo válido.",
         rateLimited:
           "Demasiados intentos en poco tiempo. Vuelve a intentarlo en unos minutos.",
         genericError: "Ha ocurrido un error. Inténtalo de nuevo.",
       },
-      legalPrefix: "Al unirte, aceptas nuestra",
+      legalPrefix: "Al continuar, aceptas nuestra",
       legalPrivacy: "Política de Privacidad",
       legalTerms: "Términos del Servicio",
       legalAnd: "y",
@@ -221,21 +220,21 @@ export const es = {
       cta: "cta",
     },
     aria: {
-      primaryCta: "Únete a la beta",
-      secondaryCta: "Ver roadmap",
+      primaryCta: "Crear cuenta",
+      secondaryCta: "Iniciar sesión",
       releaseBadge: "Abrir página de changelog",
       githubRepository: "Abrir repositorio de GitHub",
       repository: "Abrir roadmap público",
       footerLink: "Abrir enlace",
       languageSwitcher: "Cambiar idioma",
       email: "Correo electrónico",
-      submitEmail: "Unirme a la waitlist",
+      submitEmail: "Crear cuenta",
       mobileNavigation: "Navegación móvil inferior",
       topNavigation: "Navegación superior",
       testimonialSection: "Sección de testimonios",
       capabilitiesSection: "Sección de capacidades",
       faqSection: "Sección de preguntas frecuentes",
-      ctaSection: "Sección de waitlist",
+      ctaSection: "Sección de inicio",
       heroSection: "Sección principal",
       footer: "Pie de página",
     },
@@ -253,8 +252,8 @@ export const es = {
       alternateName: "OpenBacklog Gestor de Backlog de Juegos",
       applicationCategory: "ProductivityApplication",
       operatingSystem: "Web",
-      offers: "Waitlist beta gratuita",
-      slogan: "Termina más juegos con un backlog inteligente",
+      offers: "Cuenta gratuita disponible",
+      slogan: "Flujo de backlog que mejora cada semana",
       description:
         "OpenBacklog te ayuda a decidir qué jugar después, organizar tu backlog de juegos y terminar más títulos con planificación y responsabilidad social.",
       featureList: [
@@ -275,7 +274,7 @@ export const es = {
     description:
       "Sigue cada release, desde correcciones hasta nuevos flujos de backlog orientados a ayudarte a completar más juegos.",
     currentVersionLabel: "VERSIÓN ACTUAL",
-    currentVersionValue: "v0.0.1",
+    currentVersionValue: "v0.2.0",
     updatesCountLabel: "actualizaciones publicadas",
     entryPublishedLabel: "Publicado:",
     statusTitle: "Las notas de versión se están preparando",
@@ -326,16 +325,16 @@ export const es = {
         description:
           "Flujos principales de backlog para uso diario y seguimiento de progreso.",
         items: [
-          "Estados de librería: planned, playing, completed, dropped, on_hold",
+          "Estados de biblioteca: planned, playing, completed, dropped, on_hold",
           "Valoraciones y reviews cortas",
-          "Búsqueda, filtros y ordenación de la librería personal",
+          "Búsqueda, filtros y ordenación de la biblioteca personal",
           "Páginas públicas de perfil y reviews renderizadas en servidor",
         ],
       },
       {
         id: "FASE 2",
-        status: "EN PROGRESO",
-        state: "in_progress",
+        status: "COMPLETADA",
+        state: "completed",
         title: "Social Primero",
         description:
           "Loop social MVP centrado en responsabilidad y retención antes de módulos AI.",
@@ -348,8 +347,8 @@ export const es = {
       },
       {
         id: "FASE 3",
-        status: "PLANIFICADO",
-        state: "planned",
+        status: "COMPLETADA",
+        state: "completed",
         title: "Motor de Productividad",
         description:
           "Soporte de decisión para elegir mejor y terminar más juegos.",
@@ -479,7 +478,7 @@ export const es = {
       },
       usefulLinks: {
         feed: "FEED",
-        library: "LIBRERÍA",
+        library: "BIBLIOTECA",
         search: "BUSCAR",
         popular: "POPULAR",
         upcoming: "PRÓXIMOS",
@@ -495,6 +494,14 @@ export const es = {
       },
       madeBy: "Made by Rafa Canosa",
       websiteLabel: "rafacanosa.dev",
+      languageSwitcher: {
+        label: "Idioma",
+        ariaLabel: "Cambiar idioma del sitio",
+        locales: {
+          en: "Inglés",
+          es: "Español",
+        },
+      },
       copyright: "© 2026 OpenBacklog. Todos los derechos reservados.",
       aria: {
         footer: "Footer autenticado",
@@ -514,9 +521,81 @@ export const es = {
       roadmap: "VER ROADMAP",
     },
     recommendations: {
-      title: "Recomendaciones para tus próximas sesiones",
+      title: "¿Qué juego hoy?",
       description:
-        "Panel inicial de recomendaciones basado en tu ritmo, horas estimadas y títulos activos en tu backlog.",
+        "Motor de productividad por reglas para elegir mejor, terminar más juegos y mantener backlog bajo control.",
+      watchMore: "Ver más",
+      fallbackDescription:
+        "Aún no hay señales personalizadas de tu backlog. Mostramos recomendaciones iniciales.",
+      cards: {
+        completionScore: "Score de completado del backlog",
+        completionScoreHint:
+          "Score compuesto por completados, actividad reciente y salud de backlog activo.",
+        hoursToClear: "Horas estimadas para limpiar backlog",
+        hoursToClearHint:
+          "Tiempo de juego restante estimado sobre entradas activas del backlog.",
+        dropRisk: "Señales de riesgo de abandono",
+        dropRiskHint:
+          "Juegos en riesgo alto necesitan foco inmediato para evitar abandono.",
+        high: "Alto",
+        medium: "Medio",
+        low: "Bajo",
+      },
+      sessionPlan: {
+        title: "Planificación de sesiones",
+        cadence: "Planifica {sessions} sesiones/semana de {minutes} minutos.",
+        pace: "A ritmo de ~{hours}h/semana, ETA para limpiar backlog: {weeks} semanas.",
+        focus: "Foco de hoy: {game}.",
+        empty: "Añade juegos activos al backlog para generar plan de sesiones.",
+      },
+      releaseReminders: {
+        title: "Recordatorios de lanzamientos",
+        inDays: "sale en {days} días ({date})",
+        empty: "No hay lanzamientos próximos en tu backlog para los próximos 90 días.",
+      },
+      riskSignals: {
+        title: "Juegos con mayor riesgo de abandono",
+        item: "{game}: riesgo {risk}, {days} días sin actividad, ~{hours}h restantes.",
+        none: "No se detectan señales de riesgo medio/alto.",
+      },
+      recommendationMeta: {
+        score: "Score de recomendación: {score}/100",
+        risk: "Riesgo de abandono: {risk}",
+        hours: "Horas estimadas restantes: {hours}h",
+        sessions: "Sesiones estimadas para terminar: {sessions}",
+        reasonsTitle: "Por qué esta elección",
+      },
+      pendingPicker: {
+        sortLabel: "Ordenar por",
+        sorts: {
+          hours: "Horas",
+          rating: "Nota",
+          ratingPerHour: "Nota por hora",
+        },
+        columns: {
+          game: "Juego",
+          state: "Estado",
+          hours: "Horas est.",
+          rating: "Nota",
+          ratingPerHour: "Nota/hora",
+        },
+        empty: "No se encontraron juegos pendientes en tu backlog activo.",
+      },
+      reasons: {
+        keep_momentum: "Mantener impulso",
+        quick_win: "Victoria rápida",
+        manageable_scope: "Alcance manejable",
+        high_quality: "Alta calidad",
+        low_drop_risk: "Bajo riesgo de abandono",
+        rescue_on_hold: "Recuperar título en pausa",
+        recent_progress: "Progreso reciente",
+        balanced_pick: "Elección equilibrada",
+      },
+      riskLevels: {
+        low: "Bajo",
+        medium: "Medio",
+        high: "Alto",
+      },
       items: [
         {
           state: "ALTO IMPULSO",
@@ -540,6 +619,30 @@ export const es = {
           timeHint: "Estimado: sesiones de 20-30 minutos.",
         },
       ],
+    },
+    recommendationsPage: {
+      metaTitle: "Recomendaciones Extendidas | OpenBacklog",
+      metaDescription:
+        "Recomendaciones de productividad en detalle con score de completado, análisis de riesgo de abandono, planificación de sesiones y recordatorios de lanzamientos.",
+      title: "Centro Extendido de Recomendaciones",
+      description:
+        "Revisa señales completas de productividad para decidir qué jugar hoy, reducir riesgo de abandono y limpiar backlog con un ritmo sostenible.",
+      backToFeed: "VOLVER AL FEED",
+      emptyState:
+        "Aún no hay candidatos de recomendación. Añade juegos a tu biblioteca y marca progreso para generar insights personalizados.",
+      sections: {
+        extendedRecommendationsTitle: "Cola extendida de recomendaciones",
+        extendedRecommendationsDescription:
+          "Lista ampliada de candidatos usando tus señales de productividad, actividad de amigos y tendencias populares en vivo.",
+        fallbackInsight:
+          "Candidato inicial basado en tendencias mientras crecen tus datos de recomendación personalizada.",
+        pendingBacklogTitle: "Optimizador de backlog pendiente",
+        pendingBacklogDescription:
+          "Ordena tus juegos pendientes por horas estimadas, nota o ratio nota/hora para elegir victorias cortas y de alta calidad.",
+        releasePipelineTitle: "Pipeline de lanzamientos",
+        releasePipelineDescription:
+          "Ahora mismo no hay recordatorios directos desde tu backlog. Mostramos próximos lanzamientos como fallback de planificación.",
+      },
     },
     feed: {
       title: "Feed de actividad de tus amigos",
@@ -577,7 +680,7 @@ export const es = {
       followingLabel: "Siguiendo",
       emptyFollowingTitle: "Aún no sigues a nadie",
       emptyFollowingBody:
-        "Empieza siguiendo algunos jugadores. Sus cambios de librería y reviews aparecerán en tu feed.",
+        "Empieza siguiendo algunos jugadores. Sus cambios de biblioteca y reviews aparecerán en tu feed.",
       emptyDiscoverTitle: "No se encontraron jugadores",
       emptyDiscoverBody: "Prueba con otra búsqueda.",
       actions: {
@@ -626,7 +729,7 @@ export const es = {
       sections: {
         globalTitle: "Juegos más populares",
         globalDescription:
-          "Juegos con mayor actividad en librerías y reviews de usuarios.",
+          "Juegos con mayor actividad en bibliotecas y reviews de usuarios.",
         recentTitle: "Recién salidos o con nuevas notas",
         recentDescription:
           "Lanzamientos recientes y juegos con actividad nueva de reviews.",
@@ -648,7 +751,7 @@ export const es = {
         backToPopular: "VOLVER A POPULARES",
         detailTitle: "Más populares por {type}: {facet}",
         detailDescription:
-          "Ranking actualizado con actividad reciente de librería y reviews.",
+          "Ranking actualizado con actividad reciente de biblioteca y reviews.",
         switcherTitle: "Cambiar filtro",
         emptyTitle: "No hay juegos para este filtro",
         emptyBody:
@@ -659,7 +762,7 @@ export const es = {
   gameDetail: {
     metaFallbackTitle: "Detalle del Juego | OpenBacklog",
     metaDescriptionFallback:
-      "Ficha de videojuego en OpenBacklog con acciones de librería y review.",
+      "Ficha de videojuego en OpenBacklog con acciones de biblioteca y review.",
     backToSearch: "VOLVER A BÚSQUEDA",
     backHome: "VOLVER AL INICIO",
     sharePage: "COMPARTIR",
@@ -688,14 +791,14 @@ export const es = {
     revealSpoiler: "MOSTRAR SPOILER",
     spoilerLabel: "SPOILER",
     openReview: "ABRIR REVIEW",
-    libraryTitle: "Librería",
+    libraryTitle: "Biblioteca",
     libraryDescription:
       "Actualiza el estado de este juego en tu backlog desde un modal rápido.",
     reviewTitle: "Review Corta",
     reviewDescription:
       "Deja una review breve con recomendación, progreso y control de spoiler.",
     actions: {
-      openLibraryModal: "GESTIONAR EN LIBRERÍA",
+      openLibraryModal: "GESTIONAR EN BIBLIOTECA",
       openReviewModal: "ESCRIBIR REVIEW",
       closeModal: "CERRAR",
     },
@@ -721,13 +824,13 @@ export const es = {
       reviewBody: "Escribe tu review corta (max 500 chars)",
     },
     submit: {
-      saveLibrary: "GUARDAR EN LIBRERÍA",
+      saveLibrary: "GUARDAR EN BIBLIOTECA",
       savingLibrary: "GUARDANDO...",
       saveReview: "GUARDAR REVIEW",
       savingReview: "GUARDANDO...",
     },
     feedback: {
-      librarySaved: "Entrada de librería guardada.",
+      librarySaved: "Entrada de biblioteca guardada.",
       reviewSaved: "Review guardada.",
       invalidPayload: "Completa correctamente los campos obligatorios.",
       invalidPlatform: "Elige plataforma válida para este juego o usa Other.",
@@ -735,16 +838,16 @@ export const es = {
     },
   },
   library: {
-    metaTitle: "Mi Librería | OpenBacklog",
+    metaTitle: "Mi Biblioteca | OpenBacklog",
     metaDescription:
-      "Gestiona tu librería personal con estado, búsqueda, filtros y orden.",
-    title: "Mi Librería",
+      "Gestiona tu biblioteca personal con estado, búsqueda, filtros y orden.",
+    title: "Mi Biblioteca",
     description:
       "Sigue progreso con estados estables y mantén backlog ordenado para decidir mejor.",
     filters: {
       searchLabel: "Buscar",
       searchPlaceholder: "Buscar por título o slug",
-      clearSearchAriaLabel: "Limpiar búsqueda de librería",
+      clearSearchAriaLabel: "Limpiar búsqueda de biblioteca",
       autoApplyHint: "Resultados se actualizan automáticamente al escribir.",
       stateLabel: "Estado",
       sortLabel: "Ordenar por",
@@ -782,7 +885,7 @@ export const es = {
     openReview: "ABRIR REVIEW",
     unknownValue: "Desconocido",
     noSummary: "Sin resumen disponible.",
-    emptyTitle: "Tu librería está vacía",
+    emptyTitle: "Tu biblioteca está vacía",
     emptyBody: "Añade juegos desde búsqueda y empieza a seguir estados del backlog.",
     emptyCta: "IR A BÚSQUEDA",
     pagination: {
@@ -794,16 +897,49 @@ export const es = {
   profile: {
     metaTitleSuffix: "Perfil OpenBacklog",
     metaDescription:
-      "Perfil público OpenBacklog con estadísticas reales de librería y reviews recientes.",
+      "Perfil público OpenBacklog con estadísticas reales de biblioteca y reviews recientes.",
     backApp: "VOLVER A LA APP",
     previewBadge: "PERFIL PÚBLICO",
+    activityBadge: "RESUMEN PRODUCTIVO",
     heroDescription:
-      "Resumen público de estados del backlog, actividad y reviews.",
+      "Resumen público de estados del backlog, actividad reciente y señales de progreso en OpenBacklog.",
     joinedLabel: "Se unió",
     lastActivityLabel: "Última actividad",
     followersLabel: "Seguidores",
     followingLabel: "Siguiendo",
-    libraryTitle: "Resumen de Librería",
+    signOutCta: "CERRAR SESIÓN",
+    signOutSubmitting: "CERRANDO...",
+    signOutError: "No se pudo cerrar sesión. Inténtalo de nuevo.",
+    totalLibraryLabel: "Backlog total",
+    activeLibraryLabel: "Activos ahora",
+    recentReviewsCountLabel: "Reviews recientes",
+    completionRateLabel: "Tasa de completado",
+    toolkitTitle: "Herramientas OpenBacklog",
+    toolkitDescription:
+      "Áreas nuevas del producto para mantener ritmo y terminar más juegos.",
+    featureCards: {
+      feed: {
+        title: "Feed de amigos",
+        description: "Sigue cambios de biblioteca y reviews de amigos en tiempo real.",
+        cta: "ABRIR FEED",
+      },
+      upcoming: {
+        title: "Radar de lanzamientos",
+        description: "Planifica tu backlog con próximos lanzamientos y ventanas de salida.",
+        cta: "VER LANZAMIENTOS",
+      },
+      popular: {
+        title: "Tendencias",
+        description: "Descubre juegos populares y actividad reciente para elegir qué jugar.",
+        cta: "VER POPULARES",
+      },
+      library: {
+        title: "Planificador de backlog",
+        description: "Ajusta estados, filtros y prioridades para mantener progreso semanal.",
+        cta: "ABRIR BIBLIOTECA",
+      },
+    },
+    libraryTitle: "Resumen de Biblioteca",
     libraryDescription: "Distribución actual del backlog de este jugador.",
     stateLabels: {
       planned: "Planificado",
@@ -816,12 +952,14 @@ export const es = {
     recentReviewsDescription: "Últimas reviews cortas publicadas por este jugador.",
     noRecentReviews: "Aún no hay reviews públicas.",
     openReview: "ABRIR REVIEW",
+    openGame: "ABRIR JUEGO",
     recommend: "Recomendar",
     notRecommend: "No recomendar",
+    updatedLabel: "Actualizado",
     hoursLabel: "{hours}h para completar",
-    recentLibraryTitle: "Actividad Reciente de Librería",
+    recentLibraryTitle: "Actividad Reciente de Biblioteca",
     recentLibraryDescription: "Juegos actualizados recientemente en este backlog.",
-    noRecentLibrary: "Aún no hay entradas de librería.",
+    noRecentLibrary: "Aún no hay entradas de biblioteca.",
   },
   reviewPage: {
     metaTitleSuffix: "Review OpenBacklog",
@@ -846,22 +984,22 @@ export const es = {
     privacy: {
       metaTitle: "Política de Privacidad | OpenBacklog",
       metaDescription:
-        "Consulta cómo OpenBacklog recopila, usa y protege tus datos para la waitlist y las actualizaciones del producto.",
+        "Consulta cómo OpenBacklog recopila, usa y protege tus datos en los flujos de producto y cuenta.",
       title: "Política de Privacidad",
       intro:
-        "Esta política explica cómo OpenBacklog trata los datos personales mientras operamos la waitlist y el acceso temprano al producto.",
+        "Esta política explica cómo OpenBacklog trata los datos personales en el producto en vivo y en sus comunicaciones relacionadas.",
       sections: [
         {
           title: "Datos que Recopilamos",
           body: [
-            "Recopilamos el correo que envías desde la waitlist y los formularios opcionales de sugerencias.",
+            "Recopilamos datos de cuenta como correo, registros de autenticación y envíos opcionales de sugerencias para roadmap.",
             "También procesamos información técnica limitada, como señales de rate limit derivadas de IP y metadatos de petición para prevención de abuso.",
           ],
         },
         {
           title: "Cómo Usamos los Datos",
           body: [
-            "Usamos tu correo para confirmar el registro en la waitlist, avisarte del lanzamiento y compartir actualizaciones del producto.",
+            "Usamos tu correo para seguridad de cuenta, notificaciones de producto y actualizaciones relacionadas con tu actividad en OpenBacklog.",
             "Usamos datos de seguridad y prevención de abuso para proteger la plataforma y mantener los formularios disponibles para usuarios legítimos.",
           ],
         },
@@ -869,7 +1007,7 @@ export const es = {
           title: "Cesión y Conservación",
           body: [
             "No vendemos datos personales. Solo compartimos datos con proveedores de infraestructura necesarios para operar el servicio (por ejemplo, envío de correo y base de datos).",
-            "Conservamos los datos durante el tiempo necesario para operar la waitlist y sus comunicaciones relacionadas, o para cumplir obligaciones legales.",
+            "Conservamos los datos durante el tiempo necesario para operar los flujos principales del producto y cumplir obligaciones legales.",
           ],
         },
         {
@@ -883,10 +1021,10 @@ export const es = {
     terms: {
       metaTitle: "Términos del Servicio | OpenBacklog",
       metaDescription:
-        "Revisa los términos que regulan tu acceso a la waitlist y al uso temprano de OpenBacklog.",
+        "Revisa los términos que regulan tu acceso al sitio web, la cuenta y las funcionalidades de OpenBacklog.",
       title: "Términos del Servicio",
       intro:
-        "Al usar las páginas de OpenBacklog y unirte a la waitlist, aceptas estos términos.",
+        "Al usar las páginas y funcionalidades de cuenta de OpenBacklog, aceptas estos términos.",
       sections: [
         {
           title: "Alcance del Servicio",
@@ -919,7 +1057,7 @@ export const es = {
     cookies: {
       metaTitle: "Política de Cookies | OpenBacklog",
       metaDescription:
-        "Entiende cómo OpenBacklog usa cookies y tecnologías similares en páginas de waitlist y producto.",
+        "Entiende cómo OpenBacklog usa cookies y tecnologías similares en páginas públicas y autenticadas del producto.",
       title: "Política de Cookies",
       intro:
         "OpenBacklog utiliza cookies y tecnologías similares de forma limitada para operar funcionalidades esenciales del sitio.",

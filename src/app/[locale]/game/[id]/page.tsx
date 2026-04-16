@@ -4,6 +4,7 @@ import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
 import { AppFooter } from "@/components/app/app-footer"
+import { AppHeader } from "@/components/app/app-header"
 import { getDictionary } from "@/lib/i18n"
 import { toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
@@ -20,7 +21,6 @@ import { GameLibraryReviewPanel } from "@/components/game/game-library-review-pa
 import { GameShareButton } from "@/components/game/game-share-button"
 import { GameUserReviewsList } from "@/components/game/game-user-reviews-list"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 type GamePageProps = {
@@ -225,39 +225,22 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   return (
-    <main className="relative min-h-screen px-6 py-12 text-foreground">
+    <main className="relative min-h-screen bg-background text-foreground">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(gameJsonLd),
         }}
       />
+      <AppHeader dictionary={dictionary.app.header} locale={locale} profileHref={profileHref} />
 
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-0 left-0 h-80 w-80 rounded-full bg-primary/10 blur-[110px]" />
         <div className="absolute right-0 bottom-10 h-72 w-72 rounded-full bg-muted/40 blur-[110px]" />
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12">
         <div className="flex flex-wrap items-center gap-3">
-          <Link href={`/${locale}/search`}>
-            <Button
-              variant="outline"
-              className="rounded-none font-body text-[10px] tracking-[0.12em] uppercase"
-            >
-              {dictionary.gameDetail.backToSearch}
-            </Button>
-          </Link>
-
-          <Link href={`/${locale}`}>
-            <Button
-              variant="outline"
-              className="rounded-none font-body text-[10px] tracking-[0.12em] uppercase"
-            >
-              {dictionary.gameDetail.backHome}
-            </Button>
-          </Link>
-
           <GameShareButton
             labels={{
               share: dictionary.gameDetail.sharePage,

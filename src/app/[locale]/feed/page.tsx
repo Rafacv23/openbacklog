@@ -7,24 +7,21 @@ import { ArrowUpRight } from "lucide-react"
 
 import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
-import { GameCard, type GameCardData } from "@/components/app/game-card"
+import { GameCard } from "@/components/app/game-card"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { getDictionary } from "@/lib/i18n"
 import { REQUEST_LOCALE_HEADER, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl, SITE_NAME } from "@/lib/site"
 import { getAuthSession, getSessionUsername } from "@/server/auth/get-auth-session"
 import { getFriendFeedActivity } from "@/server/friends/get-feed-activity"
+import { getPopularCollections } from "@/server/games/get-popular-games"
+import { getUpcomingReleases } from "@/server/games/get-upcoming-releases"
+import { getProductivityOverview } from "@/server/productivity/service"
 
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
 const GAMES_PER_FEED_SECTION = 3
-const POPULAR_GAME_QUERIES = ["Elden Ring", "Fortnite", "Minecraft"]
-const UPCOMING_GAME_QUERIES = ["Grand Theft Auto VI", "Death Stranding 2", "Fable"]
-
-type GamesSearchApiResponse = {
-  status: string
-  data?: GameCardData[]
-}
 
 type FeedCopy = {
   justNow: string
@@ -36,6 +33,24 @@ type FeedCopy = {
   details: {
     libraryUpdated: string
     reviewPublished: string
+  }
+}
+
+type ProductivityRecommendationsCopy = {
+  title: string
+  description: string
+  watchMore: string
+  fallbackDescription: string
+  cards: {
+    completionScore: string
+    completionScoreHint: string
+    hoursToClear: string
+    hoursToClearHint: string
+    dropRisk: string
+    dropRiskHint: string
+    high: string
+    medium: string
+    low: string
   }
 }
 
@@ -52,6 +67,12 @@ function interpolateTemplate(template: string, values: Record<string, string>): 
   }
 
   return output
+}
+
+function formatNumber(locale: string, value: number): string {
+  return new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 1,
+  }).format(value)
 }
 
 function formatRelativeTime(input: {
@@ -91,77 +112,11 @@ function formatRelativeTime(input: {
   return rtf.format(Math.round(diffSeconds / 2_592_000), "month")
 }
 
-async function fetchGamesByQuery({
-  cookieHeader,
-  forwardedFor,
-  limit = GAMES_PER_FEED_SECTION,
-  query,
-  realIp,
-}: {
-  cookieHeader: string
-  forwardedFor: string
-  limit?: number
-  query: string
-  realIp: string
-}): Promise<GameCardData[]> {
-  const params = new URLSearchParams({
-    query,
-    limit: String(limit),
-  })
-
-  const response = await fetch(`${BASE_URL}/api/games/search?${params.toString()}`, {
-    cache: "no-store",
-    headers: {
-      cookie: cookieHeader,
-      ...(forwardedFor ? { "x-forwarded-for": forwardedFor } : {}),
-      ...(realIp ? { "x-real-ip": realIp } : {}),
-    },
-  })
-
-  if (!response.ok) {
-    return []
-  }
-
-  const payload = (await response.json()) as GamesSearchApiResponse
-
-  if (payload.status !== "ok" || !Array.isArray(payload.data)) {
-    return []
-  }
-
-  return payload.data
-}
-
-async function fetchGamesByQueries({
-  cookieHeader,
-  forwardedFor,
-  limitPerQuery = 1,
-  maxResults = GAMES_PER_FEED_SECTION,
-  queries,
-  realIp,
-}: {
-  cookieHeader: string
-  forwardedFor: string
-  limitPerQuery?: number
-  maxResults?: number
-  queries: string[]
-  realIp: string
-}): Promise<GameCardData[]> {
-  const resultsPerQuery = await Promise.all(
-    queries.map((query) =>
-      fetchGamesByQuery({
-        cookieHeader,
-        forwardedFor,
-        query,
-        limit: limitPerQuery,
-        realIp,
-      }),
-    ),
-  )
-
-  const uniqueGames: GameCardData[] = []
+function dedupeAndLimitGames<T extends { igdbId: number }>(games: T[], limit: number): T[] {
+  const uniqueGames: T[] = []
   const seenGameIds = new Set<number>()
 
-  for (const game of resultsPerQuery.flat()) {
+  for (const game of games) {
     if (seenGameIds.has(game.igdbId)) {
       continue
     }
@@ -169,7 +124,7 @@ async function fetchGamesByQueries({
     seenGameIds.add(game.igdbId)
     uniqueGames.push(game)
 
-    if (uniqueGames.length >= maxResults) {
+    if (uniqueGames.length >= limit) {
       break
     }
   }
@@ -237,38 +192,44 @@ export default async function AppEntryPage() {
   }
 
   const dictionary = getDictionary(locale)
-  const requestHeaders = await headers()
-  const cookieHeader = requestHeaders.get("cookie") ?? ""
-  const forwardedFor = requestHeaders.get("x-forwarded-for") ?? ""
-  const realIp = requestHeaders.get("x-real-ip") ?? ""
-  const recommendationQueries = dictionary.app.recommendations.items.map((item) => item.title)
+  const recommendationsCopy = dictionary.app.recommendations as ProductivityRecommendationsCopy
   const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
   const friendFeedItems = getFriendFeedActivity({
     userId: session.user.id,
     limit: 12,
   })
+  const productivityOverviewPromise = getProductivityOverview({
+    userId: session.user.id,
+  })
 
-  const [popularGames, recommendationGames, upcomingGames, feedItems] = await Promise.all([
-    fetchGamesByQueries({
-      cookieHeader,
-      forwardedFor,
-      queries: POPULAR_GAME_QUERIES,
-      realIp,
+  const [popularCollections, upcomingReleases, feedItems, productivityOverview] = await Promise.all([
+    getPopularCollections({
+      collectionLimit: GAMES_PER_FEED_SECTION,
+      userId: session.user.id,
     }),
-    fetchGamesByQueries({
-      cookieHeader,
-      forwardedFor,
-      queries: recommendationQueries,
-      realIp,
-    }),
-    fetchGamesByQueries({
-      cookieHeader,
-      forwardedFor,
-      queries: UPCOMING_GAME_QUERIES,
-      realIp,
+    getUpcomingReleases({
+      limit: GAMES_PER_FEED_SECTION,
     }),
     friendFeedItems,
+    productivityOverviewPromise,
   ])
+  const popularGames = popularCollections.mostPopularGames
+  const upcomingGames = dedupeAndLimitGames(
+    [
+      ...upcomingReleases.weekReleases,
+      ...upcomingReleases.monthReleases,
+      ...upcomingReleases.generalReleases,
+    ],
+    GAMES_PER_FEED_SECTION,
+  )
+  const recommendationGames = dedupeAndLimitGames(
+    [
+      ...productivityOverview.recommendations.map((recommendation) => recommendation.game),
+      ...popularCollections.friendsPopularGames,
+      ...popularCollections.recentlyActiveGames,
+    ],
+    GAMES_PER_FEED_SECTION,
+  )
 
   return (
     <main className="relative min-h-screen bg-background text-foreground">
@@ -295,15 +256,14 @@ export default async function AppEntryPage() {
             <h2 className="font-headline text-2xl uppercase">Popular games</h2>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
               <p className="text-sm text-muted-foreground">
-                What other players are adding to their backlogs and playing the
-                most.
+                {dictionary.app.popular.sections.globalDescription}
               </p>
               <Link
                 href={`/${locale}/popular`}
-                title="Popular games"
+                title={dictionary.app.popular.sections.globalTitle}
                 className="inline-flex items-center gap-2 self-start text-sm transition-colors hover:text-primary sm:self-auto"
               >
-                Watch more
+                {recommendationsCopy.watchMore}
                 <ArrowUpRight size={16} />
               </Link>
             </div>
@@ -323,28 +283,86 @@ export default async function AppEntryPage() {
         <section id="recommendations" className="space-y-4">
           <header className="space-y-1">
             <h2 className="font-headline text-2xl uppercase">
-              {dictionary.app.recommendations.title}
+              {recommendationsCopy.title}
             </h2>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
               <p className="text-sm text-muted-foreground">
-                {dictionary.app.recommendations.description}
+                {recommendationsCopy.description}
               </p>
               <Link
-                href={`/${locale}/popular`}
+                href={`/${locale}/recommendations`}
                 title="Game recommendations"
                 className="inline-flex items-center gap-2 self-start text-sm transition-colors hover:text-primary sm:self-auto"
               >
-                Watch more
+                {recommendationsCopy.watchMore}
                 <ArrowUpRight size={16} />
               </Link>
             </div>
           </header>
 
           <div className="grid gap-4 md:grid-cols-3">
+            <Card className="border border-border/60 bg-card/70 py-0">
+              <CardContent className="space-y-2 p-4">
+                <p className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                  {recommendationsCopy.cards.completionScore}
+                </p>
+                <p className="font-headline text-3xl text-primary">
+                  {productivityOverview.backlogCompletionScore}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {recommendationsCopy.cards.completionScoreHint}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border/60 bg-card/70 py-0">
+              <CardContent className="space-y-2 p-4">
+                <p className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                  {recommendationsCopy.cards.hoursToClear}
+                </p>
+                <p className="font-headline text-3xl text-primary">
+                  {formatNumber(locale, productivityOverview.estimatedHoursToClearBacklog)}h
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {recommendationsCopy.cards.hoursToClearHint}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border/60 bg-card/70 py-0">
+              <CardContent className="space-y-2 p-4">
+                <p className="text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                  {recommendationsCopy.cards.dropRisk}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="rounded-none">
+                    {recommendationsCopy.cards.high}: {productivityOverview.dropRisk.highRiskCount}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-none">
+                    {recommendationsCopy.cards.medium}: {productivityOverview.dropRisk.mediumRiskCount}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-none">
+                    {recommendationsCopy.cards.low}: {productivityOverview.dropRisk.lowRiskCount}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {recommendationsCopy.cards.dropRiskHint}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
             {recommendationGames.map((game) => (
               <GameCard copy={dictionary.search} game={game} key={game.igdbId} locale={locale} />
             ))}
           </div>
+
+          {productivityOverview.recommendations.length === 0 && recommendationGames.length > 0 ? (
+            <p className="text-sm text-muted-foreground">
+              {recommendationsCopy.fallbackDescription}
+            </p>
+          ) : null}
 
           {recommendationGames.length === 0 ? (
             <p className="text-sm text-muted-foreground">{dictionary.search.emptyBody}</p>
@@ -353,18 +371,15 @@ export default async function AppEntryPage() {
 
         <section id="upcoming-games" className="space-y-4">
           <header className="space-y-1">
-            <h2 className="font-headline text-2xl uppercase">Upcoming games</h2>
+            <h2 className="font-headline text-2xl uppercase">{dictionary.app.upcoming.title}</h2>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
-              <p className="text-sm text-muted-foreground">
-                Games that are coming out soon and are being added to players
-                backlogs.
-              </p>
+              <p className="text-sm text-muted-foreground">{dictionary.app.upcoming.description}</p>
               <Link
                 href={`/${locale}/upcoming`}
-                title="Upcoming games"
+                title={dictionary.app.upcoming.title}
                 className="inline-flex items-center gap-2 self-start text-sm transition-colors hover:text-primary sm:self-auto"
               >
-                Watch more
+                {recommendationsCopy.watchMore}
                 <ArrowUpRight size={16} />
               </Link>
             </div>
@@ -395,7 +410,7 @@ export default async function AppEntryPage() {
                 title="Friends activity"
                 className="inline-flex items-center gap-2 self-start text-sm transition-colors hover:text-primary sm:self-auto"
               >
-                Watch more
+                {recommendationsCopy.watchMore}
                 <ArrowUpRight size={16} />
               </Link>
             </div>

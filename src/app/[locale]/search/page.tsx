@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
 import { AppFooter } from "@/components/app/app-footer"
+import { AppHeader } from "@/components/app/app-header"
 import { getDictionary } from "@/lib/i18n"
 import { SUPPORTED_LOCALES, toSupportedLocale } from "@/lib/locales"
 import { getBaseUrl, getDefaultSocialImageUrl } from "@/lib/site"
@@ -97,14 +97,9 @@ export default async function SearchPage({ params }: SearchPageProps) {
   const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
 
   return (
-    <main className="relative min-h-screen px-6 py-12 text-foreground">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <Link
-          className="w-fit text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          href={`/${locale}`}
-        >
-          {dictionary.search.backHome}
-        </Link>
+    <main className="relative min-h-screen bg-background text-foreground">
+      <AppHeader dictionary={dictionary.app.header} locale={locale} profileHref={profileHref} />
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 py-12">
 
         <header className="space-y-2">
           <h1 className="font-display text-4xl leading-tight text-foreground">

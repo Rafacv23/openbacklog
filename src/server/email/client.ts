@@ -24,8 +24,20 @@ export function getResendFromEmail(): string {
   return getRequiredEnvValue("RESEND_FROM_EMAIL")
 }
 
-export function getWaitlistAdminEmail(): string {
-  return getRequiredEnvValue("WAITLIST_ADMIN_EMAIL")
+export function getProductAdminEmail(): string {
+  const productInbox = process.env.PRODUCT_ADMIN_EMAIL?.trim()
+
+  if (productInbox) {
+    return productInbox
+  }
+
+  const legacyWaitlistInbox = process.env.WAITLIST_ADMIN_EMAIL?.trim()
+
+  if (legacyWaitlistInbox) {
+    return legacyWaitlistInbox
+  }
+
+  throw new Error("Missing PRODUCT_ADMIN_EMAIL")
 }
 
 export function getRoadmapSuggestionsAdminEmail(): string {
@@ -35,5 +47,5 @@ export function getRoadmapSuggestionsAdminEmail(): string {
     return dedicatedInbox
   }
 
-  return getWaitlistAdminEmail()
+  return getProductAdminEmail()
 }

@@ -17,7 +17,7 @@ Positioning: **help players decide what to play and finish more games** (not jus
 
 ### Core parity + base value
 
-- Game tracking and personal library (Backlog-style)
+- Game tracking and personal biblioteca (Backlog-style)
 - Ratings and reviews (Steam-like model)
 - Time-to-beat tracking (HTLB-style integration)
 - Friends (followers model) + activity feed
@@ -118,9 +118,9 @@ Current internal endpoint:
 
 ### Phase 1: Core backlog
 
-- Library states (`planned`, `playing`, `completed`, `dropped`, `on_hold`)
+- Biblioteca states (`planned`, `playing`, `completed`, `dropped`, `on_hold`)
 - Ratings and short reviews
-- Search/filter/sort library
+- Search/filter/sort biblioteca
 - Basic public profile pages (SEO-ready)
 
 ### Phase 2: Social first
@@ -180,13 +180,12 @@ pnpm install
 pnpm dev
 ```
 
-Expected scripts once scaffolded:
+Main scripts:
 
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
-- `pnpm email:launch`
 
 ## Authentication (Better Auth)
 
@@ -227,7 +226,7 @@ OAuth callback URLs for local development:
 
 ## Database (Turso + Drizzle)
 
-Current schema includes both landing and authentication tables:
+Current schema includes authentication and product tables:
 
 - `pre_registrations`
 - `games`
@@ -257,7 +256,7 @@ turso db tokens create openbacklog
 # GITHUB_CLIENT_SECRET=...
 # RESEND_API_KEY=re_...
 # RESEND_FROM_EMAIL=OpenBacklog <hello@updates.openbacklog.app>
-# WAITLIST_ADMIN_EMAIL=admin@openbacklog.app
+# PRODUCT_ADMIN_EMAIL=admin@openbacklog.app
 # IGDB_CLIENT_ID=...
 # IGDB_CLIENT_SECRET=...
 
@@ -266,29 +265,21 @@ pnpm db:generate
 pnpm db:migrate
 ```
 
-## Waitlist Registration + Emails
-
-Landing waitlist flow now includes:
-
-- Save registration in Turso (`pre_registrations`)
-- Send confirmation email to the user (Resend + React Email template)
-- Send admin notification email for each new registration
-- Send roadmap suggestion notifications (`/{locale}/roadmap`) to admin + user confirmation
+## Product Emails
 
 Required env vars:
 
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL`
-- `WAITLIST_ADMIN_EMAIL`
-- `ROADMAP_SUGGESTIONS_ADMIN_EMAIL` (optional, falls back to `WAITLIST_ADMIN_EMAIL`)
+- `PRODUCT_ADMIN_EMAIL`
+- `ROADMAP_SUGGESTIONS_ADMIN_EMAIL` (optional, falls back to `PRODUCT_ADMIN_EMAIL`)
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID` (optional, enables GA4)
 - `GOOGLE_SITE_VERIFICATION` (optional, enables GSC verification meta tag)
 
-Launch day mass email command (sends only users with `notification_sent = false` and marks them as sent):
+Current email flows include:
 
-```bash
-pnpm email:launch
-```
+- Auth security emails (verification and reset password)
+- Roadmap suggestion user confirmations and admin notifications
 
 ## Google Analytics + Search Console (Prepared)
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import packageJson from "../../../package.json"
 
 import Image from "next/image"
 import Link from "next/link"
@@ -8,8 +9,6 @@ import { getDictionary } from "@/lib/i18n"
 
 import { LandingFooter } from "@/components/landing/footer"
 import { LandingHeader } from "@/components/landing/header"
-import { SmoothScrollLink } from "@/components/landing/smooth-scroll-link"
-import { WaitlistForm } from "@/components/landing/waitlist-form"
 import {
   Accordion,
   AccordionContent,
@@ -31,6 +30,7 @@ type LocalePageProps = {
 
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
+const PROJECT_VERSION = `v${packageJson.version}`
 const SHOW_SOCIAL_PROOF = false
 
 const GAME_CARD_LAYOUTS = [
@@ -135,7 +135,9 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
     description: "",
     items: [] as Array<{ question: string; answer: string }>,
   }
-
+  const completedPhases = dictionary.features.phases.filter(
+    (phase) => phase.state === "completed",
+  )
   const jsonLdGraph: Array<Record<string, unknown>> = [
     {
       "@type": "WebSite",
@@ -218,9 +220,7 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
             >
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
               {dictionary.home.hero.releaseBadgeLabel}
-              <span className="text-foreground">
-                {dictionary.home.hero.releaseBadgeValue}
-              </span>
+              <span className="text-foreground">{PROJECT_VERSION}</span>
             </Badge>
           </Link>
 
@@ -232,27 +232,72 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
             </span>
           </h1>
 
+          <p className="mx-auto mt-8 max-w-3xl font-body text-sm leading-relaxed text-muted-foreground md:text-base">
+            {dictionary.seo.description}
+          </p>
+
           <div className="mt-12 flex flex-col justify-center gap-4 md:flex-row">
-            <SmoothScrollLink
+            <Link
               aria-label={dictionary.home.aria.primaryCta}
               className={cn(
                 buttonVariants(),
                 "h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all hover:shadow-[0_0_20px_rgba(201,242,90,0.35)] active:scale-95",
               )}
-              href="#join"
+              href={`/${locale}/register`}
             >
               {dictionary.home.hero.primaryCta}
-            </SmoothScrollLink>
+            </Link>
             <Link
               aria-label={dictionary.home.aria.secondaryCta}
               className={cn(
                 buttonVariants({ variant: "outline" }),
                 "h-auto rounded-none px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all active:scale-95",
               )}
-              href={`/${locale}/roadmap`}
+              href={`/${locale}/login`}
             >
               {dictionary.home.hero.secondaryCta}
             </Link>
+            <Link
+              aria-label={dictionary.home.aria.repository}
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "h-auto rounded-none border border-border px-8 py-4 font-headline text-sm font-bold tracking-[0.12em] uppercase transition-all active:scale-95",
+              )}
+              href={`/${locale}/roadmap`}
+            >
+              {dictionary.home.capabilities.repository}
+            </Link>
+          </div>
+
+          <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+            <Card className="rounded-none border border-border bg-card/80 p-0">
+              <CardContent className="p-4 text-left">
+                <p className="font-body text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                  {dictionary.features.phaseGroups.completed}
+                </p>
+                <p className="mt-2 font-headline text-2xl">
+                  {completedPhases.length}/{dictionary.features.phases.length}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="rounded-none border border-border bg-card/80 p-0">
+              <CardContent className="p-4 text-left">
+                <p className="font-body text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                  {dictionary.features.projectVersionLabel}
+                </p>
+                <p className="mt-2 font-headline text-2xl">{PROJECT_VERSION}</p>
+              </CardContent>
+            </Card>
+            <Card className="rounded-none border border-border bg-card/80 p-0">
+              <CardContent className="p-4 text-left">
+                <p className="font-body text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                  {dictionary.home.labels.operatorsIndicator}
+                </p>
+                <p className="mt-2 font-headline text-2xl">
+                  {dictionary.home.telemetry.activeOperators}
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -265,9 +310,12 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
                 className={cn(layout.wrapper, "rounded-none p-0 ring-0")}
               >
                 <CardContent className="p-4">
+                  <Badge className={cn("mb-4 rounded-none text-[10px]", layout.badgeClass)}>
+                    {card.badge}
+                  </Badge>
                   <Image
                     alt={card.imageAlt}
-                    className="mb-4 h-48 w-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                    className="mb-4 h-48 w-full object-cover grayscale transition-all duration-500 hover:grayscale-0"
                     height={192}
                     src={card.imageSrc}
                     width={320}
@@ -293,6 +341,54 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
               </Card>
             )
           })}
+        </div>
+      </section>
+
+      <section
+        id="product"
+        aria-label={dictionary.home.aria.capabilitiesSection}
+        className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24"
+      >
+        <div className="mb-16">
+          <h2 className="font-headline text-4xl">
+            <span className="font-display italic">
+              {dictionary.features.developmentOrderTitle}
+            </span>
+          </h2>
+          <p className="mt-4 max-w-3xl font-body text-sm leading-relaxed text-muted-foreground">
+            {dictionary.features.description}
+          </p>
+          <Separator className="mt-6 h-1 w-24 bg-primary" />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {completedPhases.map((phase) => (
+            <Card
+              key={phase.id}
+              className="rounded-none border border-border bg-popover/70 p-0"
+            >
+              <CardContent className="space-y-3 border-l-4 border-l-emerald-500/80 p-6">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-none border-primary/40 bg-card px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-primary uppercase"
+                  >
+                    {phase.id}
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="rounded-none border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-body text-[10px] tracking-[0.12em] text-emerald-700 uppercase dark:text-emerald-300"
+                  >
+                    {phase.status}
+                  </Badge>
+                </div>
+                <h3 className="font-headline text-xl uppercase">{phase.title}</h3>
+                <p className="font-body text-sm leading-relaxed text-muted-foreground">
+                  {phase.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
@@ -538,33 +634,45 @@ export default async function LocaleHomePage({ params }: LocalePageProps) {
       >
         <div className="ob-join-grid">
           <div className="mx-auto flex max-w-5xl flex-col items-center px-6 py-20 text-center md:px-10 md:py-28">
-            <h2 className="mx-auto max-w-[10ch] font-display text-6xl leading-[0.9] font-bold tracking-tight text-black uppercase md:text-8xl">
+            <h2 className="mx-auto max-w-[11ch] font-display text-6xl leading-[0.9] font-bold tracking-tight text-black uppercase md:text-8xl">
               {dictionary.home.cta.title}
             </h2>
-            <p className="mx-auto mt-8 max-w-xl font-body text-lg leading-relaxed text-black/85">
+            <p className="mx-auto mt-8 max-w-2xl font-body text-lg leading-relaxed text-black/85">
               {dictionary.home.cta.body}
             </p>
 
-            <WaitlistForm
-              locale={locale}
-              messages={{
-                emailPlaceholder: dictionary.home.cta.emailPlaceholder,
-                button: dictionary.home.cta.button,
-                buttonSubmitting: dictionary.home.cta.buttonSubmitting,
-                ariaEmail: dictionary.home.aria.email,
-                ariaSubmit: dictionary.home.aria.submitEmail,
-                feedback: {
-                  success: dictionary.home.cta.feedback.success,
-                  createdEmailPending:
-                    dictionary.home.cta.feedback.createdEmailPending,
-                  alreadyRegistered:
-                    dictionary.home.cta.feedback.alreadyRegistered,
-                  invalidEmail: dictionary.home.cta.feedback.invalidEmail,
-                  rateLimited: dictionary.home.cta.feedback.rateLimited,
-                  genericError: dictionary.home.cta.feedback.genericError,
-                },
-              }}
-            />
+            <div className="mt-10 flex w-full max-w-3xl flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                aria-label={dictionary.home.aria.primaryCta}
+                className={cn(
+                  buttonVariants(),
+                  "h-14 flex-1 rounded-none bg-black px-6 font-headline text-xs tracking-[0.12em] text-primary uppercase hover:bg-black/90",
+                )}
+                href={`/${locale}/register`}
+              >
+                {dictionary.home.cta.button}
+              </Link>
+              <Link
+                aria-label={dictionary.home.aria.secondaryCta}
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "h-14 flex-1 rounded-none border-black/25 bg-transparent px-6 font-headline text-xs tracking-[0.12em] text-black uppercase hover:bg-black/5",
+                )}
+                href={`/${locale}/login`}
+              >
+                {dictionary.home.hero.secondaryCta}
+              </Link>
+              <Link
+                aria-label={dictionary.home.aria.repository}
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "h-14 flex-1 rounded-none border-black/25 bg-transparent px-6 font-headline text-xs tracking-[0.12em] text-black uppercase hover:bg-black/5",
+                )}
+                href={`/${locale}/search`}
+              >
+                {dictionary.app.quickActions.search}
+              </Link>
+            </div>
 
             <div className="mt-6 font-body text-[10px] tracking-[0.1em] text-black/55 uppercase">
               {dictionary.home.cta.security}

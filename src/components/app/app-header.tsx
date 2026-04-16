@@ -59,7 +59,7 @@ export function AppHeader({ dictionary, locale, profileHref }: AppHeaderProps) {
         </Link>
         <Link
           className="font-body text-xs tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-foreground"
-          href={`/${locale}/feed#recommendations`}
+          href={`/${locale}/recommendations`}
         >
           {dictionary.recommendations}
         </Link>
@@ -162,7 +162,7 @@ export function AppHeader({ dictionary, locale, profileHref }: AppHeaderProps) {
               </Link>
               <Link
                 className="border-b border-border/40 py-3 text-xs tracking-[0.1em] text-foreground uppercase"
-                href={`/${locale}/feed#recommendations`}
+                href={`/${locale}/recommendations`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {dictionary.recommendations}

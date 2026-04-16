@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { Dictionary } from "@/lib/i18n"
 import { OPENBACKLOG_REPO_URL } from "@/lib/github"
 import type { SupportedLocale } from "@/lib/locales"
+import { FooterLocaleDropdown } from "@/components/app/footer-locale-dropdown"
 
 type AppFooterProps = {
   dictionary: Dictionary["app"]["footer"]
@@ -170,16 +171,27 @@ export function AppFooter({
         <div className="border-t border-border/20 pt-5">
           <div className="flex flex-col gap-2 font-body text-[11px] text-muted-foreground md:flex-row md:items-center md:justify-between">
             <span>{dictionary.copyright}</span>
-            <div className="flex items-center gap-2">
-              <span>{dictionary.madeBy}</span>
-              <Link
-                className="text-primary underline underline-offset-4 hover:text-primary/85"
-                href="https://www.rafacanosa.dev/en"
-                rel="noreferrer"
-                target="_blank"
-              >
-                {dictionary.websiteLabel}
-              </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <FooterLocaleDropdown
+                currentLocale={locale}
+                labels={{
+                  ariaLabel: dictionary.languageSwitcher.ariaLabel,
+                  locales: dictionary.languageSwitcher.locales,
+                  trigger: dictionary.languageSwitcher.label,
+                }}
+              />
+
+              <div className="flex items-center gap-2">
+                <span>{dictionary.madeBy}</span>
+                <Link
+                  className="text-primary underline underline-offset-4 hover:text-primary/85"
+                  href="https://www.rafacanosa.dev/en"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {dictionary.websiteLabel}
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -8,4 +8,5 @@ Current scaffold:
 - `db/`: database schema and Turso/Drizzle client setup
 - `games/`: game domain services (search, sync, caching)
 - `igdb/`: IGDB API integration (auth + fetch client)
+- `productivity/`: rules-based recommendation, backlog scoring, risk, and planning services
 - `system/`: internal service modules (health, diagnostics)

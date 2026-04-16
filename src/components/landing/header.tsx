@@ -67,15 +67,16 @@ export async function LandingHeader({
           locale={locale}
           starsLabel={dictionary.home.nav.stars}
         />
-        <SmoothScrollLink
+        <Link
+          aria-label={dictionary.home.aria.secondaryCta}
           className={cn(
             buttonVariants({ size: "sm" }),
             "h-auto rounded-none px-3 py-2 font-headline text-[10px] font-bold tracking-[0.12em] uppercase lg:px-4 lg:text-[11px]",
           )}
-          href="#join"
+          href={`/${locale}/login`}
         >
-          {dictionary.home.nav.register}
-        </SmoothScrollLink>
+          {dictionary.home.hero.secondaryCta}
+        </Link>
       </div>
     </nav>
   )

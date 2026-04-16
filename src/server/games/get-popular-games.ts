@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, ne, or, sql } from "drizzle-orm"
+import { and, desc, eq, gte, isNotNull, lte, ne, or, sql } from "drizzle-orm"
 
 import { db } from "@/server/db"
 import { friendships, games, libraryEntries, reviews } from "@/server/db/schema"
@@ -174,7 +174,13 @@ async function readRecentlyActiveGames(limit: number): Promise<PopularGame[]> {
     })
     .from(games)
     .leftJoin(reviews, eq(reviews.gameId, games.id))
-    .where(or(gte(games.firstReleaseDate, releaseThreshold), gte(reviews.updatedAt, reviewThreshold)))
+    .where(
+      and(
+        isNotNull(games.firstReleaseDate),
+        lte(games.firstReleaseDate, now),
+        or(gte(games.firstReleaseDate, releaseThreshold), gte(reviews.updatedAt, reviewThreshold)),
+      ),
+    )
     .groupBy(games.id)
     .orderBy(
       desc(sql`coalesce(max(${reviews.updatedAt}), ${games.firstReleaseDate})`),
