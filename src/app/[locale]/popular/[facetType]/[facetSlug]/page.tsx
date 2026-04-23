@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
@@ -89,8 +89,8 @@ export async function generateMetadata({ params }: PopularFacetPageProps): Promi
     title,
     description,
     robots: {
-      index: false,
-      follow: false,
+      index: true,
+      follow: true,
     },
     alternates: {
       canonical: canonicalPath,
@@ -139,19 +139,12 @@ export default async function PopularFacetPage({ params }: PopularFacetPageProps
   }
 
   const session = await getAuthSession()
-
-  if (!session) {
-    redirect(`/${locale}/login`)
-  }
-
-  const username = getSessionUsername(session)
-
-  if (!username) {
-    redirect(`/${locale}/onboarding/username`)
-  }
+  const sessionUsername = getSessionUsername(session)
 
   const dictionary = getDictionary(locale)
-  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
+  const profileHref = sessionUsername
+    ? `/${locale}/profile/${encodeURIComponent(sessionUsername)}`
+    : `/${locale}/login`
   const { activeFacet, games, options } = await getPopularGamesByFacet({
     facetSlug,
     facetType,
@@ -245,7 +238,11 @@ export default async function PopularFacetPage({ params }: PopularFacetPageProps
         </section>
       </div>
 
-      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
+      <AppFooter
+        dictionary={dictionary.app.footer}
+        locale={locale}
+        profileHref={sessionUsername ? profileHref : null}
+      />
     </main>
   )
 }

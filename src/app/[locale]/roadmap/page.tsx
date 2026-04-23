@@ -27,36 +27,6 @@ type LocaleRoadmapPageProps = {
 const BASE_URL = getBaseUrl()
 const DEFAULT_SOCIAL_IMAGE_URL = getDefaultSocialImageUrl()
 const PROJECT_VERSION = `v${packageJson.version}`
-const ROADMAP_SUGGESTION_FALLBACK = {
-  title: "Send a roadmap suggestion",
-  description:
-    "Tell us what feature would help you finish more games. Your suggestion goes directly to the product inbox.",
-  trigger: "SEND SUGGESTION",
-  modalTitle: "Send roadmap suggestion",
-  modalDescription:
-    "Share one concrete idea with enough context so we can evaluate impact and implementation cost.",
-  close: "CANCEL",
-  submit: "SUBMIT SUGGESTION",
-  submitSubmitting: "SENDING...",
-  fields: {
-    emailLabel: "Email",
-    emailPlaceholder: "you@email.com",
-    titleLabel: "Suggestion title",
-    titlePlaceholder: "Example: Weekly backlog planning view",
-    messageLabel: "Suggestion details",
-    messagePlaceholder:
-      "Describe the problem, your proposed solution, and why it matters.",
-  },
-  feedback: {
-    created: "Suggestion sent. Check your inbox for a confirmation email.",
-    createdEmailPending: "Suggestion received. Confirmation email is pending.",
-    invalidEmail: "Enter a valid email address.",
-    invalidPayload:
-      "Complete title and details so we can review your suggestion.",
-    rateLimited: "Too many attempts in a short period. Try again in a few minutes.",
-    genericError: "Something went wrong. Please try again.",
-  },
-}
 
 export async function generateMetadata({
   params,
@@ -117,28 +87,7 @@ export default async function RoadmapPage({
   }
 
   const dictionary = getDictionary(locale)
-  const featureSuggestion =
-    (
-      dictionary.features as {
-        suggestion?: Partial<typeof ROADMAP_SUGGESTION_FALLBACK> & {
-          fields?: Partial<typeof ROADMAP_SUGGESTION_FALLBACK.fields>
-          feedback?: Partial<typeof ROADMAP_SUGGESTION_FALLBACK.feedback>
-        }
-      }
-    ).suggestion ?? {}
-
-  const suggestion = {
-    ...ROADMAP_SUGGESTION_FALLBACK,
-    ...featureSuggestion,
-    fields: {
-      ...ROADMAP_SUGGESTION_FALLBACK.fields,
-      ...(featureSuggestion.fields ?? {}),
-    },
-    feedback: {
-      ...ROADMAP_SUGGESTION_FALLBACK.feedback,
-      ...(featureSuggestion.feedback ?? {}),
-    },
-  }
+  const suggestion = dictionary.features.suggestion
   const completedPhases = dictionary.features.phases.filter(
     (phase) => phase.state === "completed"
   )

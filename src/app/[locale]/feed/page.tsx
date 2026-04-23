@@ -253,7 +253,9 @@ export default async function AppEntryPage() {
 
         <section id="popular-games" className="space-y-4">
           <header className="space-y-1">
-            <h2 className="font-headline text-2xl uppercase">Popular games</h2>
+            <h2 className="font-headline text-2xl uppercase">
+              {dictionary.app.popular.sections.globalTitle}
+            </h2>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
               <p className="text-sm text-muted-foreground">
                 {dictionary.app.popular.sections.globalDescription}
@@ -291,7 +293,7 @@ export default async function AppEntryPage() {
               </p>
               <Link
                 href={`/${locale}/recommendations`}
-                title="Game recommendations"
+                title={recommendationsCopy.title}
                 className="inline-flex items-center gap-2 self-start text-sm transition-colors hover:text-primary sm:self-auto"
               >
                 {recommendationsCopy.watchMore}

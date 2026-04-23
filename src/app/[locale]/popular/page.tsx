@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: PopularPageProps): Promise<Me
     title: dictionary.app.popular.metaTitle,
     description: dictionary.app.popular.metaDescription,
     robots: {
-      index: false,
-      follow: false,
+      index: true,
+      follow: true,
     },
     alternates: {
       canonical: `/${locale}/popular`,
@@ -85,20 +85,13 @@ export default async function PopularPage({ params }: PopularPageProps) {
   }
 
   const session = await getAuthSession()
+  const sessionUserId = typeof session?.user.id === "string" ? session.user.id : ""
+  const sessionUsername = getSessionUsername(session)
 
-  if (!session) {
-    redirect(`/${locale}/login`)
-  }
-
-  const username = getSessionUsername(session)
-
-  if (!username) {
-    redirect(`/${locale}/onboarding/username`)
-  }
-
-  const userId = typeof session.user.id === "string" ? session.user.id : ""
   const dictionary = getDictionary(locale)
-  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
+  const profileHref = sessionUsername
+    ? `/${locale}/profile/${encodeURIComponent(sessionUsername)}`
+    : `/${locale}/login`
 
   const {
     mostPopularGames,
@@ -108,7 +101,7 @@ export default async function PopularPage({ params }: PopularPageProps) {
     genreOptions,
   } = await getPopularCollections({
     collectionLimit: MAX_POPULAR_RESULTS,
-    userId,
+    userId: sessionUserId,
   })
 
   const sections = [
@@ -245,7 +238,11 @@ export default async function PopularPage({ params }: PopularPageProps) {
         ) : null}
       </div>
 
-      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
+      <AppFooter
+        dictionary={dictionary.app.footer}
+        locale={locale}
+        profileHref={sessionUsername ? profileHref : null}
+      />
     </main>
   )
 }

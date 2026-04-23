@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 import { AppFooter } from "@/components/app/app-footer"
 import { AppHeader } from "@/components/app/app-header"
@@ -83,8 +83,8 @@ export async function generateMetadata({
     title,
     description,
     robots: {
-      index: false,
-      follow: false,
+      index: true,
+      follow: true,
     },
     alternates: {
       canonical: `/${locale}/game/${rawId}`,
@@ -128,16 +128,8 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   const session = await getAuthSession()
-
-  if (!session) {
-    redirect(`/${locale}/login`)
-  }
-
-  const username = getSessionUsername(session)
-
-  if (!username) {
-    redirect(`/${locale}/onboarding/username`)
-  }
+  const sessionUserId = typeof session?.user.id === "string" ? session.user.id : null
+  const sessionUsername = getSessionUsername(session)
 
   const gameId = parseGameId(rawId)
 
@@ -146,7 +138,9 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   const dictionary = getDictionary(locale)
-  const profileHref = `/${locale}/profile/${encodeURIComponent(username)}`
+  const profileHref = sessionUsername
+    ? `/${locale}/profile/${encodeURIComponent(sessionUsername)}`
+    : `/${locale}/login`
   const game = await getGameByIgdbId(gameId)
 
   if (!game) {
@@ -154,23 +148,29 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   const [libraryEntry, userReview, recentReviews, friendsWithGame] = await Promise.all([
-    getUserLibraryEntryForGame({
-      userId: session.user.id,
-      gameIgdbId: game.igdbId,
-    }),
-    getUserReviewForGame({
-      userId: session.user.id,
-      gameIgdbId: game.igdbId,
-    }),
+    sessionUserId
+      ? getUserLibraryEntryForGame({
+          userId: sessionUserId,
+          gameIgdbId: game.igdbId,
+        })
+      : Promise.resolve(null),
+    sessionUserId
+      ? getUserReviewForGame({
+          userId: sessionUserId,
+          gameIgdbId: game.igdbId,
+        })
+      : Promise.resolve(null),
     getRecentReviewsForGame({
       gameIgdbId: game.igdbId,
       limit: 12,
     }),
-    getFriendsWithGame({
-      userId: session.user.id,
-      gameIgdbId: game.igdbId,
-      limit: 8,
-    }),
+    sessionUserId
+      ? getFriendsWithGame({
+          userId: sessionUserId,
+          gameIgdbId: game.igdbId,
+          limit: 8,
+        })
+      : Promise.resolve([]),
   ])
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
@@ -355,25 +355,27 @@ export default async function GamePage({ params }: GamePageProps) {
           </div>
         </section>
 
-        <GameLibraryReviewPanel
-          copy={dictionary.gameDetail}
-          game={{
-            igdbId: game.igdbId,
-            platforms: game.platforms,
-          }}
-          initialLibraryState={libraryEntry?.state ?? null}
-          initialReview={
-            userReview
-              ? {
-                  body: userReview.body,
-                  containsSpoilers: userReview.containsSpoilers,
-                  recommend: userReview.recommend,
-                  platformPlayed: userReview.platformPlayed,
-                  hoursToComplete: userReview.hoursToComplete,
-                }
-              : null
-          }
-        />
+        {sessionUserId ? (
+          <GameLibraryReviewPanel
+            copy={dictionary.gameDetail}
+            game={{
+              igdbId: game.igdbId,
+              platforms: game.platforms,
+            }}
+            initialLibraryState={libraryEntry?.state ?? null}
+            initialReview={
+              userReview
+                ? {
+                    body: userReview.body,
+                    containsSpoilers: userReview.containsSpoilers,
+                    recommend: userReview.recommend,
+                    platformPlayed: userReview.platformPlayed,
+                    hoursToComplete: userReview.hoursToComplete,
+                  }
+                : null
+            }
+          />
+        ) : null}
 
         <section className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
@@ -458,7 +460,11 @@ export default async function GamePage({ params }: GamePageProps) {
         />
       </div>
 
-      <AppFooter dictionary={dictionary.app.footer} locale={locale} profileHref={profileHref} />
+      <AppFooter
+        dictionary={dictionary.app.footer}
+        locale={locale}
+        profileHref={sessionUsername ? profileHref : null}
+      />
     </main>
   )
 }
